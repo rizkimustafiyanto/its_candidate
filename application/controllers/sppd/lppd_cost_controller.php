@@ -151,7 +151,6 @@ class lppd_cost_controller extends BaseController
         redirect('LPPDDetail/' . $lppd_id . '/' . $sppd_id . '/' . $zone_type);
     }
 
-
     function DeleteLPPDCost($lppd_cost_id, $lppd_id, $sppd_id, $zone_type)
     {
 

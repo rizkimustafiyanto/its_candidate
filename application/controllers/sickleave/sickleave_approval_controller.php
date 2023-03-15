@@ -101,7 +101,7 @@ class sickleave_approval_controller extends BaseController
                 $url = 'https://fcm.googleapis.com/fcm/send';
 
                 // FCM server key
-                $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+                $server_key = 'AAAAkid7nn0:APA91bEw61vVxKu8sGCf2vIshpkjPYv_JW8KW41UwM4xMfs7jhV9AVWC9Stxh4ijXRmRst_4NDEslEcEInunYd-23uYfMKh5gZVOmLFsJKw6AyvZZHQTC9pcwKJKnouy3XFfccZMGaqI';
 
                 // Notification payload
                 $payload = array(
@@ -200,7 +200,7 @@ class sickleave_approval_controller extends BaseController
                 $url = 'https://fcm.googleapis.com/fcm/send';
 
                 // FCM server key
-                $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+                $server_key = 'AAAAkid7nn0:APA91bEw61vVxKu8sGCf2vIshpkjPYv_JW8KW41UwM4xMfs7jhV9AVWC9Stxh4ijXRmRst_4NDEslEcEInunYd-23uYfMKh5gZVOmLFsJKw6AyvZZHQTC9pcwKJKnouy3XFfccZMGaqI';
 
                 // Notification payload
                 $payload = array(
@@ -296,7 +296,7 @@ class sickleave_approval_controller extends BaseController
                 $url = 'https://fcm.googleapis.com/fcm/send';
 
                 // FCM server key
-                $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+                $server_key = 'AAAAkid7nn0:APA91bEw61vVxKu8sGCf2vIshpkjPYv_JW8KW41UwM4xMfs7jhV9AVWC9Stxh4ijXRmRst_4NDEslEcEInunYd-23uYfMKh5gZVOmLFsJKw6AyvZZHQTC9pcwKJKnouy3XFfccZMGaqI';
 
                 // Notification payload
                 $payload = array(
