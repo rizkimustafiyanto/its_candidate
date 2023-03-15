@@ -236,7 +236,7 @@
                 </div>
               </div>
               <label for="shiftid">Employee Shift</label>
-              <select class="form-control select2bs4" id="shift_id" name="shift_id">
+              <select class="form-control select2bs4" id="shift_id" name="shift_id" required>
                 <option disabled selected value="">--Select--</option>
                 <?php foreach ($ShiftRecords as $row) : ?>
                   <option value="<?php echo $row->shift_id; ?>"><?php echo $row->shift_id; ?> - <?php echo $row->shift_name; ?></option>
