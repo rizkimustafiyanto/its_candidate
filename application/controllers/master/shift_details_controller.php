@@ -24,7 +24,7 @@ class shift_details_controller extends BaseController
     function GetShiftDetails()
     {
         $this->load->model('master/shift_details_model');
-        $shift_details_parameter = array('p_shift_details_id' => 0, 'p_shift_id' => 0, 'p_flag' => 0);
+        $shift_details_parameter = array('p_shift_details_id' => 0, 'p_shift_id' => 0, 'p_flag' => 0, 'p_shift_day' => 0);
         $data['ShiftDetailsRecords'] = $this->shift_details_model->GetShiftDetails($shift_details_parameter);
 
         $this->load->model('master/shift_model');

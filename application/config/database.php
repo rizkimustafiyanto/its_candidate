@@ -50,9 +50,12 @@ $active_record = TRUE;
 
 $db['default'] = array(
     'dsn'   => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
+    'hostname' => '192.168.1.20:3306',
+    'username' => 'administrator',
+    'password' => 'P3rsad4',
+    // 'hostname' => 'localhost',
+    // 'username' => 'root',
+    // 'password' => '',
     'database' => 'hris',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',

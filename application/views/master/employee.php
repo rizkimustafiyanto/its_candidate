@@ -21,6 +21,80 @@
               </div>
             </div>
           </div>
+          <!-- <?= "Filter from : "  . "<b>" . ($this->input->post('company_brand_id')) . "</b>" ?> -->
+          <!-- <?php print_r($companybrandid); ?> -->
+
+          <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+            <div class="card card-sm card-default">
+              <div class="card-header">
+                <div class="row ">
+                  <form role="form" action="<?php echo base_url() ?>EmployeeInBrand" method="post">
+                    <div class="col-sm-12">
+                      <div class="row ">
+                        <div class="row-sm-6">
+                          <label>Company</label>
+                          <select class="form-control select2bs4" id="companypusat" name="companypusat" required>
+                            <option disabled selected value="">--Select--</option>
+                            <!-- <option value="all">All</option> -->
+                            <?php foreach ($CompanyInBrandPusatRecords as $row) : ?>
+                              <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;
+                        <div class="row-sm-6">
+                          <label>Company Brand</label>
+                          <select class="form-control select2bs4" name="company_brand_id_pusat" id="company_brand_id_pusat" required>
+                            <option disabled selected value="">--Select--</option>
+                          </select>
+                        </div>
+                      </div>
+                      &nbsp;&nbsp;&nbsp;
+                      <div style="width:11vw;">
+                        <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
+
+          <?php if ($this->session->userdata('role_id') == '2') { ?>
+            <div class="card card-sm card-default">
+              <div class="card-header">
+                <div class="row ">
+                  <form role="form" action="<?php echo base_url() ?>EmployeeInBrand" method="post">
+                    <div class="col-sm-12">
+                      <div class="row ">
+                        <div class="row-sm-6">
+                          <label>Company</label>
+                          <select class="form-control select2bs4" id="company" name="company" required>
+                            <option disabled selected value="">--Select--</option>
+                            <!-- <option value="all">All</option> -->
+                            <?php foreach ($CompanyInBrandRecords as $row) : ?>
+                              <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;
+                        <div class="row-sm-6">
+                          <label>Company Brand</label>
+                          <select class="form-control select2bs4" name="company_brand_id_cabang" id="company_brand_id_cabang" required>
+                            <option disabled selected value="">--Select--</option>
+                          </select>
+                        </div>
+                      </div>
+                      &nbsp;&nbsp;&nbsp;
+                      <div style="width:11vw;">
+                        <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
 
           <?php if ($this->session->flashdata('success')) : ?>
             <div class="flash-data" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
@@ -46,6 +120,7 @@
                     <th>Company Branch</th>
                     <th>Status</th>
                     <th>Action</th>
+                    <!-- <th>Email</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -70,11 +145,16 @@
                           <td><a class="badge badge-pill badge-light float"><?php echo $record->resign_status_name ?></a></td>
                         <?php } else if ($record->resign_status == 'RS-004') { ?>
                           <td><a class="badge badge-pill badge-dark float"><?php echo $record->resign_status_name ?></a></td>
+                        <?php } else if ($record->resign_status == 'RS-005') { ?>
+                          <td><a class="badge badge-pill badge-danger float"><?php echo $record->resign_status_name ?></a></td>
                         <?php } ?>
                         <td class="text-center">
                           <a id="btnSelect" class="btn btn-xs btn-primary" href="<?php echo base_url() . 'EmployeeDetail/' . $record->employee_id; ?>"><i class="fa fa-pen"></i></a>
-                          <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteEmployee/' . $record->employee_id; ?>"><i class="fa fa-trash"></i></a>
+                          <?php if ($this->session->userdata('role_id') == '1') { ?>
+                            <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteEmployee/' . $record->employee_id; ?>"><i class="fa fa-trash"></i></a>
+                          <?php } ?>
                         </td>
+                        <!-- <td><?php echo $record->email ?></td> -->
                       </tr>
                   <?php
                     }
@@ -155,8 +235,16 @@
                   </select>
                 </div>
               </div>
+              <div class="form-group">
+                <div id="divCompanyBrand">
+                  <label>Company Brand</label>
+                  <select class="form-control select2bs4" name="company_brand_id" id="company_brand_id" required>
+                    <option disabled selected value="">--Select Company Brand--</option>
+                  </select>
+                </div>
+              </div>
               <label for="jabatan">Jabatan</label>
-              <input class="form-control" id="jabatan" placeholder="Jabatan" name="jabatan" maxlength="50">
+              <input class="form-control" id="jabatan" placeholder="Jabatan" name="jabatan" required>
               <br>
               <div class="form-group">
                 <label for="dateofbirth">Date of Birth</label>
@@ -204,10 +292,7 @@
               <br>
               <label>Leave Type ID</label>
               <select class="form-control select2bs4" name="leave_type_id" required>
-                <option disabled selected value="">--Select--</option>
-                <?php foreach ($LeaveTypeRecords as $row) : ?>
-                  <option value="<?php echo $row->variable_id; ?>"><?php echo $row->variable_name; ?></option>
-                <?php endforeach; ?>
+                <option value="LT-001">Join Date</option>
               </select>
               <br>
               <label>Citizen Status</label>
@@ -256,6 +341,15 @@
                   <option value="<?php echo $row->variable_id; ?>"><?php echo $row->variable_name; ?></option>
                 <?php endforeach; ?>
               </select>
+              <br>
+              <label for="bank">Bank</label>
+              <input class="form-control" id="bank" placeholder="Bank" name="bank" required>
+              <br>
+              <label for="norekening">No Rekening</label>
+              <input type="number" class="form-control" id="no_rekening" placeholder="No Rekening" name="no_rekening" required>
+              <br>
+              <label for="namarekening">Nama Rekening</label>
+              <input class="form-control" id="nama_rekening" placeholder="Nama Rekening" name="nama_rekening" required>
             </div>
           </div>
         </div>
@@ -302,6 +396,34 @@
           }
           //alert(data[0].sub_menu_id);
           $('#division_id').html(html);
+          var divisionid = $("#division_id").val();
+
+          // For set value Vehicle type on first load
+          $.ajax({
+            url: 'GetDepartmentByDivisionId',
+            data: {
+              division_id: divisionid
+            },
+            type: 'post',
+            async: true,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+              var html = '';
+              var is = '';
+              if (response != null) {
+                for (is = 0; is < response.length; is++) {
+                  html += '<option value=' + response[is].department_id + '>' + response[is].department_name + '</option>';
+                }
+                $("#divDepartment").show();
+              } else {
+                html += '<option value=""></option>';
+                $("#divDepartment").hide();
+              }
+              //alert(data[0].sub_menu_id);
+              $('#department_id').html(html);
+            }
+          })
         }
       })
     })
@@ -368,7 +490,135 @@
         }
       })
     })
+
+    // get company brand
+    $("#company_id").change(function() {
+      var companyid = $("#company_id").val();
+
+      // For set value Vehicle type on first load
+      $.ajax({
+        url: 'GetCompanyBrandByCompanyId',
+        data: {
+          company_id: companyid
+        },
+        type: 'post',
+        async: true,
+        dataType: 'json',
+        cache: false,
+        success: function(response) {
+          var html = '';
+          var is = '';
+          if (response != null) {
+            for (is = 0; is < response.length; is++) {
+              html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+            }
+            $("#divCompanyBrand").show();
+          } else {
+            html += '<option value=""></option>';
+            $("#divCompanyBrand").hide();
+          }
+          //alert(data[0].sub_menu_id);
+          $('#company_brand_id').html(html);
+        }
+      })
+    })
+
+    // get company brand
+    $("#company").change(function() {
+      var company = $("#company").val();
+
+      // For set value Vehicle type on first load
+      $.ajax({
+        url: 'GetCompanyBrandByCompanyId3',
+        data: {
+          company: company
+        },
+        type: 'post',
+        async: true,
+        dataType: 'json',
+        cache: false,
+        success: function(response) {
+          var html = '';
+          var is = '';
+          if (response != null) {
+            for (is = 0; is < response.length; is++) {
+              html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+              // console.log(company);
+            }
+          } else {
+            html += '<option value=""></option>';
+          }
+          //alert(data[0].sub_menu_id);
+          $('#company_brand_id_cabang').html(html);
+        }
+      })
+    })
+
+
+    // get shift by company
+    $("#company_id").change(function() {
+      var companyid = $("#company_id").val();
+
+      // For set value Vehicle type on first load
+      $.ajax({
+        url: 'GetShiftByCompanyId',
+        data: {
+          company_id: companyid
+        },
+        type: 'post',
+        async: true,
+        dataType: 'json',
+        cache: false,
+        success: function(response) {
+          var html = '';
+          var is = '';
+          if (response != null) {
+            for (is = 0; is < response.length; is++) {
+              html += '<option value=' + response[is].shift_id + '>' + response[is].shift_name + '</option>';
+              // console.log(company);
+            }
+          } else {
+            html += '<option value=""></option>';
+          }
+          //alert(data[0].sub_menu_id);
+          $('#shift_id').html(html);
+        }
+      })
+    })
   });
+
+
+  // get company brand untuk hrd pusat
+  $("#companypusat").change(function() {
+    var companypusat = $("#companypusat").val();
+
+    // For set value Vehicle type on first load
+    $.ajax({
+      url: 'GetCompanyBrandByCompanyId4',
+      data: {
+        companypusat: companypusat
+      },
+      type: 'post',
+      async: true,
+      dataType: 'json',
+      cache: false,
+      success: function(response) {
+        var html = '';
+        var is = '';
+        if (response != null) {
+          for (is = 0; is < response.length; is++) {
+            html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+            // console.log(company);
+          }
+        } else {
+          html += '<option value=""></option>';
+        }
+        //alert(data[0].sub_menu_id);
+        $('#company_brand_id_pusat').html(html);
+      }
+    })
+  })
+
 
   $(document).on("click", "#btnAdd", function() {
     // dealer

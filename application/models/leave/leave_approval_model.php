@@ -56,6 +56,28 @@ class leave_approval_model extends CI_Model
         }
     }
 
+    function GetToken($leave_approval_parameter)
+    {
+        $procedure = "call usp_xt_leave_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $leave_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
+
+    function GetTokenRequester($leave_approval_parameter)
+    {
+        $procedure = "call usp_xt_leave_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $leave_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
+
     function GetLeaveApproverName($leave_approval_parameter)
     {
         $procedure = "call usp_xt_leave_approval_select(?, ?,?,?,?)";

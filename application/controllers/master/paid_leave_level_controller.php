@@ -23,9 +23,6 @@ class paid_leave_level_controller extends BaseController
 
     function GetPaidLeaveLevel()
     {
-        // if ($this->isAdmin() == TRUE) {
-        //     $this->loadThis();
-        // } else {
         $this->load->model('master/paid_leave_level_model');
         $paid_leave_level_parameter = array('p_paid_leave_level_id' => 0, 'p_flag' => 0);
         $data['PaidLeaveLevelRecords'] = $this->paid_leave_level_model->GetPaidLeaveLevel($paid_leave_level_parameter);
@@ -50,28 +47,10 @@ class paid_leave_level_controller extends BaseController
 
         $this->global['pageTitle'] = 'CodeInsect : Employee Listing';
         $this->loadViews("master/paid_leave_level", $this->global, $data, NULL);
-        // }
     }
-
-    // function GetPaidLeaveLevelById($paid_leave_level_id, $flag)
-    // {
-    //     if ($this->isAdmin() == TRUE) {
-    //         $this->loadThis();
-    //     } else {
-    //         $this->load->model('master/paid_leave_level_id_model');
-    //         $paid_leave_level_id_parameter = array($paid_leave_level_id, $flag);
-    //         $data['PaidLeaveLevelRecords'] = $this->paid_leave_level_id_model->GetPaidLeaveLevel($paid_leave_level_id_parameter);
-
-    //         $this->global['pageTitle'] = 'CodeInsect : Employee Listing';
-    //         $this->loadViews("master/paid_leave_level", $this->global, $data, NULL);
-    //     }
-    // }
 
     function InsertPaidLeaveLevel()
     {
-        // if ($this->isAdmin() == TRUE) {
-        //     $this->loadThis();
-        // } else {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('paid_leave_level_id', 'Paid Leave Level Id', 'required|max_length[50]|xss_clean');
 
@@ -114,14 +93,10 @@ class paid_leave_level_controller extends BaseController
         }
 
         redirect('PaidLeaveLevel');
-        // }
     }
 
     function UpdatePaidLeaveLevel()
     {
-        // if ($this->isAdmin() == TRUE) {
-        //     $this->loadThis();
-        // } else {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('paid_leave_level_id', 'Paid Leave Level Id', 'required|max_length[50]|xss_clean');
 
@@ -154,7 +129,6 @@ class paid_leave_level_controller extends BaseController
             $this->session->set_flashdata('error', 'Paid Leave Level cannot update, the data has been added !');
         }
         redirect('PaidLeaveLevel');
-        // }
     }
 
 

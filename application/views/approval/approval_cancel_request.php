@@ -28,7 +28,7 @@ if (!empty($ApprovalListRecords)) {
                             <form role="form" action="<?php echo base_url() ?>MultipleApproval" method="post">
                                 <div class="row ">
                                     <div class="col-sm-6">
-                                        <h4>Approval Cancel Request- Test</h4>
+                                        <h4>Approval Cancel Request</h4>
                                     </div>
                                     <div class="col-sm-6">
 
@@ -129,49 +129,6 @@ if (!empty($ApprovalListRecords)) {
 
     <!-- Modal -->
 
-</div>
-
-<div class="modal fade" id="modal-approval">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Approval</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form role="form" action="<?php echo base_url() ?>MultipleApproval" method="post">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <!-- <input class="form-control" id="now_approver" name="now_approver" value="<?= $this->session->userdata('employee_id'); ?>"> -->
-                            <label>Document No</label>
-                            <input class="form-control" id="runningno" name="runningno" multiple="multiple" readonly>
-                            <br>
-                            <label>Status</label>
-                            <select class="form-control select2bs4" name="status_id" id="status_id" required>
-                                <option disabled selected value="">--Select--</option>
-                                <?php foreach ($ApprovalStatusRecords as $row) : ?>
-                                    <option value="<?php echo $row->variable_id; ?>"><?php echo $row->variable_name; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <br>
-                            <label>Comment</label>
-                            <textarea class="form-control" id="comment" placeholder="Comment" name="comment" maxlength="50" required></textarea>
-                            <br>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <input type="submit" id="btnSubmit" class="btn btn-primary show-loading" value="Submit" />
-                    <input type="reset" class="btn btn-default" value="Reset" />
-                </div>
-            </form>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
 </div>
 
 <script>

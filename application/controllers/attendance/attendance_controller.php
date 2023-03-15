@@ -21,6 +21,7 @@ class attendance_controller extends BaseController
         $this->load->model('attendance/attendance_model');
         $this->load->model('attendance/attendance_temp_model');
         $this->load->model('master/employee_model');
+        $this->load->model('master/company_model');
         $this->load->library(array('excel', 'session'));
         $this->load->helper(array('url', 'download'));
 
@@ -38,8 +39,71 @@ class attendance_controller extends BaseController
         $date_1 = date('Y-m-d', strtotime($this->input->post('date_1')));
         $date_2 = date('Y-m-d', strtotime($this->input->post('date_2')));
 
-        $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => 0, 'p_overtime_id' => 0, 'p_date_1' => $date_1, 'p_date_2' => $date_2, 'p_flag' => 1);
-        $data['AttendanceRecords'] = $this->attendance_model->GetAttendance($attendance_parameter);
+
+        if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+            $companypusat = $this->input->post('companypusat');
+            $company_brand_id_pusat = $this->input->post('company_brand_id_pusat');
+            $employee_id = $this->session->userdata('employee_id');
+
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
+
+            $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => 0, 'p_company_id' => $companypusat, 'p_company_brand_id' => $company_brand_id_pusat, 'p_overtime_id' => 0, 'p_date_1' => $date_1, 'p_date_2' => $date_2, 'p_flag' => 1);
+            $data['AttendanceRecords'] = $this->attendance_model->GetAttendance2($attendance_parameter);
+        }
+
+        if ($this->session->userdata('role_id') == '2') {
+            $employee_id = $this->session->userdata('employee_id');
+            $company = $this->input->post('company');
+            $company_brand_id_cabang = $this->input->post('company_brand_id_cabang');
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => 0, 'p_company_id' => $company, 'p_company_brand_id' => $company_brand_id_cabang, 'p_overtime_id' => 0, 'p_date_1' => $date_1, 'p_date_2' => $date_2, 'p_flag' => 1);
+            $data['AttendanceRecords'] = $this->attendance_model->GetAttendance2($attendance_parameter);
+        }
+
+
+        $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => 0, 'p_flag' => 0);
+        $data['AttendanceTempRecords'] = $this->attendance_temp_model->GetAttendance($attendance_parameter);
+
+        $employee_id = $this->session->userdata('employee_id');
+        $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 11);
+        $data['EmployeeShiftRecords'] = $this->employee_model->GetEmployeeShiftStart($employee_parameter);
+
+        $this->global['pageTitle'] = 'CodeInsect : Menu Listing';
+        $this->loadViews("attendance/attendance", $this->global, $data, NULL);
+    }
+
+    function GetDefaultAttendance()
+    {
+
+        $company_id = $this->session->userdata('company_id');
+        $employee_id = $this->session->userdata('employee_id');
+
+        if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
+
+            $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => 0, 'p_overtime_id' => 0, 'p_date_1' => 0, 'p_date_2' => 0, 'p_flag' => 0);
+            $data['AttendanceRecords'] = $this->attendance_model->GetAttendance($attendance_parameter);
+        }
+
+        if ($this->session->userdata('role_id') == '2') {
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            //get company_brand_id
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => $company_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 15);
+            $data['companybrandid'] = $this->employee_model->GetCompanyBrandId($employee_parameter);
+
+            $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => 0, 'p_company_id' => $company_id, 'p_company_brand_id' => $data['companybrandid'], 'p_overtime_id' => 0, 'p_date_1' => 0, 'p_date_2' => 0, 'p_flag' => 4);
+            $data['AttendanceRecords'] = $this->attendance_model->GetAttendance2($attendance_parameter);
+        }
+
+
 
         $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => 0, 'p_flag' => 0);
         $data['AttendanceTempRecords'] = $this->attendance_temp_model->GetAttendance($attendance_parameter);
@@ -84,7 +148,7 @@ class attendance_controller extends BaseController
         } else {
             $this->session->set_flashdata('error', 'Attendance cannot added !');
         }
-        redirect('Attendance');
+        redirect('GetDefaultAttendance');
     }
 
     function UpdateAttendance()
@@ -108,7 +172,7 @@ class attendance_controller extends BaseController
         } else {
             $this->session->set_flashdata('error', 'Attendance cannot updated !');
         }
-        redirect('Attendance');
+        redirect('GetDefaultAttendance');
     }
 
     function InsertAttendanceTemptoAttendance()
@@ -144,7 +208,7 @@ class attendance_controller extends BaseController
         } else {
             $this->session->set_flashdata('error', 'Attendance cannot added !');
         }
-        redirect('Attendance');
+        redirect('GetDefaultAttendance');
     }
 
 

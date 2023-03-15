@@ -78,6 +78,28 @@ class sickleave_approval_model extends CI_Model
         }
     }
 
+    function GetToken($sick_leave_approval_parameter)
+    {
+        $procedure = "call usp_xt_sick_leave_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $sick_leave_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
+
+    function GetTokenRequester($sick_leave_approval_parameter)
+    {
+        $procedure = "call usp_xt_sick_leave_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $sick_leave_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
+
     function UpdateSickLeaveApproval($sick_leave_approval_parameter)
     {
         $procedure = "call usp_xt_sick_leave_approval_update(?,?,?,?,?)";

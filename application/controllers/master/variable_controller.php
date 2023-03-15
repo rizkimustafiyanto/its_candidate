@@ -51,8 +51,8 @@ class variable_controller extends BaseController
         } else {
             $this->load->library('form_validation');
             $this->form_validation->set_rules('variable_id', 'Variable Id', 'required|max_length[50]|xss_clean');
-            $this->form_validation->set_rules('variable_name', 'Variable Name', 'required|max_length[50]|xss_clean');
-            $this->form_validation->set_rules('variable_type', 'Variable Type', 'required|max_length[50]|xss_clean');
+            $this->form_validation->set_rules('variable_name', 'Variable Name', 'required|xss_clean');
+            $this->form_validation->set_rules('variable_type', 'Variable Type', 'required|xss_clean');
             $variable_id = $this->input->post('variable_id');
             $variable_name = $this->input->post('variable_name');
             $variable_type = $this->input->post('variable_type');
@@ -83,8 +83,8 @@ class variable_controller extends BaseController
         } else {
             $this->load->library('form_validation');
             $this->form_validation->set_rules('variable_id_update', 'Variable Id', 'required|max_length[50]|xss_clean');
-            $this->form_validation->set_rules('variable_name_update', 'Variable Name', 'required|max_length[50]|xss_clean');
-            $this->form_validation->set_rules('variable_type_update', 'Variable Type', 'required|max_length[50]|xss_clean');
+            $this->form_validation->set_rules('variable_name_update', 'Variable Name', 'required|xss_clean');
+            $this->form_validation->set_rules('variable_type_update', 'Variable Type', 'required|xss_clean');
             $variable_id = $this->input->post('variable_id_update');
             $variable_name = $this->input->post('variable_name_update');
             $variable_type = $this->input->post('variable_type_update');

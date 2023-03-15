@@ -12,6 +12,16 @@ class variable_model extends CI_Model
         }
     }
 
+    function GetVariable2($variable_parameter)
+    {
+        $procedure = "call usp_gm_variable_new_select(?, ?)";
+        $sql_query = $this->db->query($procedure, $variable_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            return $sql_query->result();
+        }
+    }
+
     function InsertVariable($variable_parameter)
     {
         $procedure = "call usp_gm_variable_insert(?,?,?,?,?,?,?)";

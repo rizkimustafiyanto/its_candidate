@@ -1,3 +1,14 @@
+<?php
+$employee_exit_url = '';
+
+if (!empty($EmployeeExitRecords)) {
+    foreach ($EmployeeExitRecords as $row) {
+        $employee_exit_url = $row->employee_exit_url;
+    }
+}
+?>
+
+
 <div class="content-wrapper">
     <div style="height: 20px;"></div>
     <!-- Main content -->
@@ -9,7 +20,7 @@
                         <div class="card-header">
                             <div class="row ">
                                 <div class="col-sm-6">
-                                    <h4>Employee Exit</h4>
+                                    <h4>List Karyawan Resign</h4>
                                 </div>
                                 <div class="col-sm-6">
                                     <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
@@ -23,6 +34,78 @@
                             </div>
                         </div>
                     </div>
+
+                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                        <div class="card card-sm card-default">
+                            <div class="card-header">
+                                <div class="row ">
+                                    <form role="form" action="<?php echo base_url() ?>EmployeeExitFilter" method="post">
+                                        <div class="col-sm-12">
+                                            <div class="row ">
+                                                <div class="row-sm-6">
+                                                    <label>Company</label>
+                                                    <select class="form-control select2bs4" id="companypusat" name="companypusat" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                        <!-- <option value="all">All</option> -->
+                                                        <?php foreach ($CompanyInBrandPusatRecords as $row) : ?>
+                                                            <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <div class="row-sm-6">
+                                                    <label>Company Brand</label>
+                                                    <select class="form-control select2bs4" name="company_brand_id_pusat" id="company_brand_id_pusat" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div style="width:11vw;">
+                                                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                    <?php if ($this->session->userdata('role_id') == '2') { ?>
+                        <div class="card card-sm card-default">
+                            <div class="card-header">
+                                <div class="row ">
+                                    <form role="form" action="<?php echo base_url() ?>EmployeeExitFilter" method="post">
+                                        <div class="col-sm-12">
+                                            <div class="row ">
+                                                <div class="row-sm-6">
+                                                    <label>Company</label>
+                                                    <select class="form-control select2bs4" id="company" name="company" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                        <!-- <option value="all">All</option> -->
+                                                        <?php foreach ($CompanyInBrandRecords as $row) : ?>
+                                                            <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <div class="row-sm-6">
+                                                    <label>Company Brand</label>
+                                                    <select class="form-control select2bs4" name="company_brand_id_cabang" id="company_brand_id_cabang" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div style="width:11vw;">
+                                                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
 
                     <?php if ($this->session->flashdata('success')) : ?>
                         <div class="flash-data" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
@@ -77,6 +160,8 @@
                                                     <td><a class="badge badge-pill badge-light float"><?php echo $record->resign_status_name ?></a></td>
                                                 <?php } else if ($record->resign_status == 'RS-004') { ?>
                                                     <td><a class="badge badge-pill badge-dark float"><?php echo $record->resign_status_name ?></a></td>
+                                                <?php } else if ($record->resign_status == 'RS-005') { ?>
+                                                    <td><a class="badge badge-pill badge-danger float"><?php echo $record->resign_status_name ?></a></td>
                                                 <?php } ?>
                                                 <td class="text-center">
                                                     <?php if ($record->employee_exit_url != '') { ?>
@@ -86,8 +171,10 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <a id="btnSelect" class="btn btn-xs btn-info" href="<?php echo base_url() . 'EmployeeDetail/' . $record->employee_id; ?>"><i class="fa fa-eye"></i></a>
-                                                    <a id="btnSelectEdit" class="btn btn-xs btn-warning" data-employeeid="<?= $record->employee_id ?>" data-employeename="<?= $record->employee_name ?>" data-resignstatus="<?= $record->resign_status ?>" data-employeeexitdate="<?= $record->employee_exit_date ?>" data-employeeexitreason="<?= $record->employee_exit_reason ?>" data-employeeexitno="<?= $record->employee_exit_no ?>" data-employeeexiturl="<?= $record->employee_exit_url ?>"><i class="fa fa-pen"></i></a>
-                                                </td>
+                                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+													<a id="btnSelectEdit" class="btn btn-xs btn-warning" data-employeeid="<?= $record->employee_id ?>" data-employeename="<?= $record->employee_name ?>" data-resignstatus="<?= $record->resign_status ?>" data-employeeexitdate="<?= $record->employee_exit_date ?>" data-employeeexitreason="<?= $record->employee_exit_reason ?>" data-employeeexitno="<?= $record->employee_exit_no ?>" data-employeeexiturl="<?= $record->employee_exit_url ?>"><i class="fa fa-pen"></i></a>
+													<?php } ?>
+												</td>
                                             </tr>
                                     <?php
                                         }
@@ -145,6 +232,7 @@
                                     <option value="RS-002">Resign</option>
                                     <option value="RS-003">Off Contract</option>
                                     <option value="RS-004">Fired</option>
+									<option value="RS-005">Mangkir</option>
                                 </select>
                                 <br>
                                 <div class="form-group">
@@ -160,7 +248,7 @@
                                 <input class="form-control" id="employee_exit_no" name="employee_exit_no" required>
                                 <br>
                                 <label for="employeeexiturl">Document</label>
-                                <input class="form-control" type="file" name="image" id="image" required accept=".jpeg,.jpg,.png,.pdf">
+                                <input class="form-control" type="file" name="image" id="image" accept=".jpeg,.jpg,.png,.pdf">
                                 <small>
                                     <font color="red">Type file : jpeg/jpg/png/pdf</font>
                                 </small>
@@ -222,7 +310,9 @@
                                     <input class="form-control" id="employee_exit_no_update" name="employee_exit_no" required>
                                     <br>
                                     <label for="employeeexiturl">Document</label>
-                                    <a id="hrefurl" href="" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                    <?php if ($employee_exit_url != null || $employee_exit_url = "") { ?>
+                                        <a id="hrefurl" href="" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                    <?php } ?>
                                     <input class="form-control" type="file" name="image" id="image_update" accept=".jpeg,.jpg,.png,.pdf">
                                     <input type="hidden" id="employee_exit_url" name="employee_exit_url">
                                     <small>
@@ -337,4 +427,68 @@
             $('#ExtColoumn').show();
         }
     });
+
+    // get company brand
+    $("#company").change(function() {
+        var company = $("#company").val();
+
+        // For set value Vehicle type on first load
+        $.ajax({
+            url: 'GetCompanyBrandByCompanyId3',
+            data: {
+                company: company
+            },
+            type: 'post',
+            async: true,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                var html = '';
+                var is = '';
+                if (response != null) {
+                    for (is = 0; is < response.length; is++) {
+                        html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+                        // console.log(company);
+                    }
+                } else {
+                    html += '<option value=""></option>';
+                }
+                //alert(data[0].sub_menu_id);
+                $('#company_brand_id_cabang').html(html);
+            }
+        })
+    })
+
+
+
+    // get company brand untuk hrd pusat
+    $("#companypusat").change(function() {
+        var companypusat = $("#companypusat").val();
+
+        // For set value Vehicle type on first load
+        $.ajax({
+            url: 'GetCompanyBrandByCompanyId4',
+            data: {
+                companypusat: companypusat
+            },
+            type: 'post',
+            async: true,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                var html = '';
+                var is = '';
+                if (response != null) {
+                    for (is = 0; is < response.length; is++) {
+                        html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+                        // console.log(company);
+                    }
+                } else {
+                    html += '<option value=""></option>';
+                }
+                //alert(data[0].sub_menu_id);
+                $('#company_brand_id_pusat').html(html);
+            }
+        })
+    })
 </script>

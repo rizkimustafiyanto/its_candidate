@@ -4,7 +4,7 @@ class shift_details_model extends CI_Model
 {
     function GetShiftDetails($shift_details_parameter)
     {
-        $procedure = "call usp_gm_shift_details_select(?, ?,?)";
+        $procedure = "call usp_gm_shift_details_select(?, ?,?,?)";
         $sql_query = $this->db->query($procedure, $shift_details_parameter);
         mysqli_next_result($this->db->conn_id);
         if ($sql_query->num_rows() > 0) {

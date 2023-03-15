@@ -26,7 +26,7 @@ class leave_controller extends BaseController
     {
         $this->load->model('leave/leave_model');
         $employee_id = $this->session->userdata('employee_id');
-        $leave_parameter = array('p_leave_id' => 0, 'p_employee_id' => $employee_id, 'p_flag' => 3);
+        $leave_parameter = array('p_leave_id' => 0, 'p_employee_id' => $employee_id, 'p_flag' => 4);
         $data['LeaveRecords'] = $this->leave_model->GetLeave($leave_parameter);
 
         //Leave Date Time
@@ -34,7 +34,7 @@ class leave_controller extends BaseController
         $data['LeaveDateTimeRecords'] = $this->leavedatetime_model->GetLeaveDateTime($leave_datetime_parameter);
 
         //Category/Keperluan
-        $variable_category_parameter = array('p_variable_id' => 'BA', 'p_flag' => 1);
+        $variable_category_parameter = array('p_variable_id' => 'BA', 'p_flag' => 3);
         $data['CategoryRecords'] = $this->variable_model->GetVariable($variable_category_parameter);
 
         //Sub Category/Izin untuk
@@ -48,7 +48,6 @@ class leave_controller extends BaseController
 
     function GetLeaveById($leave_id)
     {
-
         $this->load->model('leave/leave_model');
         $leave_parameter = array('p_leave_id' => $leave_id, 'p_employee_id' => '', 'p_flag' => 1);
         $data['LeaveRecords'] = $this->leave_model->GetLeave($leave_parameter);
@@ -58,8 +57,13 @@ class leave_controller extends BaseController
         $data['LeaveDateTimeRecords'] = $this->leavedatetime_model->GetLeaveDateTime($leave_datetime_parameter);
 
         //Category/Keperluan
-        $variable_category_parameter = array('p_variable_id' => 'BA', 'p_flag' => 1);
+        $variable_category_parameter = array('p_variable_id' => 'BA', 'p_flag' => 3);
         $data['CategoryRecords'] = $this->variable_model->GetVariable($variable_category_parameter);
+
+
+        //Category/Keperluan
+        $variable_category_parameter = array('p_variable_id' => 'BA', 'p_flag' => 1);
+        $data['CategoryRecords1'] = $this->variable_model->GetVariable($variable_category_parameter);
 
         //Sub Category/Izin untuk
         $variable_sub_category_parameter = array('p_variable_id' => 'SC', 'p_flag' => 1);
@@ -102,8 +106,29 @@ class leave_controller extends BaseController
         $leave_category_id = $this->input->post('leave_category_id');
         $leave_sub_category_id = $this->input->post('leave_sub_category_id');
         $leave_status_id = 'ST-001';
-        $time_leave_start = $this->input->post('time_leave_start');
-        $time_leave_finish = $this->input->post('time_leave_finish');
+
+
+        if ($leave_sub_category_id == 'SC-001') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-002') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-003') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-004') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = $this->input->post('time_leave_finish');
+        } else if ($leave_sub_category_id == 'SC-005') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-006') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        }
+
+
         $change_no = 0;
         $creation_user_id = $this->session->userdata('employee_id');
         $change_user_id = $this->session->userdata('employee_id');
@@ -148,8 +173,28 @@ class leave_controller extends BaseController
         $leave_category_id = $this->input->post('leave_category_id');
         $leave_sub_category_id = $this->input->post('leave_sub_category_id');
         $leave_status_id = $this->input->post('leave_status_id');
-        $time_leave_start = $this->input->post('time_leave_start');
-        $time_leave_finish = $this->input->post('time_leave_finish');
+
+        if ($leave_sub_category_id == 'SC-001') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-002') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-003') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-004') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = $this->input->post('time_leave_finish');
+        } else if ($leave_sub_category_id == 'SC-005') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-006') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        }
+
+
         $change_user_id = $this->session->userdata('employee_id');
         $record_status = "A";
         $leave_parameter = array($leave_id,  $leave_name, $employee_id, $company_id, $company_brand_id, $leave_status_id, $leave_category_id, $leave_sub_category_id, $time_leave_start,  $time_leave_finish, $change_user_id, $record_status, 'p_flag' => 0);
@@ -174,8 +219,29 @@ class leave_controller extends BaseController
         $leave_category_id = $this->input->post('leave_category_id');
         $leave_sub_category_id = $this->input->post('leave_sub_category_id');
         $leave_status_id = $this->input->post('leave_status_id');
-        $time_leave_start = $this->input->post('time_leave_start');
-        $time_leave_finish = $this->input->post('time_leave_finish');
+
+
+        if ($leave_sub_category_id == 'SC-001') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-002') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-003') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-004') {
+            $time_leave_start = $this->input->post('time_leave_start');
+            $time_leave_finish = $this->input->post('time_leave_finish');
+        } else if ($leave_sub_category_id == 'SC-005') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        } else if ($leave_sub_category_id == 'SC-006') {
+            $time_leave_start = null;
+            $time_leave_finish = null;
+        }
+
+
         $change_user_id = $this->session->userdata('employee_id');
         $record_status = "A";
         $leave_parameter = array($leave_id,  $leave_name, $employee_id, $company_id, $company_brand_id, $leave_status_id, $leave_category_id, $leave_sub_category_id, $time_leave_start,  $time_leave_finish, $change_user_id, $record_status, 'p_flag' => 1);
@@ -195,6 +261,9 @@ class leave_controller extends BaseController
 
         $leave_approval_parameter = array('p_leave_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_leave_id' => $leave_id, 'p_approver_id' => 0, 'p_flag' => 9);
         $data['LeaveDetails'] = $this->leave_approval_model->GetLeaveDetails($leave_approval_parameter);
+
+        $leave_approval_parameter = array('p_leave_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_leave_id' => $leave_id, 'p_approver_id' => 0, 'p_flag' => 12);
+        $data['TokenRecords'] = $this->leave_approval_model->GetToken($leave_approval_parameter);
 
         $config = [
             'mailtype'  => 'html',
@@ -231,6 +300,9 @@ class leave_controller extends BaseController
                     "<br />Start Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       :&nbsp;" . $data['LeaveDetails']->time_leave_start .
                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;      :&nbsp;" . $data['LeaveDetails']->leave_name .
                     "<br /> " .
+                    "<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+                    "<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+                    "<br /> " .
                     "<br />Terimakasih " .
                     "<br /><b>Team HRD Persada Group</b>"
             );
@@ -251,10 +323,16 @@ class leave_controller extends BaseController
                     "<br />Finish Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;       :&nbsp;" . $data['LeaveDetails']->time_leave_finish .
                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;      :&nbsp;" . $data['LeaveDetails']->leave_name .
                     "<br /> " .
+                    "<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+                    "<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+                    "<br /> " .
                     "<br />Terimakasih " .
                     "<br /><b>Team HRD Persada Group</b>"
             );
-        } else if ($data['LeaveDetails']->leave_sub_category_id == 'SC-001') {
+        } else if (
+            $data['LeaveDetails']->leave_sub_category_id == 'SC-001' || $data['LeaveDetails']->leave_sub_category_id == 'SC-005'
+            || $data['LeaveDetails']->leave_sub_category_id == 'SC-006'
+        ) {
             $this->email->message(
                 "Yth : Bpk/Ibu " . " <b>" . $data['ApproverName'] . "</b>" .
                     "<br /> " .
@@ -269,11 +347,77 @@ class leave_controller extends BaseController
                     "<br />Sampai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       :&nbsp;" . $data['LeaveDetails']->finish_date .
                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;      :&nbsp;" . $data['LeaveDetails']->leave_name .
                     "<br /> " .
+                    "<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+                    "<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+                    "<br /> " .
                     "<br />Terimakasih " .
                     "<br /><b>Team HRD Persada Group</b>"
             );
         }
         $this->email->send();
+
+        if ($data['TokenRecords'] != null) {
+            // FCM endpoint URL
+            $url = 'https://fcm.googleapis.com/fcm/send';
+
+            // FCM server key
+            $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+
+            // Notification payload
+            $payload = array(
+                'to' => $data['TokenRecords'],
+                'notification' => array(
+                    'title' =>
+                    'Approval Information',
+                    'body' => 'Mohon untuk memberikan approval pada Leave Request dengan No '
+                        . $leave_id .
+                        '. Terimakasih.'
+                ),
+                'data' => array(
+                    'chatId' => '123456',
+                    'senderId' => 'user123'
+                )
+            );
+
+            // Set headers
+            $headers = array(
+                'Content-Type:application/json',
+                'Authorization:key=' . $server_key
+            );
+
+            // Initialize cURL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+            // Execute the request
+            $response = curl_exec($ch);
+
+            // Check for errors
+            if ($response === false) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                log_message('error', 'FCM request failed: ' . $error);
+                // return false;
+            }
+
+            // Close cURL
+            curl_close($ch);
+
+            // Check the response status
+            $response_data = json_decode($response);
+            if ($response_data->success == 1) {
+                log_message('info', 'FCM notification sent successfully.');
+                // return true;
+            } else {
+                log_message('error', 'FCM notification failed: ' . $response);
+                // return false;
+            }
+        }
+
         $this->session->set_flashdata('success', 'Leave Request Submitted');
     }
 

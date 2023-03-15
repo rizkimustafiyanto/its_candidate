@@ -38,7 +38,7 @@
               <div class="icon">
                 <i class="fas fa-list-alt fa-3x text-gray-300"></i>
               </div>
-              <a href="<?= base_url('PaidLeaveReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="<?= base_url('GetDefaultPaidLeaveReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -56,7 +56,7 @@
               <div class="icon">
                 <i class="fas fa-book fa-3x text-gray-300"></i>
               </div>
-              <a href="<?= base_url('SickLeaveReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="<?= base_url('GetDefaultSickLeaveReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -74,7 +74,7 @@
               <div class="icon">
                 <i class="fas fa-signal fa-3x text-gray-300"></i>
               </div>
-              <a href="<?= base_url('LeaveReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="<?= base_url('GetDefaultLeaveReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -92,7 +92,7 @@
               <div class="icon">
                 <i class="fas fa-file fa-3x text-gray-300"></i>
               </div>
-              <a href="<?= base_url('OvertimeReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="<?= base_url('GetDefaultOvertimeReport'); ?>" class="small-box-footer">See All <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

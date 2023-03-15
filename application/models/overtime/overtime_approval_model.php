@@ -89,6 +89,27 @@ class overtime_approval_model extends CI_Model
         }
     }
 
+    function GetToken($overtime_approval_parameter)
+    {
+        $procedure = "call usp_xt_overtime_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $overtime_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
+
+    function GetTokenRequester($overtime_approval_parameter)
+    {
+        $procedure = "call usp_xt_overtime_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $overtime_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
 
 
     function UpdateOvertimeApproval($overtime_approval_parameter)

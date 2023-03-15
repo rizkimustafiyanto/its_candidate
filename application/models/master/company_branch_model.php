@@ -14,7 +14,7 @@ class company_branch_model extends CI_Model
 
     function InsertCompanyBranch($company_branch_parameter)
     {
-        $procedure = "call usp_gm_company_branch_insert(?,?,?,?,?,?,?)";
+        $procedure = "call usp_gm_company_branch_insert(?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($procedure, $company_branch_parameter);
 
         return true;
@@ -22,7 +22,7 @@ class company_branch_model extends CI_Model
 
     function UpdateCompanyBranch($company_branch_parameter)
     {
-        $procedure = "call usp_gm_company_branch_update(?,?,?,?,?)";
+        $procedure = "call usp_gm_company_branch_update(?,?,?,?,?,?,?)";
         $sql_query = $this->db->query($procedure, $company_branch_parameter);
         return true;
     }

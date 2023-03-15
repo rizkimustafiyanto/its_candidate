@@ -237,6 +237,7 @@ $route['DeleteExtPaidLeave/(:any)/(:any)'] = "master/employee_ext_paid_leave_con
 
 // Employee Leader / Approver 
 $route['EmployeeLeader'] = "master/employee_leader_controller/GetEmployeeLeader";
+$route['EmployeeLeaderFilter'] = "master/employee_leader_controller/GetEmployeeLeaderFilter";
 $route['InsertEmployeeLeader'] = "master/employee_leader_controller/InsertEmployeeLeader";
 $route['GetEmployeeLeaderById/(:num)'] = "master/employee_leader_controller/GetEmployeeLeaderById/$1";
 $route['UpdateEmployeeLeader'] = "master/employee_leader_controller/UpdateEmployeeLeader";
@@ -273,9 +274,14 @@ $route['DownloadProfileDocument/(:any)/(:any)'] = "master/employeedocument_contr
 
 // Report
 $route['OvertimeReport'] = "reportleave/overtimereport_controller/GetOvertimeReport";
+$route['GetDefaultOvertimeReport'] = "reportleave/overtimereport_controller/GetDefaultOvertimeReport";
 $route['PaidLeaveReport'] = "reportleave/paidleavereport_controller/GetPaidLeaveReport";
+$route['GetDefaultPaidLeaveReport'] = "reportleave/paidleavereport_controller/GetDefaultPaidLeaveReport";
 $route['SickLeaveReport'] = "reportleave/sickleavereport_controller/GetSickLeaveReport";
+$route['GetDefaultSickLeaveReport'] = "reportleave/sickleavereport_controller/GetDefaultSickLeaveReport";
+$route['GetDefaultLeaveReport'] = "reportleave/leavereport_controller/GetDefaultLeaveReport";
 $route['LeaveReport'] = "reportleave/leavereport_controller/GetLeaveReport";
+
 
 // Employee History
 $route['EmployeeHistory'] = "employeehistory/employee_history_controller/GetEmployeeHistory";
@@ -298,6 +304,9 @@ $route['DeleteNoticeLetter/(:any)/(:any)'] = "noticeletter/noticeletter_controll
 $route['DownloadNoticeLetter/(:any)/(:any)'] = "noticeletter/noticeletter_controller/DownloadNoticeLetter/$1/$2";
 $route['upload/(:any)'] = "noticeletter/noticeletter_controller/upload/$1";
 $route['GetEmployeeByCompanyId'] = "master/employee_controller/GetEmployeeByCompanyId";
+$route['GetEmployeeHaveRemainingPaidLeaveByCompanyId'] = "master/employee_controller/GetEmployeeHaveRemainingPaidLeaveByCompanyId";
+$route['GetEmployeeHaveRemainingPaidLeaveByCompanyId2'] = "master/employee_controller/GetEmployeeHaveRemainingPaidLeaveByCompanyId2";
+$route['GetEmployeeHaveRemainingPaidLeaveByCompanyId3'] = "master/employee_controller/GetEmployeeHaveRemainingPaidLeaveByCompanyId3";
 
 // Notice Letter History
 $route['NoticeLetterHistory'] = "noticeletterhistory/noticeletter_history_controller/GetNoticeLetterHistory";
@@ -350,6 +359,7 @@ $route['DeleteShiftDetails/(:any)/(:any)'] = "master/shift_details_controller/De
 
 // Attendance List
 $route['Attendance'] = "attendance/attendance_controller/GetAttendance";
+$route['GetDefaultAttendance'] = "attendance/attendance_controller/GetDefaultAttendance";
 $route['InsertAttendance'] = "attendance/attendance_controller/InsertAttendance";
 $route['UpdateAttendance'] = "attendance/attendance_controller/UpdateAttendance";
 $route['ImportAttendanceInsert'] = "attendance/attendance_controller/ImportAttendanceInsert";
@@ -393,11 +403,200 @@ $route['EmployeeBrand'] = "master/employee_brand_controller/GetEmployeeBrand";
 $route['InsertEmployeeBrand'] = "master/employee_brand_controller/InsertEmployeeBrand";
 $route['GetEmployeeBrandById/(:num)'] = "master/employee_brand_controller/GetEmployeeBrandById/$1";
 $route['UpdateEmployeeBrand'] = "master/employee_brand_controller/UpdateEmployeeBrand";
-$route['DeleteEmployeeBrand/(:num)'] = "master/employee_brand_controller/DeleteEmployeeBrand/$1";
-
+$route['DeleteEmployeeBrand/(:any)/(:any)'] = "master/employee_brand_controller/DeleteEmployeeBrand/$1/$2";
 
 // Approval Cancel Request
 $route['ApprovalCancelRequest'] = "approval/approval_cancel_request_controller/GetApprovalCancelRequest";
+
+//Employee Per Cabang
+$route['EmployeeInBrand'] = "master/employee_controller/EmployeeInBrand";
+
+//Company Brand by Company
+$route['GetCompanyBrandByCompanyId3'] = "master/company_brand_controller/GetCompanyBrandByCompanyId3";
+$route['GetCompanyBrandByCompanyId4'] = "master/company_brand_controller/GetCompanyBrandByCompanyId4";
+$route['GetCompanyBrandByCompanyId5'] = "master/company_brand_controller/GetCompanyBrandByCompanyId5";
+
+//get shift by company
+$route['GetShiftByCompanyId'] = "master/shift_controller/GetShiftByCompanyId";
+$route['GetShiftByCompanyId2'] = "master/shift_controller/GetShiftByCompanyId2";
+
+//Filter Employee Brand
+$route['EmployeeBrandFilter'] = "master/employee_brand_controller/GetEmployeeBrandFilter";
+
+//Filter Employee Exit
+$route['EmployeeExitFilter'] = "employeeexit/employeeexit_controller/GetEmployeeExitFilter";
+
+//Filter Notice Letter
+$route['NoticeLetterFilter'] = "noticeletter/noticeletter_controller/GetNoticeLetterFilter";
+
+//PEMOTONGAN CUTI
+//Pemotongan Cuti / Cutting Paid Leave
+$route['CuttingPaidLeave'] = "cuttingpaidleave/cuttingpaidleave_controller/GetCuttingPaidLeave";
+$route['CuttingPaidLeaveFilter'] = "cuttingpaidleave/cuttingpaidleave_controller/GetCuttingPaidLeaveFilter";
+$route['InsertCuttingPaidLeave'] = "cuttingpaidleave/cuttingpaidleave_controller/InsertCuttingPaidLeave";
+$route['UpdateCuttingPaidLeave'] = "cuttingpaidleave/cuttingpaidleave_controller/UpdateCuttingPaidLeave";
+$route['SubmitCuttingPaidLeave'] = "cuttingpaidleave/cuttingpaidleave_controller/SubmitCuttingPaidLeave";
+$route['DeleteCuttingPaidLeave/(:any)'] = "cuttingpaidleave/cuttingpaidleave_controller/DeleteCuttingPaidLeave/$1";
+$route['CuttingPaidLeaveDetail/(:any)/(:any)/(:any)'] = "cuttingpaidleave/cuttingpaidleave_controller/GetCuttingPaidLeaveById/$1/$2/$3";
+
+// Cutting Paid Leave Date Time
+$route['PaidLeaveDateTime'] = "paidleave/paidleavedatetime_controller/GetPaidLeaveDateTime";
+$route['InsertCuttingPaidLeaveDateTime'] = "cuttingpaidleave/cuttingpaidleavedatetime_controller/InsertCuttingPaidLeaveDateTime";
+$route['DeleteCuttingPaidLeaveDateTime/(:any)/(:any)/(:any)/(:any)'] = "cuttingpaidleave/cuttingpaidleavedatetime_controller/DeleteCuttingPaidLeaveDateTime/$1/$2/$3/$4";
+
+// Report Detail
+$route['OvertimeDetailReport'] = "reportdetail/overtimedetailreport_controller/GetOvertimeDetailReport";
+$route['GetDefaultOvertimeDetailReport'] = "reportdetail/overtimedetailreport_controller/GetDefaultOvertimeDetailReport";
+$route['PaidLeaveDetailReport'] = "reportdetail/paidleavedetailreport_controller/GetPaidLeaveDetailReport";
+$route['GetDefaultPaidLeaveDetailReport'] = "reportdetail/paidleavedetailreport_controller/GetDefaultPaidLeaveDetailReport";
+$route['SickLeaveDetailReport'] = "reportdetail/sickleavedetailreport_controller/GetSickLeaveDetailReport";
+$route['GetDefaultSickLeaveDetailReport'] = "reportdetail/sickleavedetailreport_controller/GetDefaultSickLeaveDetailReport";
+$route['GetDefaultLeaveDetailReport'] = "reportdetail/leavedetailreport_controller/GetDefaultLeaveDetailReport";
+$route['LeaveDetailReport'] = "reportdetail/leavedetailreport_controller/GetLeaveDetailReport";
+
+
+
+//CUTI BERSAMA
+//Cuti Bersama / Massive Leave
+$route['MassiveLeave'] = "massiveleave/massiveleave_controller/GetMassiveLeave";
+$route['MassiveLeaveFilter'] = "massiveleave/massiveleave_controller/GetMassiveLeaveFilter";
+$route['InsertMassiveLeave'] = "massiveleave/massiveleave_controller/InsertMassiveLeave";
+
+//Delete di table massive leave
+$route['DeletePaidLeaveForMassiveLeave/(:any)'] = "massiveleave/massiveleave_controller/DeleteMassivePaidLeave/$1";
+$route['DeleteLeaveForMassiveLeave/(:any)'] = "massiveleave/massiveleave_controller/DeleteMassiveLeave/$1";
+
+//Massive leave temp
+$route['InserttoEmployeeTemp'] = "massiveleave/massiveleave_controller/InserttoEmployeeTemp";
+$route['InserttoEmployeeTempCabang'] = "massiveleave/massiveleave_controller/InserttoEmployeeTempCabang";
+$route['MassiveLeaveDetail'] = "massiveleave/massiveleave_controller/GetMassiveLeaveById";
+$route['DeleteEmployeeTemp/(:any)'] = "massiveleave/massiveleave_controller/DeleteEmployeeTemp/$1";
+
+//Massive Leave Date Time Temp
+$route['MassiveLeaveDateTimeTemp'] = "massiveleave/massiveleavedatetimetemp_controller/GetMassiveLeaveDateTimeTemp";
+$route['InsertMassiveLeaveDateTimeTemp'] = "massiveleave/massiveleavedatetimetemp_controller/InsertMassiveLeaveDateTimeTemp";
+$route['DeleteMassiveLeaveDateTimeTemp/(:any)'] = "massiveleave/massiveleavedatetimetemp_controller/DeleteMassiveLeaveDateTimeTemp/$1";
+
+//SPPD
+//Regional
+$route['Regional'] = "master/regional_controller/GetRegional";
+$route['GetRegionalById/(:any)/(:any)'] = "master/regional_controller/GetRegionalById/$1/$2";
+$route['InsertRegional'] = "master/regional_controller/InsertRegional";
+$route['UpdateRegional'] = "master/regional_controller/UpdateRegional";
+$route['DeleteRegional/(:any)'] = "master/regional_controller/DeleteRegional/$1";
+
+//Province Zone
+$route['ProvinceZone'] = "master/province_zone_controller/GetProvinceZone";
+$route['GetProvinceZoneById/(:any)/(:any)'] = "master/province_zone_controller/GetProvinceZoneById/$1/$2";
+$route['InsertProvinceZone'] = "master/province_zone_controller/InsertProvinceZone";
+$route['UpdateProvinceZone'] = "master/province_zone_controller/UpdateProvinceZone";
+$route['DeleteProvinceZone/(:any)'] = "master/province_zone_controller/DeleteProvinceZone/$1";
+
+//Country Zone
+$route['CountryZone'] = "master/country_zone_controller/GetCountryZone";
+$route['GetCountryZoneById/(:any)/(:any)'] = "master/country_zone_controller/GetCountryZoneById/$1/$2";
+$route['InsertCountryZone'] = "master/country_zone_controller/InsertCountryZone";
+$route['UpdateCountryZone'] = "master/country_zone_controller/UpdateCountryZone";
+$route['DeleteCountryZone/(:any)'] = "master/country_zone_controller/DeleteCountryZone/$1";
+
+//Cost
+$route['Cost'] = "master/cost_controller/GetCost";
+$route['GetCostById/(:any)/(:any)'] = "master/cost_controller/GetCostById/$1/$2";
+$route['InsertCost'] = "master/cost_controller/InsertCost";
+$route['UpdateCost'] = "master/cost_controller/UpdateCost";
+$route['DeleteCost/(:any)'] = "master/cost_controller/DeleteCost/$1";
+
+// Regional Cost
+$route['RegionalCost'] = "master/regional_cost_controller/GetRegionalCost";
+$route['InsertRegionalCost'] = "master/regional_cost_controller/InsertRegionalCost";
+$route['GetRegionalCostById/(:any)'] = "master/regional_cost_controller/GetRegionalCostById/$1";
+$route['UpdateRegionalCost'] = "master/regional_cost_controller/UpdateRegionalCost";
+$route['DeleteRegionalCost/(:any)'] = "master/regional_cost_controller/DeleteRegionalCost/$1";
+
+// SPPD transaksi
+$route['SPPD'] = "sppd/sppd_controller/GetSPPD";
+$route['InsertSPPD'] = "sppd/sppd_controller/InsertSPPD";
+$route['GetSPPDById/(:any)'] = "sppd/sppd_controller/GetSPPDById/$1";
+$route['UpdateSPPD'] = "sppd/sppd_controller/UpdateSPPD";
+$route['UpdateSPPDZone'] = "sppd/sppd_controller/UpdateSPPDZone";
+$route['GenerateSPPUM'] = "sppd/sppd_controller/GenerateSPPUM";
+$route['SubmitSPPD'] = "sppd/sppd_controller/SubmitSPPD";
+$route['DeleteSPPD/(:any)'] = "sppd/sppd_controller/DeleteSPPD/$1";
+$route['SPPDDetail/(:any)/(:any)'] = "sppd/sppd_controller/GetSPPDById/$1/$2";
+$route['UpdateSPPDApproval'] = "sppd/sppd_approval_controller/UpdateSPPDApproval";
+
+//SPPD Detail
+$route['SPPDDetail'] = "sppd/sppd_detail_controller/GetSPPDDetail";
+$route['InsertSPPDDetail'] = "sppd/sppd_detail_controller/InsertSPPDDetail";
+$route['GetSPPDDetailById/(:any)'] = "sppd/sppd_detail_controller/GetSPPDDetailById/$1";
+$route['UpdateSPPDDetail'] = "sppd/sppd_detail_controller/UpdateSPPDDetail";
+$route['DeleteSPPDDetail/(:any)/(:any)/(:any)'] = "sppd/sppd_detail_controller/DeleteSPPDDetail/$1/$2/$3";
+
+//SPPD Member
+$route['SPPDMember'] = "sppd/sppd_member_controller/GetSPPDMember";
+$route['InsertSPPDMember'] = "sppd/sppd_member_controller/InsertSPPDMember";
+$route['GetSPPDMemberById/(:any)'] = "sppd/sppd_member_controller/GetSPPDMemberById/$1";
+$route['DeleteSPPDMember/(:any)/(:any)/(:any)'] = "sppd/sppd_member_controller/DeleteSPPDMember/$1/$2/$3";
+
+//SPPUM
+$route['SPPUM'] = "sppd/sppum_controller/GetSPPUM";
+$route['InsertSPPUM'] = "sppd/sppum_controller/InsertSPPUM";
+$route['UpdateSPPUM'] = "sppd/sppum_controller/UpdateSPPUM";
+$route['GetSPPUMById/(:any)'] = "sppd/sppum_controller/GetSPPUMById/$1";
+$route['DeleteSPPUM/(:any)/(:any)/(:any)'] = "sppd/sppum_controller/DeleteSPPUM/$1/$2/$3";
+
+// SPPD Approval
+$route['MenuSPPDApproval'] = "sppd/menu_sppd_approval_controller/GetMenuSPPDApproval";
+
+// Get Nominal By Cost ID, Level ID, and Tujuan Kota ID
+$route['GetNominalByCostLevelTujuan'] = "master/cost_controller/GetNominalByCostLevelTujuan";
+
+//LPPD
+//LPPD
+$route['LPPD'] = "sppd/lppd_controller/GetLPPD";
+$route['LPPDDetail/(:any)/(:any)/(:any)'] = "sppd/lppd_controller/GetLPPDById/$1/$2/$3";
+$route['UpdateLPPD'] = "sppd/lppd_controller/UpdateLPPD";
+$route['SubmitLPPD'] = "sppd/lppd_controller/SubmitLPPD";
+$route['ReSubmitLPPD'] = "sppd/lppd_controller/ReSubmitLPPD";
+$route['UpdateLPPDApproval'] = "sppd/lppd_approval_controller/UpdateLPPDApproval";
+
+//LPPD Approval
+$route['MenuLPPDApproval'] = "sppd/menu_lppd_approval_controller/GetMenuLPPDApproval";
+
+//LPPD Cost / Rincian Biaya Perjalanan Dinas
+$route['LPPDCost'] = "sppd/lppd_cost_controller/GetLPPDCost";
+$route['InsertLPPDCost'] = "sppd/lppd_cost_controller/InsertLPPDCost";
+$route['GetLPPDCostById/(:any)'] = "sppd/lppd_cost_controller/GetLPPDCost/$1";
+$route['UpdateLPPDCost'] = "sppd/lppd_cost_controller/UpdateLPPDCost";
+$route['DeleteLPPDCost/(:any)/(:any)/(:any)/(:any)'] = "sppd/lppd_cost_controller/DeleteLPPDCost/$1/$2/$3/$4";
+$route['DownloadLPPDCost/(:any)/(:any)'] = "sppd/lppd_cost_controller/DownloadLPPDCost/$1/$2";
+
+//LPPD Adjustment / Pengurangan atau Penambahan Biaya Perjalanan Dinas oleh HRD atau FAD
+$route['LPPDAdjustment'] = "sppd/lppd_adjustment_controller/GetLPPDAdjustment";
+$route['InsertLPPDAdjustment'] = "sppd/lppd_adjustment_controller/InsertLPPDAdjustment";
+$route['GetLPPDAdjustmentById/(:any)'] = "sppd/lppd_adjustment_controller/GetLPPDAdjustment/$1";
+$route['UpdateLPPDAdjustment'] = "sppd/lppd_adjustment_controller/UpdateLPPDAdjustment";
+$route['DeleteLPPDAdjustment/(:any)/(:any)/(:any)/(:any)'] = "sppd/lppd_adjustment_controller/DeleteLPPDAdjustment/$1/$2/$3/$4";
+
+//LPPD Detail 
+$route['LPPDDetail'] = "sppd/lppd_detail_controller/GetLPPDdetail";
+$route['InsertLPPDDetail'] = "sppd/lppd_detail_controller/InsertLPPDDetail";
+$route['GetLPPDDetailById/(:any)'] = "sppd/lppd_detail_controller/GetLPPDDetail/$1";
+$route['UpdateLPPDDetail'] = "sppd/lppd_detail_controller/UpdateLPPDDetail";
+$route['DeleteLPPDDetail/(:any)/(:any)/(:any)/(:any)'] = "sppd/lppd_detail_controller/DeleteLPPDDetail/$1/$2/$3/$4";
+
+//SPPD and LPPD Report
+$route['GetDefaultSPPDReport'] = "reportdetail/sppd_report_controller/GetDefaultSPPDReport";
+$route['SPPDReport'] = "reportdetail/sppd_report_controller/GetSPPDReport";
+$route['GetDefaultLPPDReport'] = "reportdetail/lppd_report_controller/GetDefaultLPPDReport";
+$route['LPPDReport'] = "reportdetail/lppd_report_controller/GetLPPDReport";
+
+// Apps Config
+$route['AppsConfig'] = "master/apps_config_controller/GetAppsConfig";
+$route['InsertAppsConfig'] = "master/apps_config_controller/InsertAppsConfig";
+$route['UpdateAppsConfig'] = "master/apps_config_controller/UpdateAppsConfig";
+$route['DeleteAppsConfig/(:any)'] = "master/apps_config_controller/DeleteAppsConfig/$1";
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

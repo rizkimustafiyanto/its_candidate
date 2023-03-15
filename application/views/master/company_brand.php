@@ -12,11 +12,13 @@
                                     <h4>Company Brand</h4>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="col-xs-12 text-right">
-                                        <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-company_brand">
-                                            <i class="fa fa-plus"></i> Add Company Brand
-                                        </button>
-                                    </div>
+                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                        <div class="col-xs-12 text-right">
+                                            <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-company_brand">
+                                                <i class="fa fa-plus"></i> Add Company Brand
+                                            </button>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -40,8 +42,9 @@
                                         <th>Company Brand ID</th>
                                         <th>Company Name</th>
                                         <th>Company Brand Name</th>
-                                        <th>Creation</th>
-                                        <th>Updated Date</th>
+                                        <th>Bank</th>
+                                        <th>No Rekening</th>
+                                        <th>Nama Rekening</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -54,11 +57,14 @@
                                                 <td><?php echo $record->company_brand_id ?></td>
                                                 <td><?php echo $record->company_name ?></td>
                                                 <td><?php echo $record->company_brand_name ?></td>
-                                                <td><?php echo $record->creation_user_name ?></td>
-                                                <td><?php echo $record->change_datetime ?></td>
+                                                <td><?php echo $record->bank ?></td>
+                                                <td><?php echo $record->no_rekening ?></td>
+                                                <td><?php echo $record->nama_rekening ?></td>
                                                 <td class="text-center">
-                                                    <a id="btnSelect" class="btn btn-xs btn-primary" data-companybrandname="<?= $record->company_brand_name ?>" data-companyid="<?= $record->company_id ?>" data-companybrandid="<?= $record->company_brand_id ?>" data-toggle="modal" data-target="#modal-company_brand-update"><i class="fa fa-pen"></i></a>
-                                                    <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteCompanyBrand/' . $record->company_brand_id; ?>"><i class="fa fa-trash"></i></a>
+                                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                                        <a id="btnSelect" class="btn btn-xs btn-primary" data-companybrandname="<?= $record->company_brand_name ?>" data-companyid="<?= $record->company_id ?>" data-companybrandid="<?= $record->company_brand_id ?>" data-bank="<?= $record->bank ?>" data-norekening="<?= $record->no_rekening ?>" data-namarekening="<?= $record->nama_rekening ?>" data-toggle="modal" data-target="#modal-company_brand-update"><i class="fa fa-pen"></i></a>
+                                                        <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteCompanyBrand/' . $record->company_brand_id; ?>"><i class="fa fa-trash"></i></a>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                     <?php
@@ -106,6 +112,15 @@
                                 <label for="companybrandname">Company Brand Name</label>
                                 <input class="form-control" id="company_brand_name" placeholder="Company Brand Name" name="company_brand_name" maxlength="50" required>
                                 <br>
+                                <label for="bank">Bank</label>
+                                <input class="form-control" id="bank" placeholder="Bank" name="bank" required>
+                                <br>
+                                <label for="norekening">No Rekening</label>
+                                <input type="number" class="form-control" id="no_rekening" placeholder="No Rekening" name="no_rekening" required>
+                                <br>
+                                <label for="namarekening">Nama Rekening</label>
+                                <input class="form-control" id="nama_rekening" placeholder="Nama Rekening" name="nama_rekening" required>
+                                <br>
                             </div>
 
                         </div>
@@ -146,6 +161,15 @@
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
+                                <label>Bank</label>
+                                <input class="form-control" id="bank_update" placeholder="Bank" name="bank_update" required>
+                                <br>
+                                <label>No Rekening</label>
+                                <input type="number" class="form-control" id="no_rekening_update" placeholder="No Rekening" name="no_rekening_update" required>
+                                <br>
+                                <label>Nama Rekening</label>
+                                <input class="form-control" id="nama_rekening_update" placeholder="Nama Rekening" name="nama_rekening_update" required>
+                                <br>
                             </div>
 
                         </div>
@@ -169,10 +193,18 @@
         var company_brand_name = $(this).data("companybrandname");
         var company_brand_id = $(this).data("companybrandid");
         var company_id = $(this).data("companyid");
+        var bank = $(this).data("bank");
+        var no_rekening = $(this).data("norekening");
+        var nama_rekening = $(this).data("namarekening");
+
 
         $("#company_brand_name_update").val(company_brand_name);
         $("#company_brand_id_update").val(company_brand_id);
-        $("#company_id_update").val(company_id).trigger("change");;
+        $("#company_id_update").val(company_id).trigger("change");
+        $("#bank_update").val(bank);
+        $("#no_rekening_update").val(no_rekening);
+        $("#nama_rekening_update").val(nama_rekening);
+
 
     });
 

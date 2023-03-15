@@ -9,17 +9,14 @@
                         <div class="card-header">
                             <div class="row ">
                                 <div class="col-sm-6">
-                                    <h4>Paid Leave Report</h4>
+                                    <h4>Report Cuti</h4>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <?php if ((date('Y-m-d', strtotime($this->input->post('date_1'))) != "1970-01-01")
-                        && (date('Y-m-d', strtotime($this->input->post('date_2'))) != "1970-01-01")
-                    ) { ?>
-                        <?= "Filter Date from : "  . "<b>" . date('Y-m-d', strtotime($this->input->post('date_1'))) . "</b>" . " to " . "<b>" . date('Y-m-d', strtotime($this->input->post('date_2'))) . "</b>" ?>
-                    <?php } else { ?>
-                    <?php } ?>
+
+                    <?= "Filter Creation Date from : "  . "<b>" . ($this->input->post('date_1')) . "</b>" . " - " . "<b>" . ($this->input->post('date_2')) . "</b>" ?>
+
                     <?php if ($this->session->flashdata('success')) : ?>
                         <div class="alert alert-success">
                             <?= $this->session->flashdata('success') ?>
@@ -31,6 +28,8 @@
 
                     <?php endif; ?>
 
+                    <!-- <?php print_r($final_array); ?> -->
+
                     <?php if ($this->session->flashdata('error')) : ?>
                         <div class="alert alert-danger">
                             <?= $this->session->flashdata('error') ?>
@@ -40,7 +39,6 @@
                         </div>
                         <?= $this->session->unset_userdata('error'); ?>
                     <?php endif; ?>
-                    <!-- <?php print_r($ApprovalListRecords); ?> -->
 
                     <form role="form" action="<?php echo base_url() ?>PaidLeaveReport" method="post">
                         <div class="col-12">

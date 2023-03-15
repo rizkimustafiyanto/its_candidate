@@ -43,11 +43,11 @@ class paidleavedatetime_controller extends BaseController
         $record_status = "A";
         $paid_leave_parameter = array($employee_paid_leave_id, $employee_paid_leave_date, $change_no, $creation_user_id, $change_user_id, $record_status);
 
-        if (date('Y-m-d', strtotime($this->input->post('employee_paid_leave_date'))) < date('Y-m-d')) {
-            $error = "Paid Leave date can't older than Now ";
-            $this->session->set_flashdata('error', $error);
-            redirect('PaidLeaveDetail/' . $employee_paid_leave_id . '/' . $paid_leave_id . '/' . $employee_id);
-        }
+        // if (date('Y-m-d', strtotime($this->input->post('employee_paid_leave_date'))) < date('Y-m-d')) {
+        //     $error = "Paid Leave date can't older than Now ";
+        //     $this->session->set_flashdata('error', $error);
+        //     redirect('PaidLeaveDetail/' . $employee_paid_leave_id . '/' . $paid_leave_id . '/' . $employee_id);
+        // }
 
         $this->load->model('paidleave/paidleavedatetime_model');
         $this->paidleavedatetime_model->InsertPaidLeaveDateTime($paid_leave_parameter);

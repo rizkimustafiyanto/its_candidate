@@ -78,6 +78,28 @@ class paidleave_approval_model extends CI_Model
         }
     }
 
+    function GetToken($paid_leave_approval_parameter)
+    {
+        $procedure = "call usp_xt_paid_leave_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $paid_leave_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
+
+    function GetTokenRequester($paid_leave_approval_parameter)
+    {
+        $procedure = "call usp_xt_paid_leave_approval_select(?, ?,?,?,?)";
+        $sql_query = $this->db->query($procedure, $paid_leave_approval_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            $ret =  $sql_query->row();
+            return $ret->token;
+        }
+    }
+
     function UpdatePaidLeaveApproval($paid_leave_approval_parameter)
     {
         $procedure = "call usp_xt_paid_leave_approval_update(?,?,?,?,?,?)";

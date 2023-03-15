@@ -56,6 +56,12 @@ class overtime_approval_controller extends BaseController
         $overtime_approval_parameter = array('p_overtime_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_overtime_id' => $overtime_id, 'p_approver_id' => 0, 'p_flag' => 9);
         $data['OvertimeDetails'] = $this->overtime_approval_model->GetOvertimeDetails($overtime_approval_parameter);
 
+        $overtime_approval_parameter = array('p_overtime_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_overtime_id' => $overtime_id, 'p_approver_id' => 0, 'p_flag' => 13);
+        $data['TokenRecords'] = $this->overtime_approval_model->GetToken($overtime_approval_parameter);
+
+        $overtime_approval_parameter = array('p_overtime_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_overtime_id' => $overtime_id, 'p_approver_id' => 0, 'p_flag' => 14);
+        $data['TokenRequesterRecords'] = $this->overtime_approval_model->GetTokenRequester($overtime_approval_parameter);
+
         if ($status_id == 'AOP-001') {
             $config = [
                 'mailtype'  => 'html',
@@ -87,10 +93,75 @@ class overtime_approval_controller extends BaseController
                     "<br />Total Lembur &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     :&nbsp;" . $data['OvertimeDetails']->amountovertime .
                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;      :&nbsp;" . $data['OvertimeDetails']->description .
                     "<br /> " .
+                    "<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+                    "<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+                    "<br /> " .
                     "<br />Terimakasih " .
                     "<br /><b>Team HRD Persada Group</b>"
             );
             $this->email->send();
+
+            if ($data['TokenRecords'] != null) {
+                // FCM endpoint URL
+                $url = 'https://fcm.googleapis.com/fcm/send';
+
+                // FCM server key
+                $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+
+                // Notification payload
+                $payload = array(
+                    'to' => $data['TokenRecords'],
+                    'notification' => array(
+                        'title' =>
+                        'Approval Information',
+                        'body' => 'Mohon untuk memberikan approval pada Overtime Request dengan No '
+                            . $overtime_id .
+                            '. Terimakasih.'
+                    ),
+                    'data' => array(
+                        'chatId' => '123456',
+                        'senderId' => 'user123'
+                    )
+                );
+
+                // Set headers
+                $headers = array(
+                    'Content-Type:application/json',
+                    'Authorization:key=' . $server_key
+                );
+
+                // Initialize cURL
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+                // Execute the request
+                $response = curl_exec($ch);
+
+                // Check for errors
+                if ($response === false) {
+                    $error = curl_error($ch);
+                    curl_close($ch);
+                    log_message('error', 'FCM request failed: ' . $error);
+                    // return false;
+                }
+
+                // Close cURL
+                curl_close($ch);
+
+                // Check the response status
+                $response_data = json_decode($response);
+                if ($response_data->success == 1) {
+                    log_message('info', 'FCM notification sent successfully.');
+                    // return true;
+                } else {
+                    log_message('error', 'FCM notification failed: ' . $response);
+                    // return false;
+                }
+            }
         }
 
         if ($status_id == 'AOP-001' && $data['OvertimeDetails']->overtime_status_id == 'ST-002') {
@@ -128,6 +199,69 @@ class overtime_approval_controller extends BaseController
                     "<br /><b>Team HRD Persada Group</b>"
             );
             $this->email->send();
+
+
+            if ($data['TokenRequesterRecords'] != null) {
+                // FCM endpoint URL
+                $url = 'https://fcm.googleapis.com/fcm/send';
+
+                // FCM server key
+                $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+
+                // Notification payload
+                $payload = array(
+                    'to' => $data['TokenRequesterRecords'],
+                    'notification' => array(
+                        'title' =>
+                        'Approval Information',
+                        'body' => 'Permohonan Lembur anda dengan No '
+                            . $overtime_id . ' di setujui' .
+                            '. Terimakasih.'
+                    ),
+                    'data' => array(
+                        'chatId' => '123456',
+                        'senderId' => 'user123'
+                    )
+                );
+
+                // Set headers
+                $headers = array(
+                    'Content-Type:application/json',
+                    'Authorization:key=' . $server_key
+                );
+
+                // Initialize cURL
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+                // Execute the request
+                $response = curl_exec($ch);
+
+                // Check for errors
+                if ($response === false) {
+                    $error = curl_error($ch);
+                    curl_close($ch);
+                    log_message('error', 'FCM request failed: ' . $error);
+                    // return false;
+                }
+
+                // Close cURL
+                curl_close($ch);
+
+                // Check the response status
+                $response_data = json_decode($response);
+                if ($response_data->success == 1) {
+                    log_message('info', 'FCM notification sent successfully.');
+                    // return true;
+                } else {
+                    log_message('error', 'FCM notification failed: ' . $response);
+                    // return false;
+                }
+            }
         } else if ($status_id == 'AOP-002') {
             $config = [
                 'mailtype'  => 'html',
@@ -163,6 +297,68 @@ class overtime_approval_controller extends BaseController
                     "<br /><b>Team HRD Persada Group</b>"
             );
             $this->email->send();
+
+            if ($data['TokenRequesterRecords'] != null) {
+                // FCM endpoint URL
+                $url = 'https://fcm.googleapis.com/fcm/send';
+
+                // FCM server key
+                $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+
+                // Notification payload
+                $payload = array(
+                    'to' => $data['TokenRequesterRecords'],
+                    'notification' => array(
+                        'title' =>
+                        'Approval Information',
+                        'body' => 'Permohonan Lembur anda dengan No '
+                            . $overtime_id . ' di tolak' .
+                            '. Terimakasih.'
+                    ),
+                    'data' => array(
+                        'chatId' => '123456',
+                        'senderId' => 'user123'
+                    )
+                );
+
+                // Set headers
+                $headers = array(
+                    'Content-Type:application/json',
+                    'Authorization:key=' . $server_key
+                );
+
+                // Initialize cURL
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+                // Execute the request
+                $response = curl_exec($ch);
+
+                // Check for errors
+                if ($response === false) {
+                    $error = curl_error($ch);
+                    curl_close($ch);
+                    log_message('error', 'FCM request failed: ' . $error);
+                    // return false;
+                }
+
+                // Close cURL
+                curl_close($ch);
+
+                // Check the response status
+                $response_data = json_decode($response);
+                if ($response_data->success == 1) {
+                    log_message('info', 'FCM notification sent successfully.');
+                    // return true;
+                } else {
+                    log_message('error', 'FCM notification failed: ' . $response);
+                    // return false;
+                }
+            }
         }
 
         redirect('OvertimeDetail/' . $overtime_id . "/" . $employee_id);

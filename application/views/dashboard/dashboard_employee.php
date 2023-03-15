@@ -27,7 +27,7 @@
             <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-list-alt"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Cuti</span>
+              <span class="info-box-text">Pengajuan Cuti</span>
               <span class="info-box-number">
                 <?php if ($CountPaidLeave == null) { ?>
                   <?= 0 ?>
@@ -46,7 +46,7 @@
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-book"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Izin Sakit</span>
+              <span class="info-box-text">Pengajuan Izin Sakit</span>
               <span class="info-box-number">
                 <?php if ($CountSickLeave == null) { ?>
                   <?= 0 ?>
@@ -65,7 +65,7 @@
             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-signal"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Izin</span>
+              <span class="info-box-text">Pengajuan Izin</span>
               <span class="info-box-number">
                 <?php if ($CountLeave == null) { ?>
                   <?= 0 ?>
@@ -84,7 +84,7 @@
             <span class="info-box-icon bg-info elevation-1"><i class="fas fa-file"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Lembur</span>
+              <span class="info-box-text">Pengajuan Lembur</span>
               <span class="info-box-number">
                 <?php if ($CountOvertime == null) { ?>
                   <?= 0 ?>

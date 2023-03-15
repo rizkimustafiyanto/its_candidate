@@ -20,6 +20,7 @@ $change_user_name = '';
 $actual_time_overtime_start = '';
 $actual_time_overtime_finish = '';
 $actual_amount_time_overtime = '';
+$creation_datetime = '';
 
 if (!empty($OvertimeRecords)) {
     foreach ($OvertimeRecords as $row) {
@@ -44,6 +45,7 @@ if (!empty($OvertimeRecords)) {
         $actual_time_overtime_start = $row->actual_time_overtime_start;
         $actual_time_overtime_finish = $row->actual_time_overtime_finish;
         $actual_amount_time_overtime = $row->actual_amount_time_overtime;
+        $creation_datetime = $row->creation_datetime;
     }
 }
 ?>
@@ -60,7 +62,9 @@ if (!empty($OvertimeRecords)) {
                         <div class="col-sm-12">
                             <strong>
                                 <h3>Detail Pengajuan Lembur</h3>
-                                <!-- <?php print_r($actualtimeovertimestart) ?> -->
+                                <!-- <?php print_r($TokenRecords) ?>
+                                <?php print_r($TokenRequesterRecords) ?> -->
+
                             </strong>
                         </div>
                         <!-- /.col -->
@@ -102,13 +106,15 @@ if (!empty($OvertimeRecords)) {
                                         <i class="fa fa-paper-plane"></i> Submit
                                     </button>
                                 <?php } ?>
-                                <?php if ((str_replace('.', '', $this->session->userdata('employee_id')) == (str_replace('.', '', $OvertimeApproval1Records)) && ($overtime_status_id == 'ST-003'))) { ?>
+                                <?php if ((($this->session->userdata('employee_id') == $OvertimeApproval1Records) && ($overtime_status_id == 'ST-003'))) { ?>
                                     <button type="button" class="btn btn-md btn-success" id="btnAdd" data-toggle="modal" data-target="#modal-approval">
                                         <i class="fa fa-check-circle"></i> Approval
                                     </button>
                                 <?php } else { ?>
                                 <?php } ?>
-                                <?php if ($this->session->userdata('role_id') == '5' && ($overtime_status_id == 'ST-002')) { ?>
+                                <?php if (($this->session->userdata('role_id') == '5' &&  ($overtime_status_id == 'ST-002')) ||
+                                    ($this->session->userdata('role_id') == '2' &&  ($overtime_status_id == 'ST-002'))
+                                ) { ?>
                                     <button type="button" class="btn btn-md btn-success" id="btnAdd" data-toggle="modal" data-target="#modal-confirmation">
                                         <i class="fa fa-check-circle"></i> Confirmation
                                     </button>
@@ -227,6 +233,14 @@ if (!empty($OvertimeRecords)) {
                                             <div class="form-group">
                                                 <label for="amounttimeovertime">Jumlah Jam Lembur</label>
                                                 <input class="form-control" id="amount_timeover_time" placeholder="Jumlah Jam Lembur" name="amount_timeover_time" value="<?php echo $amount_time_overtime; ?>" maxlength="50" readonly="true" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Tanggal Diajukan</label>
+                                                <input class="form-control" id="creation_datetime" placeholder="Creation Datetime" name="creation_datetime" value="<?php echo $creation_datetime; ?>" maxlength="50" readonly="true" required>
                                             </div>
                                         </div>
                                     </div>
@@ -384,71 +398,74 @@ if (!empty($OvertimeRecords)) {
                                     </table>
                                 </div>
                             </div>
-                            <div class="card">
-                                <!-- card-header -->
-                                <div class="card-header">
-                                    <strong>
-                                        <h4 class="card-title"><b>Approval</b></h4>
-                                    </strong>
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
+
+                            <?php if ($overtime_status_id != 'ST-001') { ?>
+                                <div class="card">
+                                    <!-- card-header -->
+                                    <div class="card-header">
+                                        <strong>
+                                            <h4 class="card-title"><b>Approval</b></h4>
+                                        </strong>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <table id="approval_table" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Line No</th>
+                                                    <th>Approver</th>
+                                                    <th>Comment</th>
+                                                    <th>Status</th>
+                                                    <th>Approval Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $i = 1;
+                                                if (!empty($OvertimeApprovalRecords)) {
+                                                    foreach ($OvertimeApprovalRecords as $record) {
+                                                ?>
+                                                        <tr>
+                                                            <td><?php echo $record->line_no; ?></td>
+                                                            <td>
+                                                                <?php echo $record->approver_name; ?>
+                                                            </td>
+                                                            <?php if ($record->comment != null) { ?>
+                                                                <td>
+                                                                    <?php echo $record->comment; ?>
+                                                                </td>
+                                                            <?php } else { ?>
+                                                                <td> -</td>
+                                                            <?php } ?>
+                                                            <?php if ($record->status_name != null) { ?>
+                                                                <td>
+                                                                    <?php echo $record->status_name; ?>
+                                                                </td>
+                                                            <?php } else { ?>
+                                                                <td> -</td>
+                                                            <?php } ?>
+                                                            <?php if ($record->change_datetime != null) { ?>
+                                                                <td>
+                                                                    <?php echo $record->change_datetime; ?>
+                                                                </td>
+                                                            <?php } else { ?>
+                                                                <td> -</td>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                        </tr>
+                                                    <?php
+                                                }
+                                                    ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-
-                                <div class="card-body">
-                                    <table id="approval_table" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Line No</th>
-                                                <th>Approver</th>
-                                                <th>Comment</th>
-                                                <th>Status</th>
-                                                <th>Approval Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $i = 1;
-                                            if (!empty($OvertimeApprovalRecords)) {
-                                                foreach ($OvertimeApprovalRecords as $record) {
-                                            ?>
-                                                    <tr>
-                                                        <td><?php echo $record->line_no; ?></td>
-                                                        <td>
-                                                            <?php echo $record->approver_name; ?>
-                                                        </td>
-                                                        <?php if ($record->comment != null) { ?>
-                                                            <td>
-                                                                <?php echo $record->comment; ?>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td> -</td>
-                                                        <?php } ?>
-                                                        <?php if ($record->status_name != null) { ?>
-                                                            <td>
-                                                                <?php echo $record->status_name; ?>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td> -</td>
-                                                        <?php } ?>
-                                                        <?php if ($record->change_datetime != null) { ?>
-                                                            <td>
-                                                                <?php echo $record->change_datetime; ?>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td> -</td>
-                                                        <?php } ?>
-                                                    <?php } ?>
-                                                    </tr>
-                                                <?php
-                                            }
-                                                ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <?php } ?>
                         </div>
                         <!-- /.card -->
     </section>
@@ -471,7 +488,7 @@ if (!empty($OvertimeRecords)) {
                                 <label for="overtimeid">Document No</label>
                                 <input class="form-control" id="overtime_id" value="<?php echo $overtime_id; ?>" name="overtime_id" readonly>
                                 <br>
-                                <label for="overtimestatusid">Status</label>
+                                <label for="overtimestatusid">Status *</label>
                                 <select class="form-control select2bs4" name="status_id" id="status_id" required>
                                     <option disabled selected value="">--Select--</option>
                                     <?php foreach ($OvertimeApprovalStatusRecords as $row) : ?>
@@ -479,10 +496,10 @@ if (!empty($OvertimeRecords)) {
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="comment">Comment</label>
+                                <label for="comment">Comment *</label>
                                 <!-- <input type="hidden" id="overtime_id_approval" name="overtime_id" value="<?php echo $overtime_id; ?>"> -->
                                 <input type="hidden" id="status_id_approval" name="overtime_status_id" value="<?php echo $overtime_status_id; ?>">
-                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" maxlength="50" required></textarea>
+                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" required>-</textarea>
                                 <br>
                             </div>
 

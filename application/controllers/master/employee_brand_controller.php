@@ -11,6 +11,7 @@ class employee_brand_controller extends BaseController
         $this->load->model('master/employee_model');
         $this->load->model('master/company_brand_model');
         $this->load->model('master/employee_brand_model');
+        $this->load->model('master/company_model');
 
         $this->IsLoggedIn();
     }
@@ -23,9 +24,72 @@ class employee_brand_controller extends BaseController
 
     function GetEmployeeBrand()
     {
-        $this->load->model('master/employee_brand_model');
-        $employee_brand_parameter = array('p_employee_brand_id' => 0, 'p_flag' => 0);
-        $data['EmployeeBrandRecords'] = $this->employee_brand_model->GetEmployeeBrand($employee_brand_parameter);
+
+        if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
+
+            $this->load->model('master/employee_brand_model');
+            $employee_brand_parameter = array('p_employee_brand_id' => 0, 'p_employee_id' => 0, 'p_flag' => 0);
+            $data['EmployeeBrandRecords'] = $this->employee_brand_model->GetEmployeeBrand($employee_brand_parameter);
+        }
+
+        if ($this->session->userdata('role_id') == '2') {
+            $employee_id = $this->session->userdata('employee_id');
+            $company_id = $this->session->userdata('company_id');
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            //get company_brand_id
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => $company_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 15);
+            $data['companybrandid'] = $this->employee_model->GetCompanyBrandId($employee_parameter);
+
+            $employee_brand_parameter = array('p_employee_brand_id' => 0, 'p_company_id' => $company_id, 'p_company_brand_id' => $data['companybrandid'],  'p_flag' => 0);
+            $data['EmployeeBrandRecords'] = $this->employee_brand_model->GetEmployeeBrandPerCabang($employee_brand_parameter);
+        }
+
+
+        $brand_parameter = array('p_company_brand_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
+        $data['CompanyBrandRecords'] = $this->company_brand_model->GetCompanyBrand($brand_parameter);
+
+        $employee_parameter = array(
+            'p_employee_id' => 0, 'p_company_id' => 0,
+            'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 0
+        );
+        $data['EmployeeRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+        $this->global['pageTitle'] = 'CodeInsect : Employee Listing';
+        $this->loadViews("master/employee_brand", $this->global, $data, NULL);
+    }
+
+    function GetEmployeeBrandFilter()
+    {
+
+        if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
+
+            $companypusat = $this->input->post('companypusat');
+            $company_brand_id_pusat = $this->input->post('company_brand_id_pusat');
+            $this->load->model('master/employee_brand_model');
+            $employee_brand_parameter = array('p_employee_brand_id' => 0, 'p_company_id' => $companypusat, 'p_company_brand_id' => $company_brand_id_pusat, 'p_flag' => 0);
+            $data['EmployeeBrandRecords'] = $this->employee_brand_model->GetEmployeeBrandPerCabang($employee_brand_parameter);
+        }
+
+        if ($this->session->userdata('role_id') == '2') {
+            $employee_id = $this->session->userdata('employee_id');
+
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            $this->load->model('master/employee_brand_model');
+            $company = $this->input->post('company');
+            $company_brand_id_cabang = $this->input->post('company_brand_id_cabang');
+            $employee_brand_parameter = array('p_employee_brand_id' => 0, 'p_company_id' => $company, 'p_company_brand_id' => $company_brand_id_cabang,  'p_flag' => 0);
+            $data['EmployeeBrandRecords'] = $this->employee_brand_model->GetEmployeeBrandPerCabang($employee_brand_parameter);
+        }
 
         $brand_parameter = array('p_company_brand_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
         $data['CompanyBrandRecords'] = $this->company_brand_model->GetCompanyBrand($brand_parameter);
@@ -81,7 +145,7 @@ class employee_brand_controller extends BaseController
             $this->session->set_flashdata('error', 'Employee Brand Already Exist!');
         }
 
-        redirect('EmployeeBrand');
+        redirect('EmployeeDetail/' . $employee_id);
     }
 
     function UpdateEmployeeBrand()
@@ -111,12 +175,12 @@ class employee_brand_controller extends BaseController
             $this->session->set_flashdata('error', 'Employee Brand cannot updated!');
         }
 
-        redirect('EmployeeBrand');
+        redirect('EmployeeDetail/' . $employee_id);
     }
 
 
 
-    function DeleteEmployeeBrand($employee_brand_id)
+    function DeleteEmployeeBrand($employee_brand_id, $employee_id)
     {
         $employee_brand_parameter = array($employee_brand_id);
 
@@ -128,6 +192,6 @@ class employee_brand_controller extends BaseController
             $this->session->set_flashdata('error', 'Employee  Brand cannot deleted !');
         }
 
-        redirect('EmployeeBrand');
+        redirect('EmployeeDetail/' . $employee_id);
     }
 }

@@ -130,10 +130,6 @@ class announcement_controller extends BaseController
                 }
             }
 
-            // if ($resign_status == 'RS-001') {
-            //     $path = './upload/' . $employee_exit_url;
-            //     unlink($path);
-            // }
             $this->session->set_flashdata('success', 'Announcement has been updated !');
         } else {
             $this->session->set_flashdata('error', 'Announcement cannot updated !');

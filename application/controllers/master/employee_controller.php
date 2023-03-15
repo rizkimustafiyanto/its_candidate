@@ -21,6 +21,8 @@ class employee_controller extends BaseController
         $this->load->model('noticeletter/noticeletter_model');
         $this->load->model('master/employee_address_model');
         $this->load->model('master/shift_model');
+        $this->load->model('master/company_brand_model');
+        $this->load->model('master/employee_brand_model');
 
         $this->IsLoggedIn();
     }
@@ -34,15 +36,124 @@ class employee_controller extends BaseController
     function GetEmployee()
     {
         $company_id = $this->session->userdata('company_id');
+        $employee_id = $this->session->userdata('employee_id');
 
         if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+
+            $company_brand_parameter = array('p_company_brand_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyBrandRecords'] = $this->company_brand_model->GetCompanyBrand($company_brand_parameter);
+
             $employee_parameter = array('p_employee_id' => 0, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 0);
             $data['EmployeeRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
         }
 
         if ($this->session->userdata('role_id') == '2') {
-            $employee_parameter = array('p_employee_id' => 0, 'p_company_id' => $company_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 13);
-            $data['EmployeeRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            //get company_brand_id
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => $company_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 15);
+            $data['companybrandid'] = $this->employee_model->GetCompanyBrandId($employee_parameter);
+
+            $employee_parameter = array('p_employee_id' => 0, 'p_company_id' => $company_id, 'p_company_brand_id' => $data['companybrandid'], 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 0);
+            $data['EmployeeRecords'] = $this->employee_model->GetEmployeePerCabang($employee_parameter);
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+        }
+
+        $department_parameter = array('p_department_id' => 0, 'p_division_id' => 0, 'p_flag' => 0);
+        $data['DepartmentRecords'] = $this->department_model->GetDepartment($department_parameter);
+        $division_parameter = array('p_division_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
+        $data['DivisionRecords'] = $this->division_model->GetDivision($division_parameter);
+
+        $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+        $data['CompanyRecords'] = $this->company_model->GetCompany($company_parameter);
+
+        //variable
+        $variable_gender_parameter = array('p_variable_id' => 'GND', 'p_flag' => 1);
+        $data['GenderRecords'] = $this->variable_model->GetVariable($variable_gender_parameter);
+
+        //religion
+        $variable_religion_parameter = array('p_variable_id' => 'RG', 'p_flag' => 1);
+        $data['ReligionRecords'] = $this->variable_model->GetVariable($variable_religion_parameter);
+
+        //gender
+        $variable_gender_parameter = array('p_variable_id' => 'GR', 'p_flag' => 1);
+        $data['GenderRecords'] = $this->variable_model->GetVariable($variable_gender_parameter);
+
+        //employee status
+        $variable_employee_status_parameter = array('p_variable_id' => 'ES', 'p_flag' => 1);
+        $data['EmployeeStatusRecords'] = $this->variable_model->GetVariable($variable_employee_status_parameter);
+
+        //employee level
+        $variable_employee_level_parameter = array('p_variable_id' => 'EL', 'p_flag' => 1);
+        $data['EmployeeLevelRecords'] = $this->variable_model->GetVariable($variable_employee_level_parameter);
+
+        //employee level
+        $variable_citizen_status_parameter = array('p_variable_id' => 'CS', 'p_flag' => 1);
+        $data['CitizenStatusRecords'] = $this->variable_model->GetVariable($variable_citizen_status_parameter);
+
+        //leave type
+        $leave_type_parameter = array('p_variable_id' => 'LT', 'p_flag' => 1);
+        $data['LeaveTypeRecords'] = $this->variable_model->GetVariable($leave_type_parameter);
+
+        //employee paid leave
+        $variable_employee_paid_leave_parameter = array('p_variable_id' => 'PL', 'p_flag' => 1);
+        $data['EmployeePaidLeaveRecords'] = $this->variable_model->GetVariable($variable_employee_paid_leave_parameter);
+
+        //approver status
+        $variable_approver_status_parameter = array('p_variable_id' => 'APS', 'p_flag' => 1);
+        $data['ApproverStatusRecords'] = $this->variable_model->GetVariable($variable_approver_status_parameter);
+
+        //hak lembur
+        $variable_hak_lembur_parameter = array('p_variable_id' => 'OVT', 'p_flag' => 1);
+        $data['HakLemburRecords'] = $this->variable_model->GetVariable($variable_hak_lembur_parameter);
+
+        //shift
+        $shift_parameter = array('p_shift_id' => 0, 'p_flag' => 0);
+        $data['ShiftRecords'] = $this->shift_model->GetShift($shift_parameter);
+
+        $this->global['pageTitle'] = 'CodeInsect : Employee Listing';
+        $this->loadViews("master/employee", $this->global, $data, NULL);
+    }
+
+
+    function EmployeeInBrand()
+    {
+
+        if ($this->session->userdata('role_id') == '2') {
+            $employee_id = $this->session->userdata('employee_id');
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            $company = $this->input->post('company');
+            $company_brand_id_cabang = $this->input->post('company_brand_id_cabang');
+            $employee_id = $this->session->userdata('employee_id');
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => $company, 'p_company_brand_id' => $company_brand_id_cabang, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 0);
+            $data['EmployeeRecords'] = $this->employee_model->GetEmployeePerCabang($employee_parameter);
+        }
+
+        if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+
+            $company_brand_parameter = array('p_company_brand_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyBrandRecords'] = $this->company_brand_model->GetCompanyBrand($company_brand_parameter);
+
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
+
+            $companypusat = $this->input->post('companypusat');
+            $company_brand_id_pusat = $this->input->post('company_brand_id_pusat');
+            $employee_id = $this->session->userdata('employee_id');
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => $companypusat, 'p_company_brand_id' => $company_brand_id_pusat, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 0);
+            $data['EmployeeRecords'] = $this->employee_model->GetEmployeePerCabang($employee_parameter);
         }
 
         $department_parameter = array('p_department_id' => 0, 'p_division_id' => 0, 'p_flag' => 0);
@@ -209,6 +320,14 @@ class employee_controller extends BaseController
         $variable_hak_lembur_parameter = array('p_variable_id' => 'OVT', 'p_flag' => 1);
         $data['HakLemburRecords'] = $this->variable_model->GetVariable($variable_hak_lembur_parameter);
 
+        //employee brand
+        $employee_brand_parameter = array('p_employee_brand_id' => 0, 'p_employee_id' => $employee_id, 'p_flag' => 1);
+        $data['EmployeeBrandRecords'] = $this->employee_brand_model->GetEmployeeBrand($employee_brand_parameter);
+
+        //company brand
+        $company_brand_parameter = array('p_company_brand_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
+        $data['CompanyBrandRecords'] = $this->company_brand_model->GetCompanyBrand($company_brand_parameter);
+
 
         $this->global['pageTitle'] = 'CodeInsect : Employee Listing';
         $this->loadViews("master/employee_detail", $this->global, $data, NULL);
@@ -230,6 +349,7 @@ class employee_controller extends BaseController
         $division_id = $this->input->post('division_id');
         $department_id = $this->input->post('department_id');
         $company_branch_id = $this->input->post('company_branch_id');
+        $company_brand_id = $this->input->post('company_brand_id');
         $date_of_birth = date('Y-m-d', strtotime($this->input->post('date_of_birth')));
         $place_of_birth = $this->input->post('place_of_birth');;
         $gender_id = $this->input->post('gender_id');;
@@ -252,6 +372,10 @@ class employee_controller extends BaseController
         }
 
         $overtime_flag = $this->input->post('overtime_flag');
+        $bank = $this->input->post('bank');
+        $no_rekening = $this->input->post('no_rekening');
+        $nama_rekening = $this->input->post('nama_rekening');
+
         $change_no = 0;
         $creation_user_id = $this->session->userdata('employee_id');
         $change_user_id = $this->session->userdata('employee_id');
@@ -266,6 +390,7 @@ class employee_controller extends BaseController
             $division_id,
             $department_id,
             $company_branch_id,
+            $company_brand_id,
             $date_of_birth,
             $place_of_birth,
             $gender_id,
@@ -281,6 +406,9 @@ class employee_controller extends BaseController
             $shift_id,
             $photo_url,
             $overtime_flag,
+            $bank,
+            $no_rekening,
+            $nama_rekening,
             $change_no,
             $creation_user_id,
             $change_user_id,
@@ -363,12 +491,15 @@ class employee_controller extends BaseController
         $jabatan = $this->input->post('jabatan_update');
         $shift_id = $this->input->post('shift_id_update');
         $overtime_flag = $this->input->post('overtime_flag_update');
+        $bank = $this->input->post('bank_update');
+        $no_rekening = $this->input->post('no_rekening_update');
+        $nama_rekening = $this->input->post('nama_rekening_update');
         $change_no = 0;
         $creation_user_id = $this->session->userdata('employee_id');
         $change_user_id = $this->session->userdata('employee_id');
         $record_status = "A";
-
         $flag = 0;
+
         $employee_parameter = array(
             $employee_id,
             $employee_name,
@@ -392,6 +523,9 @@ class employee_controller extends BaseController
             $jabatan,
             $shift_id,
             $overtime_flag,
+            $bank,
+            $no_rekening,
+            $nama_rekening,
             $change_no,
             $creation_user_id,
             $change_user_id,
@@ -439,6 +573,42 @@ class employee_controller extends BaseController
         $employee_parameter =
             array('p_employee_id' => 0, 'p_company_id' => $company_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 7);
         $records =  $this->employee_model->GetEmployee($employee_parameter);
+
+        echo json_encode($records);
+    }
+
+    function GetEmployeeHaveRemainingPaidLeaveByCompanyId()
+    {
+
+        $company_id = $this->input->post('company_id'); //receiving the ajax post from view
+
+        $employee_parameter =
+            array('p_employee_id' => 0, 'p_company_id' => $company_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 16);
+        $records =  $this->employee_model->GetEmployee($employee_parameter);
+
+        echo json_encode($records);
+    }
+
+    function GetEmployeeHaveRemainingPaidLeaveByCompanyId2()
+    {
+
+        $company_brand_id = $this->input->post('company_brand_id'); //receiving the ajax post from view
+
+        $employee_parameter =
+            array('p_employee_id' => 0, 'p_company_brand_id' => $company_brand_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 0);
+        $records =  $this->employee_model->GetEmployee3($employee_parameter);
+
+        echo json_encode($records);
+    }
+
+    function GetEmployeeHaveRemainingPaidLeaveByCompanyId3()
+    {
+
+        $company_brand_id_2 = $this->input->post('company_brand_id_2'); //receiving the ajax post from view
+
+        $employee_parameter =
+            array('p_employee_id' => 0, 'p_company_brand_id' => $company_brand_id_2, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 0);
+        $records =  $this->employee_model->GetEmployee3($employee_parameter);
 
         echo json_encode($records);
     }

@@ -32,7 +32,7 @@
           <div class="card">
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="announcement_table" class="table table-bordered  table-striped table-responsive">
+              <table id="announcement_table" class="table table-bordered  table-striped">
                 <thead>
                   <tr>
                     <th>No</th>

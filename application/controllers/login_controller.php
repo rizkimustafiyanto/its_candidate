@@ -78,7 +78,7 @@ class login_controller extends CI_Controller
                     $this->session->set_userdata($sessionArray);
 
                     if ($res->role_id != '1') {
-                        redirect('/DashboardEmployee');
+                        redirect('/Approval');
                         $this->session->set_flashdata('success', 'Success Login');
                     } else {
                         redirect('/DashboardAdmin');

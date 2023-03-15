@@ -89,7 +89,10 @@ class attendance_temp_controller extends BaseController
                     'record_status' => 'A'
                 );
 
-                $result = $this->attendance_temp_model->InsertImportAttendance($temp_data);
+                // $result = $this->attendance_temp_model->InsertImportAttendance($temp_data);
+                if ($employee_id != null) {
+                    $result = $this->attendance_temp_model->InsertImportAttendance($temp_data);
+                }
             }
             if ($result > 0) {
                 // Redirect to modal Preview
@@ -97,13 +100,13 @@ class attendance_temp_controller extends BaseController
             } else {
                 $this->session->set_flashdata('error', 'Import Attendance failed !');
             }
-            redirect('Attendance');
+            redirect('GetDefaultAttendance');
         }
     }
 
     function DeleteAttendanceTemp()
     {
         $this->attendance_temp_model->DeleteAttendanceTemp();
-        redirect('Attendance');
+        redirect('GetDefaultAttendance');
     }
 }

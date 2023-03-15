@@ -41,13 +41,15 @@ class company_brand_controller extends BaseController
         $company_brand_id = $this->input->post('company_brand_id');
         $company_brand_name = $this->input->post('company_brand_name');
         $company_id = $this->input->post('company_id');
-
+        $bank = $this->input->post('bank');
+        $no_rekening = $this->input->post('no_rekening');
+        $nama_rekening = $this->input->post('nama_rekening');
         $change_no = 0;
         $creation_user_id = $this->session->userdata('employee_id');
         $change_user_id = $this->session->userdata('employee_id');
         $record_status = "A";
 
-        $company_brand_parameter = array($company_brand_id, $company_id, $company_brand_name, $change_no, $creation_user_id, $change_user_id, $record_status);
+        $company_brand_parameter = array($company_brand_id, $company_id, $company_brand_name, $bank, $no_rekening, $nama_rekening, $change_no, $creation_user_id, $change_user_id, $record_status);
 
         $this->load->model('master/company_brand_model');
         $result = $this->company_brand_model->InsertCompanyBrand($company_brand_parameter);
@@ -72,8 +74,11 @@ class company_brand_controller extends BaseController
         $company_brand_name = $this->input->post('company_brand_name_update');
         $company_id = $this->input->post('company_id_update');
         $change_user_id = $this->session->userdata('employee_id');
+        $bank = $this->input->post('bank_update');
+        $no_rekening = $this->input->post('no_rekening_update');
+        $nama_rekening = $this->input->post('nama_rekening_update');
         $record_status = "A";
-        $company_brand_parameter = array($company_brand_id, $company_brand_name, $company_id, $change_user_id, $record_status);
+        $company_brand_parameter = array($company_brand_id, $company_brand_name, $company_id, $bank, $no_rekening, $nama_rekening, $change_user_id, $record_status);
 
         $this->load->model('master/company_brand_model');
         $result = $this->company_brand_model->UpdateCompanyBrand($company_brand_parameter);
@@ -105,7 +110,7 @@ class company_brand_controller extends BaseController
     function GetCompanyBrandByCompanyId()
     {
 
-        $company_id = $this->input->post('company_id'); //receiving the ajax post from view
+        $company_id = $this->input->post('company_id');
 
         $company_brand_parameter =
             array('p_company_brand_id' => 0, 'p_company_id' => $company_id, 'p_flag' => 2);
@@ -117,11 +122,50 @@ class company_brand_controller extends BaseController
     function GetCompanyBrandByCompanyId2()
     {
 
-        $company_id = $this->input->post('company_id_update'); //receiving the ajax post from view
+        $company_id = $this->input->post('company_id_update');
 
         $company_brand_parameter =
             array('p_company_brand_id' => 0, 'p_company_id' => $company_id, 'p_flag' => 2);
         $records =  $this->company_brand_model->GetCompanyBrand($company_brand_parameter);
+
+        echo json_encode($records);
+    }
+
+
+    function GetCompanyBrandByCompanyId3()
+    {
+
+        $company = $this->input->post('company');
+        $employee_id = $this->session->userdata('employee_id');
+
+        $company_brand_parameter =
+            array('p_company_brand_id' => 0, 'p_employee_id' => $employee_id, 'p_company_id' => $company, 'p_flag' => 0);
+        $records =  $this->company_brand_model->GetCompanyBrand2($company_brand_parameter);
+
+        echo json_encode($records);
+    }
+
+    function GetCompanyBrandByCompanyId4()
+    {
+
+        $companypusat = $this->input->post('companypusat');
+
+        $company_brand_parameter =
+            array('p_company_brand_id' => 0, 'p_employee_id' => 0, 'p_company_id' => $companypusat, 'p_flag' => 1);
+        $records =  $this->company_brand_model->GetCompanyBrand2($company_brand_parameter);
+
+        echo json_encode($records);
+    }
+
+    function GetCompanyBrandByCompanyId5()
+    {
+
+        $company = $this->input->post('company_id_2');
+        $employee_id = $this->session->userdata('employee_id');
+
+        $company_brand_parameter =
+            array('p_company_brand_id' => 0, 'p_employee_id' => $employee_id, 'p_company_id' => $company, 'p_flag' => 0);
+        $records =  $this->company_brand_model->GetCompanyBrand2($company_brand_parameter);
 
         echo json_encode($records);
     }

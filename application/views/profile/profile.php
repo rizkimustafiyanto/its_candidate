@@ -28,6 +28,9 @@ $employee_exit_date = '';
 $employee_exit_reason = '';
 $employee_exit_no = '';
 $employee_exit_url = '';
+$bank = '';
+$no_rekening = '';
+$nama_rekening = '';
 
 if (!empty($EmployeeRecords)) {
     foreach ($EmployeeRecords as $row) {
@@ -60,6 +63,9 @@ if (!empty($EmployeeRecords)) {
         $employee_exit_reason = $row->employee_exit_reason;
         $employee_exit_no = $row->employee_exit_no;
         $employee_exit_url = $row->employee_exit_url;
+        $bank = $row->bank;
+        $no_rekening = $row->no_rekening;
+        $nama_rekening = $row->nama_rekening;
     }
 }
 ?>
@@ -362,6 +368,23 @@ if (!empty($EmployeeRecords)) {
                                                 <?php } ?>
                                             </select>
                                         </div>
+                                        <div class="col-md-4">
+                                            <label for="bank">Bank</label>
+                                            <input class="form-control" id="bank_update" placeholder="Bank" name="bank_update" value="<?php echo $bank; ?>" readonly>
+                                            <br>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>No Rekening</label>
+                                            <input class="form-control" type="number" id="no_rekening_update" placeholder="No Rekening" name="no_rekening_update" value="<?php echo $no_rekening; ?>" maxlength="50" readonly>
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Nama Rekening</label>
+                                            <input class="form-control" id="nama_rekening_update" placeholder="Nama Rekening" name="nama_rekening_update" value="<?php echo $nama_rekening; ?>" readonly>
+                                            <br>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -406,8 +429,10 @@ if (!empty($EmployeeRecords)) {
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="employeeexitno">Document</label>
-                                                <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadEmployeeExit/' . $employee_exit_url . '/' . $employee_id; ?>"><i class="fa fa-download"></i></a>
-                                                <a href="<?= base_url('upload/' . $employee_exit_url); ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                                <?php if ($employee_exit_url != '') { ?>
+                                                    <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadEmployeeExit/' . $employee_exit_url . '/' . $employee_id; ?>"><i class="fa fa-download"></i></a>
+                                                    <a href="<?= base_url('upload/' . $employee_exit_url); ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                                <?php } ?>
                                                 <input readonly type="text" class="form-control" id="employee_exit_no" name="employee_exit_no" value="<?php echo $employee_exit_no; ?>">
                                             </div>
                                         </div>
@@ -593,14 +618,30 @@ if (!empty($EmployeeRecords)) {
                                                         <td><?php echo $record->notice_reason; ?></td>
                                                         <td><?php echo $record->notice_letter_date; ?></td>
                                                         <?php $validnotice = date('Y-m-d', strtotime("+6 months", strtotime($record->notice_letter_date))) ?>
-                                                        <td><?php echo $validnotice; ?></td>
-                                                        <?php if (strtotime(date('Y-m-d', time())) <= strtotime($validnotice) && ($record->employee_notice_letter_id == $record->lastsp)) { ?>
-                                                            <td><a class="badge badge-pill badge-success float"> <?= 'Aktif'; ?></a></td>
+                                                        <?php $validsuratteguran = date('Y-m-d', strtotime("+30 days", strtotime($record->notice_letter_date))) ?>
+                                                        <?php if ($record->notice_letter_id == 'NL-004') { ?>
+                                                            <td><?php echo $validsuratteguran; ?></td>
                                                         <?php } else { ?>
-                                                            <td><a class="badge badge-pill badge-danger float"> <?= 'Non Aktif'; ?></a></td>
+                                                            <td><?php echo $validnotice; ?></td>
                                                         <?php } ?>
-                                                        <td> <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadNoticeLetter/' . $record->notice_letter_url . '/' . $record->employee_notice_letter_id; ?>"><i class="fa fa-download"></i></a>
-                                                            <a href="<?= base_url('upload/' . $record->notice_letter_url); ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                                        <?php if ($record->notice_letter_id == 'NL-004') { ?>
+                                                            <?php if (strtotime(date('Y-m-d', time())) <= strtotime($validsuratteguran) && ($record->employee_notice_letter_id == $record->lastsp)) { ?>
+                                                                <td><a class="badge badge-pill badge-success float"> <?= 'Aktif'; ?></a></td>
+                                                            <?php } else { ?>
+                                                                <td><a class="badge badge-pill badge-danger float"> <?= 'Non Aktif'; ?></a></td>
+                                                            <?php } ?>
+                                                        <?php } else { ?>
+                                                            <?php if (strtotime(date('Y-m-d', time())) <= strtotime($validnotice) && ($record->employee_notice_letter_id == $record->lastsp)) { ?>
+                                                                <td><a class="badge badge-pill badge-success float"> <?= 'Aktif'; ?></a></td>
+                                                            <?php } else { ?>
+                                                                <td><a class="badge badge-pill badge-danger float"> <?= 'Non Aktif'; ?></a></td>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                        <td>
+                                                            <?php if ($record->notice_letter_url != '') { ?>
+                                                                <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadNoticeLetter/' . $record->notice_letter_url . '/' . $record->employee_notice_letter_id; ?>"><i class="fa fa-download"></i></a>
+                                                                <a href="<?= base_url('upload/' . $record->notice_letter_url); ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                                            <?php } ?>
                                                         </td>
                                                     <?php } ?>
                                                     </tr>

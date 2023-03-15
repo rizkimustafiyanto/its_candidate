@@ -17,6 +17,9 @@ $pic_phone_no = '';
 $urgent_phone_no = '';
 $start_date = '';
 $reason_canceled = '';
+$creation_datetime = '';
+$creation_user_name = '';
+$creation_user_id = '';
 
 
 if (!empty($PaidLeaveRecords)) {
@@ -39,6 +42,9 @@ if (!empty($PaidLeaveRecords)) {
         $urgent_phone_no = $row->urgent_phone_no;
         $start_date = $row->start_date;
         $reason_canceled = $row->reason_canceled;
+        $creation_datetime = $row->creation_datetime;
+        $creation_user_name = $row->creation_user_name;
+        $creation_user_id = $row->creation_user_id;
     }
 }
 ?>
@@ -54,6 +60,8 @@ if (!empty($PaidLeaveRecords)) {
                         <div class="col-sm-12">
                             <strong>
                                 <h3>Detail Pengajuan Cuti</h3>
+                                <!-- <?php print_r($EmployeePaidLeaveKhususRecords2) ?> -->
+                                <!-- <?php print_r($PaidLeaveRecords2) ?> -->
                             </strong>
                         </div>
                         <!-- /.col -->
@@ -67,7 +75,6 @@ if (!empty($PaidLeaveRecords)) {
                             </ol>
                         </div>
                     </div>
-
                     <?php if ($this->session->flashdata('success')) : ?>
                         <div class="flash-data" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
                         <?= $this->session->unset_userdata('success'); ?>
@@ -115,12 +122,12 @@ if (!empty($PaidLeaveRecords)) {
 
                                 <?php if (($this->session->userdata('employee_id') == $PaidLeaveApproval1Records) && ($paid_leave_status_id == 'ST-006')) { ?>
                                     <button type="button" class="btn btn-md btn-success" id="btnAdd" data-toggle="modal" data-target="#modal-cancel-approval">
-                                        <i class="fa fa-check-circle"></i> Approvalc
+                                        <i class="fa fa-check-circle"></i> Approval
                                     </button>
                                 <?php } ?>
 
                                 <!-- cancel request -->
-                                <?php if (($paid_leave_status_id == 'ST-002') && ((strtotime($start_date)) >= (time())) && ($this->session->userdata('employee_id') == $employee_id)) { ?>
+                                <?php if (($paid_leave_status_id == 'ST-002') && ((strtotime($start_date)) >= (time())) && ($this->session->userdata('employee_id') == $employee_id) && ($creation_user_id == $this->session->userdata('employee_id'))) { ?>
                                     <button type=" button" class="btn btn-md btn-danger" id="btnCancelRequest" data-toggle="modal" data-target="#modal-cancel">
                                         <i class="fa fa-paper-plane"></i> Cancel Request
                                     </button>
@@ -129,9 +136,6 @@ if (!empty($PaidLeaveRecords)) {
                         </div>
                     </div>
                     <br>
-
-                    <?php print_r(str_replace('.', '', $PaidLeaveApproval1Records)); ?>
-                    <?php print_r(str_replace('.', '', $this->session->userdata('employee_id'))) ?>
 
                     <!-- /.card-header -->
                     <div class="row">
@@ -194,6 +198,16 @@ if (!empty($PaidLeaveRecords)) {
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
+                                                <label>Tanggal Diajukan</label>
+                                                <input class="form-control" id="creation_datetime" placeholder="Creation Datetime" name="creation_datetime" value="<?php echo $creation_datetime; ?>" maxlength="50" readonly="true" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Creator</label>
+                                            <input class="form-control" id="creation_user_id" placeholder="Creator" name="creation_user_id" value="<?php echo $creation_user_name; ?>" maxlength="50" readonly>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
                                                 <label>Changer PIC</label>
                                                 <?php if ($paid_leave_status_id == 'ST-001') { ?>
                                                     <select data-width="100%" class="form-control select2bs4" id="changer_pic" name="changer_pic">
@@ -213,6 +227,18 @@ if (!empty($PaidLeaveRecords)) {
                                                             <option value="<?= $row->employee_id; ?>" <?= $selected; ?> class=""><?= $row->employee_name; ?></option>
                                                         <?php } ?>
                                                     </select>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="description">Description</label>
+                                                <?php if ($paid_leave_status_id == 'ST-001') { ?>
+                                                    <textarea type="text" class="form-control" id="description" name="description"><?php echo $description; ?></textarea>
+                                                <?php } else { ?>
+                                                    <textarea readonly type="text" class="form-control" id="description" name="description"><?php echo $description; ?></textarea>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -238,16 +264,6 @@ if (!empty($PaidLeaveRecords)) {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="description">Description</label>
-                                                <?php if ($paid_leave_status_id == 'ST-001') { ?>
-                                                    <textarea type="text" class="form-control" id="description" name="description"><?php echo $description; ?></textarea>
-                                                <?php } else { ?>
-                                                    <textarea readonly type="text" class="form-control" id="description" name="description"><?php echo $description; ?></textarea>
-                                                <?php } ?>
-                                            </div>
-                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Category Paid Leave</label>
@@ -277,11 +293,68 @@ if (!empty($PaidLeaveRecords)) {
                                                 <label>Paid Leave Sub Category</label>
                                                 <?php if ($paid_leave_status_id == 'ST-001') { ?>
                                                     <select class="form-control select2bs4 paid_leave_id" name="paid_leave_id" id="paid_leave_id">
-                                                        <?php
-                                                        foreach ($EmployeePaidLeaveKhususRecords as $row) {
-                                                            $selected = ($row->variable_id == $paid_leave_id) ? 'selected' : '';
-                                                        ?>
-                                                            <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                        <?php if ($PaidLeaveRecordsWisataRohani == 0 && $PaidLeaveRecordsIbadahHaji == 0) { ?>
+                                                            <?php
+                                                            foreach ($EmployeePaidLeaveKhususRecords as $row) {
+                                                                $selected = ($row->variable_id == $paid_leave_id) ? 'selected' : '';
+                                                            ?>
+                                                                <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                            <?php } ?>
+                                                        <?php } else if ($PaidLeaveRecordsIbadahHaji > 0 && $PaidLeaveRecordsWisataRohani > 0) { ?>
+                                                            <?php if ($paid_leave_id == 'KC-012') { ?>
+                                                                <option selected value="KC-012">Ibadah Haji</option>
+                                                                <?php
+                                                                foreach ($EmployeePaidLeaveKhususIbadahHajiAndWisataRohaniRecords as $row) {
+                                                                ?>
+                                                                    <option value="<?= $row->variable_id; ?>" class=""><?= $row->variable_name; ?></option>
+                                                                <?php } ?>
+                                                            <?php } else if ($paid_leave_id == 'KC-010') { ?>
+                                                                <option selected value="KC-010">Wisata Rohani</option>
+                                                                <?php
+                                                                foreach ($EmployeePaidLeaveKhususIbadahHajiAndWisataRohaniRecords as $row) {
+                                                                ?>
+                                                                    <option value="<?= $row->variable_id; ?>" class=""><?= $row->variable_name; ?></option>
+                                                                <?php } ?>
+                                                            <?php } else { ?>
+                                                                <?php
+                                                                foreach ($EmployeePaidLeaveKhususIbadahHajiAndWisataRohaniRecords as $row) {
+                                                                    $selected = ($row->variable_id == $paid_leave_id) ? 'selected' : '';
+                                                                ?>
+                                                                    <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                                <?php } ?>
+                                                            <?php } ?>
+                                                        <?php } else if ($PaidLeaveRecordsWisataRohani > 0) { ?>
+                                                            <?php if ($paid_leave_id == 'KC-010') { ?>
+                                                                <option selected value="KC-010">Wisata Rohani</option>
+                                                                <?php
+                                                                foreach ($EmployeePaidLeaveKhususWisataRohaniRecords as $row) {
+                                                                ?>
+                                                                    <option value="<?= $row->variable_id; ?>" class=""><?= $row->variable_name; ?></option>
+                                                                <?php } ?>
+                                                            <?php } else { ?>
+                                                                <?php
+                                                                foreach ($EmployeePaidLeaveKhususWisataRohaniRecords as $row) {
+                                                                    $selected = ($row->variable_id == $paid_leave_id) ? 'selected' : '';
+                                                                ?>
+                                                                    <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                                <?php } ?>
+                                                            <?php } ?>
+                                                        <?php } else if ($PaidLeaveRecordsIbadahHaji > 0) { ?>
+                                                            <?php if ($paid_leave_id == 'KC-012') { ?>
+                                                                <option selected value="KC-012">Ibadah Haji</option>
+                                                                <?php
+                                                                foreach ($EmployeePaidLeaveKhususIbadahHajiRecords as $row) {
+                                                                ?>
+                                                                    <option value="<?= $row->variable_id; ?>" class=""><?= $row->variable_name; ?></option>
+                                                                <?php } ?>
+                                                            <?php } else { ?>
+                                                                <?php
+                                                                foreach ($EmployeePaidLeaveKhususIbadahHajiRecords as $row) {
+                                                                    $selected = ($row->variable_id == $paid_leave_id) ? 'selected' : '';
+                                                                ?>
+                                                                    <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                                <?php } ?>
+                                                            <?php } ?>
                                                         <?php } ?>
                                                     </select>
                                                 <?php } else { ?>
@@ -300,41 +373,41 @@ if (!empty($PaidLeaveRecords)) {
                                 </div>
                             </div>
                         </div>
+                    </div>
 
 
-                        <div class="col-md-12">
-                            <?php if (($paid_leave_status_id == 'ST-006') || ($paid_leave_status_id == 'ST-007') || ($paid_leave_status_id == 'ST-008')) { ?>
-                                <div class="card">
-                                    <!-- /.card-header -->
-                                    <div class="card-header">
-                                        <strong>
-                                            <h4 class="card-title"><b>Alasan Batal Cuti</b></h4>
-                                        </strong>
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                        </div>
+                    <div class="col-md-12">
+                        <?php if (($paid_leave_status_id == 'ST-006') || ($paid_leave_status_id == 'ST-007') || ($paid_leave_status_id == 'ST-008')) { ?>
+                            <div class="card">
+                                <div class="card-header">
+                                    <strong>
+                                        <h4 class="card-title"><b>Alasan Batal Cuti</b></h4>
+                                    </strong>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <textarea readonly type="text" class="form-control" id="employee_exit_reason" name="employee_exit_reason"><?php echo $reason_canceled; ?></textarea>
-                                                </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <textarea readonly type="text" class="form-control" id="employee_exit_reason" name="employee_exit_reason"><?php echo $reason_canceled; ?></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            <?php } ?>
+                            </div>
+                        <?php } ?>
 
-                            <div class="card">
-                                <!-- card-header -->
-                                <div class="card-header">
-                                    <strong>
-                                        <h4 class="card-title"><b>Tanggal Cuti</b></h4>
-                                    </strong>
-                                    <div class="card-tools">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong>
+                                    <h4 class="card-title"><b>Tanggal Cuti</b></h4>
+                                </strong>
+                                <div class="card-tools">
+                                    <?php if ($paid_leave_id == 'PL-001') { ?>
                                         <?php if (($paid_leave_status_id == 'ST-001') && ($remaining_paid_leave <= 0)) { ?>
                                             <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-input-datetime-paidleave" hidden>
                                                 <i class="fa fa-plus"></i> Add Date
@@ -347,48 +420,63 @@ if (!empty($PaidLeaveRecords)) {
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                             <i class="fas fa-minus"></i>
                                         </button>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <table id="sickleave_datetime_table" class="table table-bordered  table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Tanggal Cuti</th>
-                                                <?php
-                                                if ($paid_leave_status_id == 'ST-001') {
-                                                ?>
-                                                    <th>Action</th>
-                                                <?php } else { ?>
-                                                <?php } ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $i = 1;
-                                            if (!empty($PaidLeaveDateTimeRecords)) {
-                                                foreach ($PaidLeaveDateTimeRecords as $record) {
-                                            ?>
-                                                    <tr>
-                                                        <td><?= $i++; ?></td>
-                                                        <td><?php echo date('d-m-Y', strtotime($record->employee_paid_leave_date)); ?></td>
-                                                        <?php if ($paid_leave_status_id == 'ST-001') { ?>
-                                                            <td class="text-center">
-                                                                <a id="btnDelete" class="btn btn-xs btn-danger" href="<?php echo base_url() . 'DeletePaidLeaveDateTime/' . $record->employee_paid_leave_datetime_id . '/' . $record->employee_paid_leave_id . '/' . $paid_leave_id . '/' . $employee_id; ?>"><i class="fa fa-trash"></i></a>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                        <?php } ?>
-                                                    <?php } ?>
-                                                    </tr>
-                                                <?php
-                                            }
-                                                ?>
-                                        </tbody>
-                                    </table>
+                                    <?php } ?>
+                                    <?php if (substr($paid_leave_id, 0, 2) == 'KC') { ?>
+                                        <?php if (($paid_leave_status_id == 'ST-001') && ($remaining_paid_leave == $paid_leave_amount)) { ?>
+                                            <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-input-datetime-paidleave" hidden>
+                                                <i class="fa fa-plus"></i> Add Date
+                                            </button>
+                                        <?php } else if ($paid_leave_status_id == 'ST-001') { ?>
+                                            <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-input-datetime-paidleave">
+                                                <i class="fa fa-plus"></i> Add Date
+                                            </button>
+                                        <?php } ?>
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    <?php } ?>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <table id="sickleave_datetime_table" class="table table-bordered  table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Tanggal Cuti</th>
+                                            <?php
+                                            if ($paid_leave_status_id == 'ST-001') {
+                                            ?>
+                                                <th>Action</th>
+                                            <?php } else { ?>
+                                            <?php } ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $i = 1;
+                                        if (!empty($PaidLeaveDateTimeRecords)) {
+                                            foreach ($PaidLeaveDateTimeRecords as $record) {
+                                        ?>
+                                                <tr>
+                                                    <td><?= $i++; ?></td>
+                                                    <td><?php echo date('d-m-Y', strtotime($record->employee_paid_leave_date)); ?></td>
+                                                    <?php if ($paid_leave_status_id == 'ST-001') { ?>
+                                                        <td class="text-center">
+                                                            <a id="btnDelete" class="btn btn-xs btn-danger" href="<?php echo base_url() . 'DeletePaidLeaveDateTime/' . $record->employee_paid_leave_datetime_id . '/' . $record->employee_paid_leave_id . '/' . $paid_leave_id . '/' . $employee_id; ?>"><i class="fa fa-trash"></i></a>
+                                                        </td>
+                                                    <?php } else { ?>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                                </tr>
+                                            <?php
+                                        }
+                                            ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <?php if ($paid_leave_status_id != 'ST-001') { ?>
                             <div class="card">
-                                <!-- card-header -->
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Approval</b></h4>
@@ -399,7 +487,7 @@ if (!empty($PaidLeaveRecords)) {
                                         </button>
                                     </div>
                                 </div>
-                                <!-- <?php print_r($this->session->userdata('company_id')); ?> -->
+
                                 <div class="card-body">
                                     <table id="approval_table" class="table table-bordered table-striped">
                                         <thead>
@@ -452,10 +540,10 @@ if (!empty($PaidLeaveRecords)) {
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.card -->
+                        <?php } ?>
+                    </div>
     </section>
-    <!-- /.content -->
+
     <div class="modal fade" id="modal-input-datetime-paidleave">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -497,9 +585,7 @@ if (!empty($PaidLeaveRecords)) {
                     </div>
                 </form>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
 
     <div class="modal fade" id="modal-approval">
@@ -520,7 +606,7 @@ if (!empty($PaidLeaveRecords)) {
                                 <label for="leaveid">Document No</label>
                                 <input class="form-control" id="employee_paid_leave_id" value="<?php echo $employee_paid_leave_id; ?>" name="employee_paid_leave_id" readonly>
                                 <br>
-                                <label for="leavestatusid">Status</label>
+                                <label for="leavestatusid">Status *</label>
                                 <select class="form-control select2bs4" name="status_id" id="status_id" required>
                                     <option disabled selected value="">--Select--</option>
                                     <?php foreach ($PaidLeaveApprovalStatusRecords as $row) : ?>
@@ -528,10 +614,9 @@ if (!empty($PaidLeaveRecords)) {
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="comment">Comment</label>
-                                <!-- <input type="hidden" id="employee_paid_leave_id_approval" name="employee_paid_leave_id" value="<?php echo $employee_paid_leave_id; ?>"> -->
                                 <input type="hidden" id="status_id_approval" name="paid_leave_status_id" value="<?php echo $paid_leave_status_id; ?>">
-                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" maxlength="50" required></textarea>
+                                <label for="comment">Comment *</label>
+                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" required>-</textarea>
                                 <br>
                             </div>
                         </div>
@@ -542,9 +627,7 @@ if (!empty($PaidLeaveRecords)) {
                     </div>
                 </form>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
 
     <div class="modal fade" id="modal-cancel">
@@ -566,7 +649,7 @@ if (!empty($PaidLeaveRecords)) {
                                 <label for="leaveid">Document No</label>
                                 <input class="form-control" id="employee_paid_leave_id" value="<?php echo $employee_paid_leave_id; ?>" name="employee_paid_leave_id" readonly>
                                 <br>
-                                <label for="reasoncanceled">Reason Canceled</label>
+                                <label for="reasoncanceled">Reason Canceled *</label>
                                 <textarea class="form-control" id="reason_canceled" placeholder="Reason Canceled" name="reason_canceled" maxlength="50" required></textarea>
                                 <br>
                             </div>
@@ -578,11 +661,8 @@ if (!empty($PaidLeaveRecords)) {
                     </div>
                 </form>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
-
 
     <div class="modal fade" id="modal-cancel-approval">
         <div class="modal-dialog">
@@ -602,18 +682,23 @@ if (!empty($PaidLeaveRecords)) {
                                 <label for="leaveid">Document No</label>
                                 <input class="form-control" id="employee_paid_leave_id" value="<?php echo $employee_paid_leave_id; ?>" name="employee_paid_leave_id" readonly>
                                 <br>
-                                <label for="leavestatusid">Status</label>
-                                <select class="form-control select2bs4" name="status_id" id="status_id" required>
-                                    <option disabled selected value="">--Select--</option>
-                                    <?php foreach ($PaidLeaveApprovalStatusRecords as $row) : ?>
-                                        <option value="<?php echo $row->variable_id; ?>"><?php echo $row->variable_name; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <label>Status *</label>
+                                <?php if ($this->session->userdata('role_id') == '2' || $this->session->userdata('role_id') == '5') { ?>
+                                    <select class="form-control select2bs4" name="status_id" id="status_id" required>
+                                        <option value="AOP-001">Approved</option>
+                                    </select>
+                                <?php } else { ?>
+                                    <select class="form-control select2bs4" name="status_id" id="status_id" required>
+                                        <option disabled selected value="">--Select--</option>
+                                        <?php foreach ($PaidLeaveApprovalStatusRecords as $row) : ?>
+                                            <option value="<?php echo $row->variable_id; ?>"><?php echo $row->variable_name; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php } ?>
                                 <br>
-                                <label for="comment">Comment</label>
-                                <!-- <input type="hidden" id="employee_paid_leave_id_approval" name="employee_paid_leave_id" value="<?php echo $employee_paid_leave_id; ?>"> -->
                                 <input type="hidden" id="status_id_approval" name="paid_leave_status_id" value="<?php echo $paid_leave_status_id; ?>">
-                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" maxlength="50" required></textarea>
+                                <label for="comment">Comment *</label>
+                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" maxlength="50" required>-</textarea>
                                 <br>
                             </div>
                         </div>
@@ -624,9 +709,7 @@ if (!empty($PaidLeaveRecords)) {
                     </div>
                 </form>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
     </div>
 </div>
 
@@ -638,7 +721,7 @@ if (!empty($PaidLeaveRecords)) {
 </script>
 
 <script>
-    // Submit Leave
+    // Submit Paid Leave
     $(document).ready(function() {
         $("#btnSubmitPaidLeave").click(function() {
 

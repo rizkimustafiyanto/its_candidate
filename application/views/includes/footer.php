@@ -14,6 +14,8 @@
 <!-- sweetalert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
 
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
 
 
 <!-- Page specific script -->
@@ -144,6 +146,61 @@
       .container()
       .appendTo("#leave_datetime_table_wrapper .col-md-6:eq(0)");
 
+    $("#sppd_detail_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#sppd_detail_table_wrapper .col-md-6:eq(0)");
+
+    $("#sppd_member_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#sppd_member_table_wrapper .col-md-6:eq(0)");
+
+    $("#sppd_regional_cost_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#sppd_regional_cost_table_wrapper .col-md-6:eq(0)");
+
+    $("#a_hrd_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#a_hrd_table_wrapper .col-md-6:eq(0)");
+
+    $("#lpd_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#lpd_table_wrapper .col-md-6:eq(0)");
+
     $("#extpaidleave_table")
       .DataTable({
         responsive: true,
@@ -189,6 +246,17 @@
       .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
 
     $("#employeeleader_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
+
+    $("#employeebrand_table")
       .DataTable({
         responsive: true,
         lengthChange: true,
@@ -330,12 +398,11 @@
 
     $("#announcement_table")
       .DataTable({
-        lengthChange: false,
+        responsive: true,
+        lengthChange: true,
+        searching: true,
         autoWidth: false,
-        buttons: ["copy", "csv", "excel", "colvis"],
-        order: [
-          [0, "desc"]
-        ]
+        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
       })
       .buttons()
       .container()
@@ -405,6 +472,32 @@
       .buttons()
       .container()
       .appendTo("#sick_leave_report_wrapper .col-md-6:eq(0)");
+
+    $("#sppd_report")
+      .DataTable({
+        lengthChange: false,
+        autoWidth: false,
+        buttons: ["copy", "csv", "excel", "colvis"],
+        order: [
+          [0, "desc"]
+        ]
+      })
+      .buttons()
+      .container()
+      .appendTo("#sppd_report_wrapper .col-md-6:eq(0)");
+
+    $("#massive_leave")
+      .DataTable({
+        lengthChange: false,
+        autoWidth: false,
+        buttons: ["copy", "csv", "excel", "colvis"],
+        order: [
+          [0, "desc"]
+        ]
+      })
+      .buttons()
+      .container()
+      .appendTo("#massive_leave_wrapper .col-md-6:eq(0)");
 
     //format jam 
     $('#datetime').datetimepicker({
@@ -576,6 +669,32 @@
       format: 'DD-MM-YYYY'
     });
 
+    $('#datetime27').datetimepicker({
+      format: 'DD-MM-YYYY'
+    });
+    $('#datetime28').datetimepicker({
+      format: 'DD-MM-YYYY'
+    });
+    $('#datetime29').datetimepicker({
+      format: 'YYYY-MM-DD'
+    });
+    $('#datetime30').datetimepicker({
+      format: 'DD-MM-YYYY'
+    });
+    $('#datetime31').datetimepicker({
+      format: 'DD-MM-YYYY'
+    });
+    $('#datetime32').datetimepicker({
+      format: 'DD-MM-YYYY'
+    });
+    $('#datetime33').datetimepicker({
+      format: 'YYYY-MM-DD'
+    });
+    var dateNow = new Date();
+    $('#datetime34').datetimepicker({
+      defaultDate: dateNow,
+      format: 'YYYY-MM-DD'
+    });
 
     $('.select2').select2()
 
@@ -592,6 +711,20 @@
     Swal.fire({
       icon: 'error',
       title: 'Please Input Date Leave!'
+    })
+  });
+
+  $('#btnSubmitSPPDError').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Mohon Input Rencana Perjalanan Dinas!'
+    })
+  });
+
+  $('#btnSubmitLPPDError').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Mohon Input Laporan Perjalanan Dinas!'
     })
   });
 </script>
@@ -621,6 +754,15 @@
     Swal.fire({
       icon: 'error',
       title: 'You Dont Have Remaining Paid Leave!'
+    })
+  });
+</script>
+
+<script>
+  $('#btnSubmitWithDraft').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Please Complete Draft Paid Leave First!'
     })
   });
 </script>
@@ -721,8 +863,61 @@
 </script>
 
 <script>
+  const flashData2 = $('.flash-data2').data('flashdata');
+  if (flashData2) {
+    Swal.fire({
+        title: 'Mohon Cek SPPUM Anda',
+        text: flashData,
+        icon: 'success',
+        confirmButtonText: "Cek",
+        allowOutsideClick: false
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          window.scrollTo(100, document.body.scrollHeight)
+        }
+      })
+  }
+</script>
+
+<script>
+  const flashData3 = $('.flash-data3').data('flashdata');
+  if (flashData3) {
+    Swal.fire({
+        title: 'SPPUM created successfully',
+        text: flashData,
+        icon: 'success',
+        confirmButtonText: "Ok",
+        allowOutsideClick: false
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          window.scrollTo(100, document.body.scrollHeight)
+        }
+      })
+  }
+</script>
+
+<script>
+  const flashData4 = $('.flash-data4').data('flashdata');
+  if (flashData4) {
+    Swal.fire({
+        title: 'SPPUM updated successfully',
+        text: flashData,
+        icon: 'success',
+        confirmButtonText: "Ok",
+        allowOutsideClick: false
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          window.scrollTo(100, document.body.scrollHeight)
+        }
+      })
+  }
+</script>
+
+<script>
   const flashData1 = $('.flash-data1').data('flashdata');
-  // console.log(flashData);
   if (flashData1) {
     Swal.fire({
       title: 'Error',

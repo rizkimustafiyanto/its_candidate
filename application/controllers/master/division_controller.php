@@ -21,9 +21,6 @@ class division_controller extends BaseController
 
     function GetDivision()
     {
-        // if ($this->isAdmin() == TRUE) {
-        //     $this->loadThis();
-        // } else {
         $this->load->model('master/division_model');
         $division_parameter = array('p_division_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
         $data['DivisionRecords'] = $this->division_model->GetDivision($division_parameter);
@@ -31,7 +28,6 @@ class division_controller extends BaseController
         $data['CompanyRecords'] = $this->company_model->GetCompany($company_parameter);
         $this->global['pageTitle'] = 'CodeInsect : Division Listing';
         $this->loadViews("master/division", $this->global, $data, NULL);
-        // }
     }
 
     // function GetDivisionById($division_id, $flag)
@@ -84,9 +80,6 @@ class division_controller extends BaseController
 
     function UpdateDivision()
     {
-        // if ($this->isAdmin() == TRUE) {
-        //     $this->loadThis();
-        // } else {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('division_name', 'Division Name', 'required|max_length[50]|xss_clean');
         $this->form_validation->set_rules('company_id', 'Company Id', 'required|max_length[50]|xss_clean');
@@ -109,7 +102,6 @@ class division_controller extends BaseController
         }
 
         redirect('Division');
-        // }
     }
 
     function DeleteDivision($division_id)
@@ -151,11 +143,9 @@ class division_controller extends BaseController
         echo json_encode($records);
     }
 
+
     function GetDivisionById($division_id, $flag)
     {
-        // if ($this->isAdmin() == TRUE) {
-        //     $this->loadThis();
-        // } else {
         $this->load->model('master/division_model');
         $division_parameter = array($division_id, '', $flag);
         $data['DivisionRecords'] = $this->division_model->GetVehicleType($division_parameter);
@@ -163,6 +153,5 @@ class division_controller extends BaseController
         $data['CompanyRecords'] = $this->company_model->GetCompany($company_parameter);
         $this->global['pageTitle'] = 'CodeInsect : Company Listing';
         $this->loadViews("master/division", $this->global, $data, NULL);
-        // }
     }
 }

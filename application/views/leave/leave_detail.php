@@ -13,6 +13,11 @@ $leave_sub_category_id = '';
 $leave_sub_category_name = '';
 $time_leave_start = '';
 $time_leave_finish = '';
+$creation_datetime = '';
+$creation_user_id = '';
+$creation_user_name = '';
+// $amount_leave = '';
+
 
 if (!empty($LeaveRecords)) {
     foreach ($LeaveRecords as $row) {
@@ -30,6 +35,10 @@ if (!empty($LeaveRecords)) {
         $leave_sub_category_name = $row->leave_sub_category_name;
         $time_leave_start = $row->time_leave_start;
         $time_leave_finish = $row->time_leave_finish;
+        $creation_datetime = $row->creation_datetime;
+        $creation_user_id = $row->creation_user_id;
+        $creation_user_name = $row->creation_user_name;
+        // $amount_leave = $row->amount_leave;
     }
 }
 ?>
@@ -94,7 +103,7 @@ if (!empty($LeaveRecords)) {
                                     <?php } ?>
                                 <?php } else { ?>
                                 <?php } ?>
-                                <?php if ((str_replace('.', '', $this->session->userdata('employee_id')) == (str_replace('.', '', $LeaveApproval1Records)) && ($leave_status_id == 'ST-003'))) { ?>
+                                <?php if ((($this->session->userdata('employee_id') == $LeaveApproval1Records) && ($leave_status_id == 'ST-003'))) { ?>
                                     <button type="button" class="btn btn-md btn-success" id="btnAdd" data-toggle="modal" data-target="#modal-approval">
                                         <i class="fa fa-check-circle"></i> Approval
                                     </button>
@@ -123,7 +132,7 @@ if (!empty($LeaveRecords)) {
                                 <!-- <form role="form" action="<?php echo base_url() ?>UpdateLeave" method="post"> -->
                                 <div class="card-body">
                                     <div class="row">
-                                        <input class="form-control" id="company_brand_id" name="company_brand_id" value="<?php echo $company_brand_id; ?>" hidden>
+                                        <input class="form-control" id="company_brand_id" name="company_brand_id" value="<?php echo $company_brand_id; ?>">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="employeeid">NIK</label>
@@ -150,51 +159,13 @@ if (!empty($LeaveRecords)) {
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Keperluan</label>
-                                                <?php if ($leave_status_id == 'ST-001') { ?>
-                                                    <select data-width="100%" class="form-control select2bs4" id="leave_category_id" name="leave_category_id">
-                                                        <?php
-                                                        foreach ($CategoryRecords as $row) {
-                                                            $selected = ($row->variable_id == $leave_category_id) ? 'selected' : '';
-                                                        ?>
-                                                            <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                <?php } else { ?>
-                                                    <select data-width="100%" class="form-control select2bs4" id="leave_category_id" name="leave_category_id" disabled>
-                                                        <?php
-                                                        foreach ($CategoryRecords as $row) {
-                                                            $selected = ($row->variable_id == $leave_category_id) ? 'selected' : '';
-                                                        ?>
-                                                            <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                <?php } ?>
+                                                <label>Tanggal Diajukan</label>
+                                                <input class="form-control" id="creation_datetime" placeholder="Creation Datetime" name="creation_datetime" value="<?php echo $creation_datetime; ?>" maxlength="50" readonly="true" required>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Izin untuk</label>
-                                                <?php if ($leave_status_id == 'ST-001') { ?>
-                                                    <select data-width="100%" class="form-control select2bs4" id="leave_sub_category_id" name="leave_sub_category_id">
-                                                        <?php
-                                                        foreach ($SubCategoryRecords as $row) {
-                                                            $selected = ($row->variable_id == $leave_sub_category_id) ? 'selected' : '';
-                                                        ?>
-                                                            <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                <?php } else { ?>
-                                                    <select data-width="100%" class="form-control select2bs4" id="leave_sub_category_id" name="leave_sub_category_id" disabled>
-                                                        <?php
-                                                        foreach ($SubCategoryRecords as $row) {
-                                                            $selected = ($row->variable_id == $leave_sub_category_id) ? 'selected' : '';
-                                                        ?>
-                                                            <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                <?php } ?>
-                                            </div>
+                                            <label>Creator</label>
+                                            <input class="form-control" id="creation_user_id" placeholder="Creator" name="creation_user_id" value="<?php echo $creation_user_name; ?>" maxlength="50" readonly>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -208,6 +179,89 @@ if (!empty($LeaveRecords)) {
                                                 <?php } ?>
                                             </div>
                                         </div>
+                                        <div class="col-md-4">
+                                            <?php if ($leave_category_id != 'BA-003') { ?>
+                                                <div class="form-group">
+                                                    <label>Keperluan</label>
+                                                    <?php if ($leave_status_id == 'ST-001') { ?>
+                                                        <select data-width="100%" class="form-control select2bs4" id="leave_category_id" name="leave_category_id">
+                                                            <?php
+                                                            foreach ($CategoryRecords as $row) {
+                                                                $selected = ($row->variable_id == $leave_category_id) ? 'selected' : '';
+                                                            ?>
+                                                                <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    <?php } else { ?>
+                                                        <select data-width="100%" class="form-control select2bs4" id="leave_category_id" name="leave_category_id" disabled>
+                                                            <?php
+                                                            foreach ($CategoryRecords as $row) {
+                                                                $selected = ($row->variable_id == $leave_category_id) ? 'selected' : '';
+                                                            ?>
+                                                                <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    <?php } ?>
+                                                </div>
+                                            <?php } else if ($leave_category_id == 'BA-003') { ?>
+                                                <div class="form-group">
+                                                    <label>Keperluan</label>
+                                                    <?php if ($leave_status_id == 'ST-001') { ?>
+                                                        <select data-width="100%" class="form-control select2bs4" id="leave_category_id" name="leave_category_id">
+                                                            <?php
+                                                            foreach ($CategoryRecords1 as $row) {
+                                                                $selected = ($row->variable_id == $leave_category_id) ? 'selected' : '';
+                                                            ?>
+                                                                <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    <?php } else { ?>
+                                                        <select data-width="100%" class="form-control select2bs4" id="leave_category_id" name="leave_category_id" disabled>
+                                                            <?php
+                                                            foreach ($CategoryRecords1 as $row) {
+                                                                $selected = ($row->variable_id == $leave_category_id) ? 'selected' : '';
+                                                            ?>
+                                                                <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    <?php } ?>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                        <?php if ($leave_category_id == 'BA-003') { ?>
+                                            <!-- <div class="col-md-4">
+                                                <label>Jumlah Izin</label>
+                                                <input class="form-control" id="amount_leave" placeholder="Jumlah Cuti" name="amount_leave" value="<?php echo $amount_leave; ?>" maxlength="50" readonly>
+                                            </div> -->
+                                        <?php } ?>
+                                        <div class="col-md-4">
+                                            <?php if ($leave_sub_category_id != null) { ?>
+                                                <div class="form-group">
+                                                    <label>Izin untuk</label>
+                                                    <?php if ($leave_status_id == 'ST-001') { ?>
+                                                        <select data-width="100%" class="form-control select2bs4" id="leave_sub_category_id" name="leave_sub_category_id">
+                                                            <?php
+                                                            foreach ($SubCategoryRecords as $row) {
+                                                                $selected = ($row->variable_id == $leave_sub_category_id) ? 'selected' : '';
+                                                            ?>
+                                                                <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    <?php } else { ?>
+                                                        <select data-width="100%" class="form-control select2bs4" id="leave_sub_category_id" name="leave_sub_category_id" disabled>
+                                                            <?php
+                                                            foreach ($SubCategoryRecords as $row) {
+                                                                $selected = ($row->variable_id == $leave_sub_category_id) ? 'selected' : '';
+                                                            ?>
+                                                                <option value="<?= $row->variable_id; ?>" <?= $selected; ?> class=""><?= $row->variable_name; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    <?php } ?>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-4">
                                             <div id="Divtime_leave_start" class="form-group"> <label for="timeleavestart">Jam Mulai</label>
                                                 <?php if ($leave_status_id == 'ST-001') { ?>
@@ -246,6 +300,7 @@ if (!empty($LeaveRecords)) {
                                                 <?php } ?>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -275,8 +330,7 @@ if (!empty($LeaveRecords)) {
                                         <?php } ?>
                                     </div>
                                 </div>
-                                <!-- <?php print_r($LeaveDateTimeRecords['leave_status_id']); ?> -->
-
+                                <!-- <?php print_r($TokenRequesterRecords); ?> -->
 
                                 <div class="card-body">
                                     <table id="leave_datetime_table" class="table table-bordered  table-striped">
@@ -316,72 +370,73 @@ if (!empty($LeaveRecords)) {
                                     </table>
                                 </div>
                             </div>
-                            <div class="card">
-                                <!-- card-header -->
-                                <div class="card-header">
-                                    <strong>
-                                        <h4 class="card-title"><b>Approval</b></h4>
-                                    </strong>
-                                    <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                            <i class="fas fa-minus"></i>
-                                        </button>
+                            <?php if ($leave_status_id != 'ST-001' && !empty($LeaveApprovalRecords)) { ?>
+                                <div class="card">
+                                    <!-- card-header -->
+                                    <div class="card-header">
+                                        <strong>
+                                            <h4 class="card-title"><b>Approval</b></h4>
+                                        </strong>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <table id="approval_table" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Line No</th>
+                                                    <th>Approver</th>
+                                                    <th>Comment</th>
+                                                    <th>Status</th>
+                                                    <th>Approval Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $i = 1;
+                                                if (!empty($LeaveApprovalRecords)) {
+                                                    foreach ($LeaveApprovalRecords as $record) {
+                                                ?>
+                                                        <tr>
+                                                            <td><?php echo $record->line_no; ?></td>
+                                                            <td>
+                                                                <?php echo $record->approver_name; ?>
+                                                            </td>
+                                                            <?php if ($record->comment != null) { ?>
+                                                                <td>
+                                                                    <?php echo $record->comment; ?>
+                                                                </td>
+                                                            <?php } else { ?>
+                                                                <td> -</td>
+                                                            <?php } ?>
+                                                            <?php if ($record->status_name != null) { ?>
+                                                                <td>
+                                                                    <?php echo $record->status_name; ?>
+                                                                </td>
+                                                            <?php } else { ?>
+                                                                <td> -</td>
+                                                            <?php } ?>
+                                                            <?php if ($record->change_datetime != null) { ?>
+                                                                <td>
+                                                                    <?php echo $record->change_datetime; ?>
+                                                                </td>
+                                                            <?php } else { ?>
+                                                                <td> -</td>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                        </tr>
+                                                    <?php
+                                                }
+                                                    ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                                <!-- <?php print_r($LeaveDateTimeRecords); ?> -->
-                                <div class="card-body">
-                                    <table id="approval_table" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Line No</th>
-                                                <th>Approver</th>
-                                                <th>Comment</th>
-                                                <th>Status</th>
-                                                <th>Approval Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $i = 1;
-                                            if (!empty($LeaveApprovalRecords)) {
-                                                foreach ($LeaveApprovalRecords as $record) {
-                                            ?>
-                                                    <tr>
-                                                        <td><?php echo $record->line_no; ?></td>
-                                                        <td>
-                                                            <?php echo $record->approver_name; ?>
-                                                        </td>
-                                                        <?php if ($record->comment != null) { ?>
-                                                            <td>
-                                                                <?php echo $record->comment; ?>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td> -</td>
-                                                        <?php } ?>
-                                                        <?php if ($record->status_name != null) { ?>
-                                                            <td>
-                                                                <?php echo $record->status_name; ?>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td> -</td>
-                                                        <?php } ?>
-                                                        <?php if ($record->change_datetime != null) { ?>
-                                                            <td>
-                                                                <?php echo $record->change_datetime; ?>
-                                                            </td>
-                                                        <?php } else { ?>
-                                                            <td> -</td>
-                                                        <?php } ?>
-                                                    <?php } ?>
-                                                    </tr>
-                                                <?php
-                                            }
-                                                ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
+                            <?php } ?>
                         </div>
 
                         <!-- /.card -->
@@ -450,7 +505,7 @@ if (!empty($LeaveRecords)) {
                                 <label for="leaveid">Document No</label>
                                 <input class="form-control" id="leave_id" value="<?php echo $leave_id; ?>" name="leave_id" readonly>
                                 <br>
-                                <label for="leavestatusid">Status</label>
+                                <label for="leavestatusid">Status *</label>
                                 <select class="form-control select2bs4" name="status_id" id="status_id" required>
                                     <option disabled selected value="">--Select--</option>
                                     <?php foreach ($LeaveApprovalStatusRecords as $row) : ?>
@@ -458,10 +513,10 @@ if (!empty($LeaveRecords)) {
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
-                                <label for="comment">Comment</label>
+                                <label for="comment">Comment *</label>
                                 <!-- <input type="hidden" id="leave_id_approval" name="leave_id" value="<?php echo $leave_id; ?>"> -->
                                 <input type="hidden" id="status_id_approval" name="leave_status_id" value="<?php echo $leave_status_id; ?>">
-                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" maxlength="50" required></textarea>
+                                <textarea class="form-control" id="comment" placeholder="Comment" name="comment" required>-</textarea>
                                 <br>
                             </div>
                         </div>
@@ -482,14 +537,17 @@ if (!empty($LeaveRecords)) {
 <script>
     $(document).ready(function(e) {
         var leavesubcategoryid = $("#leave_sub_category_id").val();
-        if (leavesubcategoryid == "SC-001") {
+        if (leavesubcategoryid == "SC-001" || leavesubcategoryid == "SC-005" || leavesubcategoryid == "SC-006") {
             $('#Divtime_leave_start').hide();
-            $('#Divtime_leave_finish').hide()
+            $('#Divtime_leave_finish').hide();
         } else if (leavesubcategoryid == 'SC-002') {
             $('#Divtime_leave_start').show();
             $('#Divtime_leave_finish').hide();
         } else if (leavesubcategoryid == 'SC-003') {
             $('#Divtime_leave_start').show();
+            $('#Divtime_leave_finish').hide();
+        } else if (leavesubcategoryid == null) {
+            $('#Divtime_leave_start').hide();
             $('#Divtime_leave_finish').hide();
         } else {
             $('#Divtime_leave_start').show();
@@ -508,7 +566,7 @@ if (!empty($LeaveRecords)) {
     $("#leave_sub_category_id").change(function() {
         var leavesubcategoryid = $("#leave_sub_category_id").val();
 
-        if (leavesubcategoryid == 'SC-001') {
+        if (leavesubcategoryid == "SC-001" || leavesubcategoryid == "SC-005" || leavesubcategoryid == "SC-006") {
             $('#Divtime_leave_start').hide();
             $('#Divtime_leave_finish').hide();
         } else if (leavesubcategoryid == 'SC-002') {

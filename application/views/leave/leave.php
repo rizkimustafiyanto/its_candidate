@@ -151,7 +151,7 @@
                                     </div>
                                 </div>
                                 <label for="leavename">Alasan</label>
-                                <textarea class="form-control" id="leave_name" placeholder="Alasan" name="leave_name" maxlength="50" required></textarea>
+                                <textarea class="form-control" id="leave_name" placeholder="Alasan" name="leave_name" required></textarea>
                                 <br>
                             </div>
 
@@ -208,7 +208,7 @@
     $("#leave_sub_category_id").change(function() {
         var leavesubcategoryid = $("#leave_sub_category_id").val();
 
-        if (leavesubcategoryid == 'SC-001') {
+        if (leavesubcategoryid == "SC-001" || leavesubcategoryid == "SC-005" || leavesubcategoryid == "SC-006") {
             $('#Divtime_leave_start').hide();
             $('#Divtime_leave_finish').hide();
         } else if (leavesubcategoryid == 'SC-002') {
@@ -227,7 +227,8 @@
 <script>
     $(document).ready(function(e) {
         var leavesubcategoryid = $("#leave_sub_category_id").val();
-        if (leavesubcategoryid == "SC-001") {
+
+        if (leavesubcategoryid == "SC-001" || leavesubcategoryid == "SC-005" || leavesubcategoryid == "SC-006") {
             $('#Divtime_leave_start').hide();
             $('#Divtime_leave_finish').hide()
         } else if (leavesubcategoryid == 'SC-002') {

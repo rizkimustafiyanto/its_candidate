@@ -156,7 +156,7 @@ class approval_controller extends BaseController
                                     $this->email->message(
                                         "Yth : " . " <b>" . $approver_name . "</b>" .
                                             "<br /> " .
-                                            "<br /> Anda mendapatkan tugas untuk Approve Overtime Request, dengan detail : " .
+                                            "<br /> Mohon approval atas Overtime Request, dengan detail : " .
                                             "<br /> " .
                                             "<br /> Document No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     :&nbsp;" . $overtime_id .
                                             "<br />Requester Name &nbsp;&nbsp;&nbsp;        :&nbsp;" . $requester_name .
@@ -166,6 +166,9 @@ class approval_controller extends BaseController
                                             "<br />Total Lembur &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     :&nbsp;" . $amountovertime .
                                             "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;      :&nbsp;" . $description .
                                             "<br /> " .
+											"<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+											"<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+											"<br /> " .
                                             "<br />Terimakasih " .
                                             "<br /><b>Team HRD Persada Group</b>"
                                     );
@@ -259,7 +262,7 @@ class approval_controller extends BaseController
                             $this->email->message(
                                 " Kepada Yth : Bpk/Ibu " . " <b>" . $approver_name . "</b>" .
                                     "<br /> " .
-                                    "<br /> Mohon atas approval Paid Leave Request, dengan detail : " .
+                                     "<br /> Mohon atas approval Paid Leave Request, dengan detail : " .
                                     "<br /> " .
                                     "<br /> Document No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     :&nbsp;" . $employee_paid_leave_id .
                                     "<br />Requester Name &nbsp;&nbsp;&nbsp;        :&nbsp;" . $requester_name .
@@ -269,6 +272,9 @@ class approval_controller extends BaseController
                                     "<br />Sampai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      :&nbsp;" . $finish_date .
                                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;      :&nbsp;" . $description .
                                     "<br /> " .
+									"<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+									"<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+									"<br /> " .
                                     "<br />Terimakasih " .
                                     "<br /><b>Team HRD Persada Group</b>"
                             );
@@ -406,6 +412,9 @@ class approval_controller extends BaseController
                                 "<br />Sampai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;" . $finish_date .
                                 "<br />Keterangan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;" . $description .
                                 "<br /> " .
+								"<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+								"<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+								"<br /> " .
                                 "<br />Terimakasih " .
                                 "<br /><b>Team HRD Persada Group</b>"
                         );
@@ -549,6 +558,9 @@ class approval_controller extends BaseController
                                     "<br />Start Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       :&nbsp;" . $time_leave_start .
                                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;      :&nbsp;" . $leave_name .
                                     "<br /> " .
+									"<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+									"<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+									"<br /> " .
                                     "<br />Terimakasih " .
                                     "<br /><b>Team HRD Persada Group</b>"
                             );
@@ -569,10 +581,13 @@ class approval_controller extends BaseController
                                     "<br />Finish Time &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;       :&nbsp;" . $time_leave_finish .
                                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;      :&nbsp;" . $leave_name .
                                     "<br /> " .
+									"<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+									"<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+									"<br /> " .
                                     "<br />Terimakasih " .
                                     "<br /><b>Team HRD Persada Group</b>"
                             );
-                        } else if ($leave_sub_category_id == 'SC-001') {
+                        } else if ($leave_sub_category_id == 'SC-001' || $leave_sub_category_id == 'SC-005' || $leave_sub_category_id == 'SC-006') {
                             $this->email->message(
                                 "Yth : Bpk/Ibu " . " <b>" . $approver_name . "</b>" .
                                     "<br /> " .
@@ -587,6 +602,9 @@ class approval_controller extends BaseController
                                     "<br />Sampai &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       :&nbsp;" . $finish_date .
                                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;      :&nbsp;" . $leave_name .
                                     "<br /> " .
+									"<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+									"<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+									"<br /> " .
                                     "<br />Terimakasih " .
                                     "<br /><b>Team HRD Persada Group</b>"
                             );
@@ -651,7 +669,7 @@ class approval_controller extends BaseController
                                     "<br />Terimakasih " .
                                     "<br /><b>Team HRD Persada Group</b>"
                             );
-                        } else if ($leave_sub_category_id == 'SC-001') {
+                        } else if ($leave_sub_category_id == 'SC-001' || $leave_sub_category_id == 'SC-005' || $leave_sub_category_id == 'SC-006') {
                             $this->email->message(
                                 "Yth : Bpk/Ibu " . " <b>" . $requester_name . "</b>" .
                                     "<br /> " .
@@ -729,7 +747,7 @@ class approval_controller extends BaseController
                                     "<br />Terimakasih " .
                                     "<br /><b>Team HRD Persada Group</b>"
                             );
-                        } else if ($leave_sub_category_id == 'SC-001') {
+                        } else if ($leave_sub_category_id == 'SC-001' || $leave_sub_category_id == 'SC-005' || $leave_sub_category_id == 'SC-006') {
                             $this->email->message(
                                 "Yth : Bpk/Ibu " . " <b>" . $requester_name . "</b>" .
                                     "<br /> " .

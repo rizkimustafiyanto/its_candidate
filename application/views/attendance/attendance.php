@@ -10,27 +10,23 @@
                             <div class="row ">
                                 <div class="col-sm-6">
                                     <div class="row">
-                                        <h4>Attendance List</h4>
+                                        <h4>List Kehadiran</h4>
                                         <a data-toggle="popover" title="Attendance" data-content="Attendance merupakan menu untuk memantau serta menarik report kehadiran karyawan"><i class="icon fa fa-question-circle text-primary fa-fw"></i></a>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="col-xs-12 text-right">
+                                    <!-- <div class="col-xs-12 text-right">
                                         <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-attendance">
                                             <i class="fa fa-plus"></i> Add Attendance
                                         </button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <?php if ((date('Y-m-d', strtotime($this->input->post('date_1'))) != "1970-01-01")
-                        && (date('Y-m-d', strtotime($this->input->post('date_2'))) != "1970-01-01")
-                    ) { ?>
-                        <?= "Filter Date from : "  . "<b>" . date('Y-m-d', strtotime($this->input->post('date_1'))) . "</b>" . " to " . "<b>" . date('Y-m-d', strtotime($this->input->post('date_2'))) . "</b>" ?>
-                    <?php } else { ?>
-                    <?php } ?>
+
+                    <?= "Filter Date from : "  . "<b>" . ($this->input->post('date_1')) . "</b>" . " - " . "<b>" . ($this->input->post('date_2')) . "</b>" ?>
 
                     <?php if ($this->session->flashdata('success')) : ?>
                         <div class="flash-data" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
@@ -45,63 +41,163 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-8">
-                                    <!-- <div class="col-md-4 col-md-offset-3"> -->
-                                    <!-- <h3>Import Data</h3> -->
+                                <div class="col-md-3">
                                     <?php if (!empty($this->session->flashdata('status'))) { ?>
                                         <div class="alert alert-info" role="alert"><?= $this->session->flashdata('status'); ?></div>
                                     <?php } ?>
                                     <form action="<?= base_url('ImportTempAttendanceInsert'); ?>" method="post" enctype="multipart/form-data">
-                                        <!-- <div class="row"> -->
                                         <label>Select Excel File</label>
                                         <div class="form-group">
                                             <input type="file" name="data" required accept=".xls,.xlsx,.csv">
                                         </div>
                                         <div>
-                                            <button class='btn btn-success' type="submit">
+                                            <button class='btn btn-success show-loading' type="submit">
                                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                                                 Import
                                             </button>
                                             <a id="btnDownload" class="btn btn-warning" href="<?php echo base_url() . 'DownloadTemplate' ?>"><i class="fa fa-download"></i> Download Template</a>
                                         </div>
-                                        <!-- </div> -->
                                     </form>
-                                    <!-- </div> -->
                                 </div>
-                                <div class="col-md-4">
-                                    <form role="form" action="<?php echo base_url() ?>Attendance" method="post">
-                                        <label>Filter</label>
-                                        <div class="row">
-                                            <div class="form-group" style="width:11vw;">
-                                                <div class="input-group date" id="datetime11" data-target-input="nearest">
-                                                    <input type="text" id="date_1" placeholder="Start Date" name="date_1" class="form-control datetimepicker-input" data-target="#datetime11" data-width="10%" />
-                                                    <div class="input-group-append" data-target="#datetime11" data-toggle="datetimepicker">
-                                                        <div class="input-group-text" data-width="10%"><i class="fa fa-calendar"></i></div>
+                                <div class="col-md-9">
+                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                        <form role="form" action="<?php echo base_url() ?>Attendance" method="post">
+                                            <div class="col-sm-12">
+                                                <div class="row ">
+                                                    <div class="row-sm-3">
+                                                        <label>Company</label>
+                                                        <select class="form-control select2bs4" id="companypusat" name="companypusat" required>
+                                                            <option disabled selected value="">--Select--</option>
+                                                            <!-- <option value="all">All</option> -->
+                                                            <?php foreach ($CompanyInBrandPusatRecords as $row) : ?>
+                                                                <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div class="row-sm-3">
+                                                        <label>Company Brand</label>
+                                                        <select class="form-control select2bs4" name="company_brand_id_pusat" id="company_brand_id_pusat" required>
+                                                            <option disabled selected value="">--Select--</option>
+                                                        </select>
+                                                    </div>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div class="row-sm-2">
+                                                        <label>Start Date</label>
+                                                        <div class="form-group" style="width:11vw;">
+                                                            <div class="input-group date" id="datetime11" data-target-input="nearest">
+                                                                <input type="text" id="date_1" placeholder="Start Date" name="date_1" class="form-control datetimepicker-input" data-target="#datetime11" data-width="10%" />
+                                                                <div class="input-group-append" data-target="#datetime11" data-toggle="datetimepicker">
+                                                                    <div class="input-group-text" data-width="10%"><i class="fa fa-calendar"></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div class="row-sm-2">
+                                                        <div class="form-group" style="width:11vw;">
+                                                            <label>Finish Date</label>
+                                                            <div class="input-group date" id="datetime12" data-target-input="nearest">
+                                                                <input type="text" id="date_2" placeholder="Finish Date" name="date_2" class="form-control datetimepicker-input" data-target="#datetime12" data-width="10%" />
+                                                                <div class="input-group-append" data-target="#datetime12" data-toggle="datetimepicker">
+                                                                    <div class="input-group-text" data-width="10%"><i class="fa fa-calendar"></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <div class="row-sm-1">
+                                                            <label style="color:white">Filter</label>
+                                                            <br>
+                                                            <input type="submit" id="btnSubmit" class="btn btn-primary" value="Filter" />
+                                                        </div>
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        <div class="row-sm-1">
+                                                            <label style="color:white">Reset</label>
+                                                            <br>
+                                                            <button class="btn btn-secondary">
+                                                                <a style="text-decoration:none;color:white" href="<?php echo base_url() ?>GetDefaultAttendance">Reset</a>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <div class="form-group" style="width:11vw;">
-                                                <div class="input-group date" id="datetime12" data-target-input="nearest">
-                                                    <input type="text" id="date_2" placeholder="Finish Date" name="date_2" class="form-control datetimepicker-input" data-target="#datetime12" data-width="10%" />
-                                                    <div class="input-group-append" data-target="#datetime12" data-toggle="datetimepicker">
-                                                        <div class="input-group-text" data-width="10%"><i class="fa fa-calendar"></i></div>
+                                        </form>
+                                    <?php } ?>
+                                    <?php if ($this->session->userdata('role_id') == '2') { ?>
+                                        <form role="form" action="<?php echo base_url() ?>Attendance" method="post">
+                                            <!-- <div class="form-group"> -->
+                                            <div class="col-sm-12">
+                                                <div class="row ">
+                                                    <div class="row-sm-4">
+                                                        <label>Company</label>
+                                                        <select class="form-control select2bs4" id="company" name="company" required>
+                                                            <option disabled selected value="">--Select--</option>
+                                                            <!-- <option value="all">All</option> -->
+                                                            <?php foreach ($CompanyInBrandRecords as $row) : ?>
+                                                                <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div class="row-sm-2">
+                                                        <label>Company Brand</label>
+                                                        <select class="form-control select2bs4" name="company_brand_id_cabang" id="company_brand_id_cabang" required>
+                                                            <option disabled selected value="">--Select--</option>
+                                                        </select>
+                                                    </div>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div class="row-sm-2">
+                                                        <label>Start Date</label>
+                                                        <div class="form-group" style="width:11vw;">
+                                                            <div class="input-group date" id="datetime11" data-target-input="nearest">
+                                                                <input type="text" id="date_1" placeholder="Start Date" name="date_1" class="form-control datetimepicker-input" data-target="#datetime11" data-width="10%" />
+                                                                <div class="input-group-append" data-target="#datetime11" data-toggle="datetimepicker">
+                                                                    <div class="input-group-text" data-width="10%"><i class="fa fa-calendar"></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div class="row-sm-2">
+                                                        <div class="form-group" style="width:11vw;">
+                                                            <label>Finish Date</label>
+                                                            <div class="input-group date" id="datetime12" data-target-input="nearest">
+                                                                <input type="text" id="date_2" placeholder="Finish Date" name="date_2" class="form-control datetimepicker-input" data-target="#datetime12" data-width="10%" />
+                                                                <div class="input-group-append" data-target="#datetime12" data-toggle="datetimepicker">
+                                                                    <div class="input-group-text" data-width="10%"><i class="fa fa-calendar"></i></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <div class="row-sm-1">
+                                                            <label style="color:white">Filter</label>
+                                                            <br>
+                                                            <input type="submit" id="btnSubmit" class="btn btn-primary" value="Filter" />
+                                                        </div>
+                                                        &nbsp;&nbsp;&nbsp;
+                                                        <div class="row-sm-1">
+                                                            <label style="color:white">Reset</label>
+                                                            <br>
+                                                            <button class="btn btn-secondary">
+                                                                <a style="text-decoration:none;color:white" href="<?php echo base_url() ?>GetDefaultAttendance">Reset</a>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <div style="width:11vw;">
-                                                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
-                                                <input type="submit" id="btnSubmit" class="btn btn-secondary" value="Reset" />
-                                            </div>
-                                        </div>
-                                    </form>
+                                            <!-- </div> -->
+                                        </form>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- <?php print_r($AttendanceTempRecords['employee_id']); ?> -->
+                    <!-- <?php print_r($companybrandid); ?> -->
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -135,27 +231,55 @@
                                     if (!empty($AttendanceRecords)) {
                                         foreach ($AttendanceRecords as $record) {
                                     ?>
-                                            <tr>
+                                            <?php if ($record->employee_name == null) { ?>
+                                                <tr style="background-color:Red;">
+                                                <?php } else { ?>
+                                                <tr>
+                                                <?php } ?>
                                                 <td><?php echo $record->attendance_id ?></td>
                                                 <td><?php echo $record->employee_id ?></td>
-                                                <td><?php echo $record->employee_name ?></td>
-                                                <td><?php echo $record->company_name ?></td>
-                                                <td><?php echo $record->shift_name ?></td>
-                                                <?php if ($record->shift_day == 'Monday') { ?>
-                                                    <td><?php echo 'Senin'; ?></td>
-                                                <?php } else if ($record->shift_day == 'Tuesday') { ?>
-                                                    <td><?php echo 'Selasa'; ?></td>
-                                                <?php } else if ($record->shift_day == 'Wednesday') { ?>
-                                                    <td><?php echo 'Rabu'; ?></td>
-                                                <?php } else if ($record->shift_day == 'Thursday') { ?>
-                                                    <td><?php echo 'Kamis'; ?></td>
-                                                <?php } else if ($record->shift_day == 'Friday') { ?>
-                                                    <td><?php echo 'Jumat'; ?></td>
-                                                <?php } else if ($record->shift_day == 'Saturday') { ?>
-                                                    <td><?php echo 'Sabtu'; ?></td>
+                                                <?php if ($record->employee_name == null) { ?>
+                                                    <td><?php echo '-'; ?></td>
+                                                <?php } else { ?>
+                                                    <td><?php echo $record->employee_name ?></td>
                                                 <?php } ?>
-                                                <td><?php echo $record->shift_start ?></td>
-                                                <td><?php echo $record->shift_finish ?></td>
+                                                <?php if ($record->company_name == null) { ?>
+                                                    <td><?php echo '-'; ?></td>
+                                                <?php } else { ?>
+                                                    <td><?php echo $record->company_name ?></td>
+                                                <?php } ?>
+                                                <?php if ($record->shift_name == null) { ?>
+                                                    <td><?php echo '-'; ?></td>
+                                                <?php } else { ?>
+                                                    <td><?php echo $record->shift_name ?></td>
+                                                <?php } ?>
+                                                <?php if ($record->shift_day == null) { ?>
+                                                    <td><?php echo '-'; ?></td>
+                                                <?php } else { ?>
+                                                    <?php if ($record->shift_day == 'Monday') { ?>
+                                                        <td><?php echo 'Senin'; ?></td>
+                                                    <?php } else if ($record->shift_day == 'Tuesday') { ?>
+                                                        <td><?php echo 'Selasa'; ?></td>
+                                                    <?php } else if ($record->shift_day == 'Wednesday') { ?>
+                                                        <td><?php echo 'Rabu'; ?></td>
+                                                    <?php } else if ($record->shift_day == 'Thursday') { ?>
+                                                        <td><?php echo 'Kamis'; ?></td>
+                                                    <?php } else if ($record->shift_day == 'Friday') { ?>
+                                                        <td><?php echo 'Jumat'; ?></td>
+                                                    <?php } else if ($record->shift_day == 'Saturday') { ?>
+                                                        <td><?php echo 'Sabtu'; ?></td>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                                <?php if ($record->shift_start == null) { ?>
+                                                    <td><?php echo '-'; ?></td>
+                                                <?php } else { ?>
+                                                    <td><?php echo $record->shift_start ?></td>
+                                                <?php } ?>
+                                                <?php if ($record->shift_finish == null) { ?>
+                                                    <td><?php echo '-'; ?></td>
+                                                <?php } else { ?>
+                                                    <td><?php echo $record->shift_finish ?></td>
+                                                <?php } ?>
                                                 <td><?php echo date('Y-m-d', strtotime($record->date_time_attendance_start)); ?></td>
                                                 <?php if ($record->date_time_attendance_start == date('Y-m-d', strtotime($record->date_time_attendance_start))) { ?>
                                                     <td><?php echo '-'; ?></td>
@@ -203,11 +327,11 @@
                                                 <td class="text-center">
                                                     <a id="btnSelect" class="btn btn-xs btn-primary" data-attendanceid="<?= $record->attendance_id ?>" data-employeeid="<?= $record->employee_id ?>" data-datetimeattendancefinish="<?= $record->date_time_attendance_finish ?>"><i class="fa fa-pen"></i></a>
                                                 </td>
-                                            </tr>
-                                    <?php
+                                                </tr>
+                                        <?php
                                         }
                                     }
-                                    ?>
+                                        ?>
                                 </tbody>
                             </table>
                         </div>
@@ -318,7 +442,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">Preview Import Attendance</h4>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-success" id="btnInsertImport">Submit
+                    <button type="button" class="btn btn-success show-loading" id="btnInsertImport">Submit
                         <i class="fa fa-paper-plane"></i></button>
                     <button type="button" class="btn btn-danger" id="btnDeleteImport">Delete
                         <i class="fa fa-trash"></i></button>
@@ -352,27 +476,55 @@
                         if (!empty($AttendanceTempRecords)) {
                             foreach ($AttendanceTempRecords as $record) {
                         ?>
-                                <tr>
+                                <?php if ($record->employee_name == null) { ?>
+                                    <tr style="background-color:Red;">
+                                    <?php } else { ?>
+                                    <tr>
+                                    <?php } ?>
                                     <td><?php echo $record->attendance_id ?></td>
                                     <td><?php echo $record->employee_id ?></td>
-                                    <td><?php echo $record->employee_name ?></td>
-                                    <td><?php echo $record->company_name ?></td>
-                                    <td><?php echo $record->shift_name ?></td>
-                                    <?php if ($record->shift_day == 'Monday') { ?>
-                                        <td><?php echo 'Senin'; ?></td>
-                                    <?php } else if ($record->shift_day == 'Tuesday') { ?>
-                                        <td><?php echo 'Selasa'; ?></td>
-                                    <?php } else if ($record->shift_day == 'Wednesday') { ?>
-                                        <td><?php echo 'Rabu'; ?></td>
-                                    <?php } else if ($record->shift_day == 'Thursday') { ?>
-                                        <td><?php echo 'Kamis'; ?></td>
-                                    <?php } else if ($record->shift_day == 'Friday') { ?>
-                                        <td><?php echo 'Jumat'; ?></td>
-                                    <?php } else if ($record->shift_day == 'Saturday') { ?>
-                                        <td><?php echo 'Sabtu'; ?></td>
+                                    <?php if ($record->employee_name == null) { ?>
+                                        <td><?php echo '-'; ?></td>
+                                    <?php } else { ?>
+                                        <td><?php echo $record->employee_name ?></td>
                                     <?php } ?>
-                                    <td><?php echo $record->shift_start ?></td>
-                                    <td><?php echo $record->shift_finish ?></td>
+                                    <?php if ($record->company_name == null) { ?>
+                                        <td><?php echo '-'; ?></td>
+                                    <?php } else { ?>
+                                        <td><?php echo $record->company_name ?></td>
+                                    <?php } ?>
+                                    <?php if ($record->shift_name == null) { ?>
+                                        <td><?php echo '-'; ?></td>
+                                    <?php } else { ?>
+                                        <td><?php echo $record->shift_name ?></td>
+                                    <?php } ?>
+                                    <?php if ($record->shift_day == null) { ?>
+                                        <td><?php echo '-'; ?></td>
+                                    <?php } else { ?>
+                                        <?php if ($record->shift_day == 'Monday') { ?>
+                                            <td><?php echo 'Senin'; ?></td>
+                                        <?php } else if ($record->shift_day == 'Tuesday') { ?>
+                                            <td><?php echo 'Selasa'; ?></td>
+                                        <?php } else if ($record->shift_day == 'Wednesday') { ?>
+                                            <td><?php echo 'Rabu'; ?></td>
+                                        <?php } else if ($record->shift_day == 'Thursday') { ?>
+                                            <td><?php echo 'Kamis'; ?></td>
+                                        <?php } else if ($record->shift_day == 'Friday') { ?>
+                                            <td><?php echo 'Jumat'; ?></td>
+                                        <?php } else if ($record->shift_day == 'Saturday') { ?>
+                                            <td><?php echo 'Sabtu'; ?></td>
+                                        <?php } ?>
+                                    <?php } ?>
+                                    <?php if ($record->shift_start == null) { ?>
+                                        <td><?php echo '-'; ?></td>
+                                    <?php } else { ?>
+                                        <td><?php echo $record->shift_start ?></td>
+                                    <?php } ?>
+                                    <?php if ($record->shift_finish == null) { ?>
+                                        <td><?php echo '-'; ?></td>
+                                    <?php } else { ?>
+                                        <td><?php echo $record->shift_finish ?></td>
+                                    <?php } ?>
                                     <td><?php echo date('Y-m-d', strtotime($record->date_time_attendance_start)); ?></td>
                                     <?php if ($record->date_time_attendance_start == date('Y-m-d', strtotime($record->date_time_attendance_start))) { ?>
                                         <td><?php echo '-'; ?></td>
@@ -413,11 +565,11 @@
                                         <td><?php echo '-'; ?></td>
                                     <?php } ?>
                                     <td><?php echo $record->attendance_status_name ?></td>
-                                </tr>
-                        <?php
+                                    </tr>
+                            <?php
                             }
                         }
-                        ?>
+                            ?>
                     </tbody>
                 </table>
             </div>
@@ -501,4 +653,66 @@
         $('#modal-preview').modal('hide');
 
     });
+
+    // get company brand
+    $("#company").change(function() {
+        var company = $("#company").val();
+
+        // For set value Vehicle type on first load
+        $.ajax({
+            url: 'GetCompanyBrandByCompanyId3',
+            data: {
+                company: company
+            },
+            type: 'post',
+            async: true,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                var html = '';
+                var is = '';
+                if (response != null) {
+                    for (is = 0; is < response.length; is++) {
+                        html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+                        // console.log(company);
+                    }
+                } else {
+                    html += '<option value=""></option>';
+                }
+                //alert(data[0].sub_menu_id);
+                $('#company_brand_id_cabang').html(html);
+            }
+        })
+    })
+
+    // get company brand untuk hrd pusat
+    $("#companypusat").change(function() {
+        var companypusat = $("#companypusat").val();
+
+        // For set value Vehicle type on first load
+        $.ajax({
+            url: 'GetCompanyBrandByCompanyId4',
+            data: {
+                companypusat: companypusat
+            },
+            type: 'post',
+            async: true,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                var html = '';
+                var is = '';
+                if (response != null) {
+                    for (is = 0; is < response.length; is++) {
+                        html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+                        // console.log(company);
+                    }
+                } else {
+                    html += '<option value=""></option>';
+                }
+                //alert(data[0].sub_menu_id);
+                $('#company_brand_id_pusat').html(html);
+            }
+        })
+    })
 </script>

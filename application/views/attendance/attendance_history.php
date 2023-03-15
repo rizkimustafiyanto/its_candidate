@@ -14,23 +14,9 @@
                                         <a data-toggle="popover" title="Attendance History" data-content="Attendance History merupakan menu untuk melihat history kehadiran karyawan selama 1 bulan berjalan"><i class="icon fa fa-question-circle text-primary fa-fw"></i></a>
                                     </div>
                                 </div>
-                                <!-- <div class="col-sm-6">
-                                    <div class="col-xs-12 text-right">
-                                        <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-attendance">
-                                            <i class="fa fa-plus"></i> Add Attendance
-                                        </button>
-                                    </div>
-                                </div> -->
                             </div>
                         </div>
                     </div>
-
-                    <?php if ((date('Y-m-d', strtotime($this->input->post('date_1'))) != "1970-01-01")
-                        && (date('Y-m-d', strtotime($this->input->post('date_2'))) != "1970-01-01")
-                    ) { ?>
-                        <?= "Filter Date from : "  . "<b>" . date('Y-m-d', strtotime($this->input->post('date_1'))) . "</b>" . " to " . "<b>" . date('Y-m-d', strtotime($this->input->post('date_2'))) . "</b>" ?>
-                    <?php } else { ?>
-                    <?php } ?>
 
                     <?php if ($this->session->flashdata('success')) : ?>
                         <div class="flash-data" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
@@ -45,7 +31,7 @@
                     <div class="card">
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="attendance_table" class="table table-bordered table-striped table-responsive">
+                            <table id="attendance_table" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>Attendance ID</th>

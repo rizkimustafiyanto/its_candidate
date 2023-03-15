@@ -166,7 +166,7 @@ if (!empty($ApprovalListRecords)) {
                             </select>
                             <br>
                             <label>Comment</label>
-                            <textarea class="form-control" id="comment" placeholder="Comment" name="comment" maxlength="50" required></textarea>
+                            <textarea class="form-control" id="comment" placeholder="Comment" name="comment" required>-</textarea>
                             <br>
                         </div>
 

@@ -10,20 +10,94 @@
                             <div class="row ">
                                 <div class="col-sm-6">
                                     <div class="row">
-                                        <h4>Warning Letter</h4>
+                                        <h4>Surat Peringatan</h4>
                                         <a data-toggle="popover" title="Warning Letter" data-content="Warning Letter merupakan menu untuk memasukkan surat peringatan untuk karyawan"><i class="icon fa fa-question-circle text-primary fa-fw"></i></a>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
+								<?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
                                     <div class="col-xs-12 text-right">
                                         <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-notice-letter">
                                             <i class="fa fa-plus"></i> Add Warning Letter
                                         </button>
                                     </div>
+								<?php } ?>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                        <div class="card card-sm card-default">
+                            <div class="card-header">
+                                <div class="row ">
+                                    <form role="form" action="<?php echo base_url() ?>NoticeLetterFilter" method="post">
+                                        <div class="col-sm-12">
+                                            <div class="row ">
+                                                <div class="row-sm-6">
+                                                    <label>Company</label>
+                                                    <select class="form-control select2bs4" id="companypusat" name="companypusat" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                        <!-- <option value="all">All</option> -->
+                                                        <?php foreach ($CompanyInBrandPusatRecords as $row) : ?>
+                                                            <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <div class="row-sm-6">
+                                                    <label>Company Brand</label>
+                                                    <select class="form-control select2bs4" name="company_brand_id_pusat" id="company_brand_id_pusat" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div style="width:11vw;">
+                                                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+
+                    <?php if ($this->session->userdata('role_id') == '2') { ?>
+                        <div class="card card-sm card-default">
+                            <div class="card-header">
+                                <div class="row ">
+                                    <form role="form" action="<?php echo base_url() ?>NoticeLetterFilter" method="post">
+                                        <div class="col-sm-12">
+                                            <div class="row ">
+                                                <div class="row-sm-6">
+                                                    <label>Company</label>
+                                                    <select class="form-control select2bs4" id="company" name="company" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                        <!-- <option value="all">All</option> -->
+                                                        <?php foreach ($CompanyInBrandRecords as $row) : ?>
+                                                            <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <div class="row-sm-6">
+                                                    <label>Company Brand</label>
+                                                    <select class="form-control select2bs4" name="company_brand_id_cabang" id="company_brand_id_cabang" required>
+                                                        <option disabled selected value="">--Select--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div style="width:11vw;">
+                                                <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
 
                     <?php if ($this->session->flashdata('success')) : ?>
                         <div class="flash-data" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
@@ -68,16 +142,34 @@
                                                 <td><?php echo $record->notice_reason; ?></td>
                                                 <td><?php echo $record->notice_letter_date; ?></td>
                                                 <?php $validnotice = date('Y-m-d', strtotime("+6 months", strtotime($record->notice_letter_date))) ?>
-                                                <td><?php echo $validnotice; ?></td>
-                                                <?php if (strtotime(date('Y-m-d', time())) <= strtotime($validnotice) && ($record->employee_notice_letter_id == $record->lastsp)) { ?>
-                                                    <td><a class="badge badge-pill badge-success float"> <?= 'Aktif'; ?></a></td>
+                                                <?php $validsuratteguran = date('Y-m-d', strtotime("+30 days", strtotime($record->notice_letter_date))) ?>
+                                                <?php if ($record->notice_letter_id == 'NL-004') { ?>
+                                                    <td><?php echo $validsuratteguran; ?></td>
                                                 <?php } else { ?>
-                                                    <td><a class="badge badge-pill badge-danger float"> <?= 'Non Aktif'; ?></a></td>
+                                                    <td><?php echo $validnotice; ?></td>
                                                 <?php } ?>
-                                                <td> <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadNoticeLetter/' . $record->notice_letter_url . '/' . $record->employee_notice_letter_id; ?>"><i class="fa fa-download"></i></a>
-                                                    <a href="<?= base_url('upload/' . $record->notice_letter_url); ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                                <?php if ($record->notice_letter_id == 'NL-004') { ?>
+                                                    <?php if (strtotime(date('Y-m-d', time())) <= strtotime($validsuratteguran) && ($record->employee_notice_letter_id == $record->lastsp)) { ?>
+                                                        <td><a class="badge badge-pill badge-success float"> <?= 'Aktif'; ?></a></td>
+                                                    <?php } else { ?>
+                                                        <td><a class="badge badge-pill badge-danger float"> <?= 'Non Aktif'; ?></a></td>
+                                                    <?php } ?>
+                                                <?php } else { ?>
+                                                    <?php if (strtotime(date('Y-m-d', time())) <= strtotime($validnotice) && ($record->employee_notice_letter_id == $record->lastsp)) { ?>
+                                                        <td><a class="badge badge-pill badge-success float"> <?= 'Aktif'; ?></a></td>
+                                                    <?php } else { ?>
+                                                        <td><a class="badge badge-pill badge-danger float"> <?= 'Non Aktif'; ?></a></td>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                                <td>
+                                                    <?php if ($record->notice_letter_url != '') { ?>
+                                                        <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadNoticeLetter/' . $record->notice_letter_url . '/' . $record->employee_notice_letter_id; ?>"><i class="fa fa-download"></i></a>
+                                                        <a href="<?= base_url('upload/' . $record->notice_letter_url); ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
+                                                    <?php } ?>
+													<?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
                                                     <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteNoticeLetter/' . $record->employee_notice_letter_id . '/' . $record->notice_letter_url; ?>"><i class="fa fa-trash"></i></a>
-                                                </td>
+													<?php } ?>
+											   </td>
                                             </tr>
                                     <?php
                                         }
@@ -226,4 +318,68 @@
             })
         })
     });
+
+    // get company brand
+    $("#company").change(function() {
+        var company = $("#company").val();
+
+        // For set value Vehicle type on first load
+        $.ajax({
+            url: 'GetCompanyBrandByCompanyId3',
+            data: {
+                company: company
+            },
+            type: 'post',
+            async: true,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                var html = '';
+                var is = '';
+                if (response != null) {
+                    for (is = 0; is < response.length; is++) {
+                        html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+                        // console.log(company);
+                    }
+                } else {
+                    html += '<option value=""></option>';
+                }
+                //alert(data[0].sub_menu_id);
+                $('#company_brand_id_cabang').html(html);
+            }
+        })
+    })
+
+
+
+    // get company brand untuk hrd pusat
+    $("#companypusat").change(function() {
+        var companypusat = $("#companypusat").val();
+
+        // For set value Vehicle type on first load
+        $.ajax({
+            url: 'GetCompanyBrandByCompanyId4',
+            data: {
+                companypusat: companypusat
+            },
+            type: 'post',
+            async: true,
+            dataType: 'json',
+            cache: false,
+            success: function(response) {
+                var html = '';
+                var is = '';
+                if (response != null) {
+                    for (is = 0; is < response.length; is++) {
+                        html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+                        // console.log(company);
+                    }
+                } else {
+                    html += '<option value=""></option>';
+                }
+                //alert(data[0].sub_menu_id);
+                $('#company_brand_id_pusat').html(html);
+            }
+        })
+    })
 </script>

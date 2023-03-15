@@ -2,12 +2,16 @@
 $shift_id = '';
 $shift_name = '';
 $description = '';
+$company_id = '';
+$company_name = '';
 
 if (!empty($ShiftRecords)) {
   foreach ($ShiftRecords as $row) {
     $shift_id = $row->shift_id;
     $shift_name = $row->shift_name;
     $description = $row->description;
+    $company_id = $row->company_id;
+    $company_name = $row->company_name;
   }
 }
 ?>
@@ -59,11 +63,13 @@ if (!empty($ShiftRecords)) {
               </div>
             </div>
             <div class="col-sm-7">
-              <div class="col-xs-12 text-right">
-                <button type="button" class="btn btn-md btn-primary" id="btnUpdateShift">
-                  <i class="fa fa-edit"></i> Update
-                </button>
-              </div>
+              <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                <div class="col-xs-12 text-right">
+                  <button type="button" class="btn btn-md btn-primary" id="btnUpdateShift">
+                    <i class="fa fa-edit"></i> Update
+                  </button>
+                </div>
+              <?php } ?>
             </div>
           </div>
           <br>
@@ -92,6 +98,19 @@ if (!empty($ShiftRecords)) {
                     <label>Shift Name</label>
                     <input class="form-control" id="shift_name" placeholder="Shift Name" name="shift_name" value="<?php echo $shift_name; ?>" maxlength="50" required>
                     <br>
+                    <!-- <div class="form-group"> -->
+                    <br>
+                    <label>Company</label>
+                    <select data-width="100%" class="form-control select2bs4" name="company_id" id="company_id" data-companyid="<?= $company_id; ?>">
+                      <?php
+                      foreach ($CompanyRecords as $row) {
+                        $selected = ($row->company_id == $company_id) ? 'selected' : ''; // bikin kondisi kaya gini
+                      ?>
+                        <option value="<?= $row->company_id; ?>" <?= $selected; ?> class=""><?= $row->company_name; ?></option>
+                      <?php } ?>
+                    </select>
+                    <!-- </div> -->
+                    <br>
                     <br>
                     <label>Description</label>
                     <textarea class="form-control" id="description" placeholder="Description" name="description"><?php echo $description; ?></textarea>
@@ -106,9 +125,11 @@ if (!empty($ShiftRecords)) {
                     <h4 class="card-title"><b>Shift Details</b></h4>
                   </strong>
                   <div class="card-tools">
-                    <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-shift-details">
-                      <i class="fa fa-plus"></i> Add Shift Details
-                    </button>
+                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                      <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-shift-details">
+                        <i class="fa fa-plus"></i> Add Shift Details
+                      </button>
+                    <?php } ?>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                       <i class="fas fa-minus"></i>
                     </button>
@@ -161,9 +182,11 @@ if (!empty($ShiftRecords)) {
                             <td><?php echo $record->shift_time_finish ?></td>
                             <td><?php echo $record->description ?></td>
                             <td class="text-center">
-                              <a id="btnSelect" class="btn btn-xs btn-primary" data-shiftdetailsid="<?= $record->shift_details_id ?>" data-shiftid="<?= $record->shift_id ?>" data-shiftname="<?= $record->shift_name ?>" data-shiftday="<?= $record->shift_day ?>" data-shifttimestart="<?= $record->shift_time_start ?>" data-shifttimefinish="<?= $record->shift_time_finish ?>" data-description="<?= $record->description ?>" data-toggle="modal" data-target="#modal-shift-details-update">
-                                <i class="fa fa-pen"></i></a>
-                              <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteShiftDetails/' . $record->shift_details_id . '/' . $record->shift_id; ?>"><i class="fa fa-trash"></i></a>
+                              <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                <a id="btnSelect" class="btn btn-xs btn-primary" data-shiftdetailsid="<?= $record->shift_details_id ?>" data-shiftid="<?= $record->shift_id ?>" data-shiftname="<?= $record->shift_name ?>" data-shiftday="<?= $record->shift_day ?>" data-shifttimestart="<?= $record->shift_time_start ?>" data-shifttimefinish="<?= $record->shift_time_finish ?>" data-description="<?= $record->description ?>" data-toggle="modal" data-target="#modal-shift-details-update">
+                                  <i class="fa fa-pen"></i></a>
+                                <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteShiftDetails/' . $record->shift_details_id . '/' . $record->shift_id; ?>"><i class="fa fa-trash"></i></a>
+                              <?php } ?>
                             </td>
                           </tr>
                       <?php
@@ -320,6 +343,8 @@ if (!empty($ShiftRecords)) {
       var shiftid = $("#shift_id").val();
       var shiftname = $("#shift_name").val();
       var description = $("#description").val();
+      var companyid = $("#company_id").val();
+
 
       $.ajax({
         url: '<?php echo base_url() ?>UpdateShift',
@@ -327,6 +352,7 @@ if (!empty($ShiftRecords)) {
           shift_id: shiftid,
           shift_name: shiftname,
           description: description,
+          company_id: companyid,
         },
         type: 'post',
         async: true,

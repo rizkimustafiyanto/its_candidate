@@ -12,9 +12,20 @@ class shift_model extends CI_Model
         }
     }
 
+    function GetShift2($shift_parameter)
+    {
+        $procedure = "call usp_gm_shift_by_company_select(?, ?,?)";
+        $sql_query = $this->db->query($procedure, $shift_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            return $sql_query->result();
+        }
+    }
+
+
     function InsertShift($shift_parameter)
     {
-        $procedure = "call usp_gm_shift_insert(?,?,?,?,?,?,?)";
+        $procedure = "call usp_gm_shift_insert(?,?,?,?,?,?,?,?)";
         $result = $this->db->query($procedure, $shift_parameter);
 
         return true;
@@ -22,7 +33,7 @@ class shift_model extends CI_Model
 
     function UpdateShift($shift_parameter)
     {
-        $procedure = "call usp_gm_shift_update(?,?,?,?,?)";
+        $procedure = "call usp_gm_shift_update(?,?,?,?,?,?)";
         $sql_query = $this->db->query($procedure, $shift_parameter);
         return true;
     }

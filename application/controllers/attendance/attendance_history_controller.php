@@ -23,11 +23,9 @@ class attendance_history_controller extends BaseController
 
     function GetAttendanceHistory()
     {
-        $date_1 = date('Y-m-d', strtotime($this->input->post('date_1')));
-        $date_2 = date('Y-m-d', strtotime($this->input->post('date_2')));
 
         $employee_id = $this->session->userdata('employee_id');
-        $attendance_history_parameter = array('p_attendance_id' => 0, 'p_employee_id' => $employee_id, 'p_date_1' => $date_1, 'p_date_2' => $date_2, 'p_flag' => 0);
+        $attendance_history_parameter = array('p_attendance_id' => 0, 'p_employee_id' => $employee_id, 'p_date_1' => 0, 'p_date_2' => 0, 'p_flag' => 0);
         $data['AttendanceRecords'] = $this->attendance_history_model->GetAttendanceHistory($attendance_history_parameter);
 
 

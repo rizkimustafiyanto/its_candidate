@@ -29,7 +29,7 @@ class sick_leave_controller extends BaseController
 
         $this->load->model('sickleave/sick_leave_model');
         $employee_id = $this->session->userdata('employee_id');
-        $sick_leave_parameter = array('p_sick_leave_id' => 0, 'p_employee_id' => $employee_id, 'p_flag' => 3);
+        $sick_leave_parameter = array('p_sick_leave_id' => 0, 'p_employee_id' => $employee_id, 'p_flag' => 4);
         $data['SickLeaveRecords'] = $this->sick_leave_model->GetSickLeave($sick_leave_parameter);
 
         // $data['sick_leave_id'] = $this->sick_leave_model->kode_sick_leave();
@@ -172,6 +172,9 @@ class sick_leave_controller extends BaseController
         $sick_leave_approval_parameter = array('p_sick_leave_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_sick_leave_id' => $sick_leave_id, 'p_approver_id' => 0, 'p_flag' => 9);
         $data['SickLeaveDetails'] = $this->sickleave_approval_model->GetSickLeaveDetails($sick_leave_approval_parameter);
 
+        $sick_leave_approval_parameter = array('p_sick_leave_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_sick_leave_id' => $sick_leave_id, 'p_approver_id' => 0, 'p_flag' => 12);
+        $data['TokenRecords'] = $this->sickleave_approval_model->GetToken($sick_leave_approval_parameter);
+
         $config = [
             'mailtype'  => 'html',
             'charset'   => 'utf-8',
@@ -201,10 +204,75 @@ class sick_leave_controller extends BaseController
                 "<br />Sampai&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;" . $data['SickLeaveDetails']->finish_date .
                 "<br />Keterangan&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;" . $data['SickLeaveDetails']->description .
                 "<br /> " .
+                "<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+                "<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+                "<br /> " .
                 "<br />Terimakasih " .
                 "<br /><b>Team HRD Persada Group</b>"
         );
         $this->email->send();
+
+        if ($data['TokenRecords'] != null) {
+            // FCM endpoint URL
+            $url = 'https://fcm.googleapis.com/fcm/send';
+
+            // FCM server key
+            $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+
+            // Notification payload
+            $payload = array(
+                'to' => $data['TokenRecords'],
+                'notification' => array(
+                    'title' =>
+                    'Approval Information',
+                    'body' => 'Mohon untuk memberikan approval pada Sick Leave Request dengan No '
+                        . $sick_leave_id .
+                        '. Terimakasih.'
+                ),
+                'data' => array(
+                    'chatId' => '123456',
+                    'senderId' => 'user123'
+                )
+            );
+
+            // Set headers
+            $headers = array(
+                'Content-Type:application/json',
+                'Authorization:key=' . $server_key
+            );
+
+            // Initialize cURL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+            // Execute the request
+            $response = curl_exec($ch);
+
+            // Check for errors
+            if ($response === false) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                log_message('error', 'FCM request failed: ' . $error);
+                // return false;
+            }
+
+            // Close cURL
+            curl_close($ch);
+
+            // Check the response status
+            $response_data = json_decode($response);
+            if ($response_data->success == 1) {
+                log_message('info', 'FCM notification sent successfully.');
+                // return true;
+            } else {
+                log_message('error', 'FCM notification failed: ' . $response);
+                // return false;
+            }
+        }
 
         $this->session->set_flashdata('success', 'Sick Leave Request Submitted');
     }

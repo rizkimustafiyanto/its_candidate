@@ -28,7 +28,7 @@ class overtime_controller extends BaseController
 
         $this->load->model('overtime/overtime_model');
         $employee_id = $this->session->userdata('employee_id');
-        $overtime_parameter = array('p_overtime_id' => 0, 'p_employee_id' => $employee_id, 'p_flag' => 3);
+        $overtime_parameter = array('p_overtime_id' => 0, 'p_employee_id' => $employee_id, 'p_flag' => 4);
         $data['OvertimeRecords'] = $this->overtime_model->GetOvertime($overtime_parameter);
 
         $this->load->model('master/employee_model');
@@ -89,6 +89,12 @@ class overtime_controller extends BaseController
         $attendance_parameter = array('p_attendance_id' => 0, 'p_employee_id' => $employee_id, 'p_overtime_id' => $overtime_id, 'p_date_1' => 0, 'p_date_2' => 0, 'p_flag' => 4);
         $data['AttendanceRecords'] = $this->attendance_model->GetAttendance($attendance_parameter);
 
+        $overtime_approval_parameter = array('p_overtime_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_overtime_id' => $overtime_id, 'p_approver_id' => 0, 'p_flag' => 13);
+        $data['TokenRecords'] = $this->overtime_approval_model->GetToken($overtime_approval_parameter);
+
+        $overtime_approval_parameter = array('p_overtime_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_overtime_id' => $overtime_id, 'p_approver_id' => 0, 'p_flag' => 14);
+        $data['TokenRequesterRecords'] = $this->overtime_approval_model->GetTokenRequester($overtime_approval_parameter);
+
 
         $this->global['pageTitle'] = 'CodeInsect : Menu Listing';
         $this->loadViews("overtime/overtime_detail", $this->global, $data, NULL);
@@ -129,7 +135,7 @@ class overtime_controller extends BaseController
         $record_status = "A";
         $overtime_parameter = array($description, $employee_id, $overtime_status_id, $overtime_category_id, $time_overtime_start,  $time_overtime_finish, $amount_time_overtime, $change_no, $creation_user_id, $change_user_id, $record_status);
 
-        if (strtotime($time_overtime_start) < (time())) {
+        if (date('Y-m-d', strtotime($time_overtime_start)) < date("Y-m-d")) {
             $error = "Start date time can't older than Now ";
             $this->session->set_flashdata('error', $error);
             redirect('Overtime');
@@ -203,7 +209,12 @@ class overtime_controller extends BaseController
         $overtime_parameter = array($overtime_id,  $description, $employee_id, $company_id, $company_brand_id, $overtime_status_id, $overtime_category_id, $time_overtime_start,  $time_overtime_finish, $amount_time_overtime, $change_user_id, $record_status, 'p_flag' => 0);
 
         //cek jika date time finish kurang dari date time start
-        if (strtotime($time_overtime_finish) <= strtotime($time_overtime_start)) {
+
+        if (date('Y-m-d', strtotime($time_overtime_start)) < date("Y-m-d")) {
+            $result  = "Start date time can't older than Now ";
+            echo json_encode($result);
+            $this->session->set_flashdata('error', $result);
+        } else if (strtotime($time_overtime_finish) <= strtotime($time_overtime_start)) {
             $result = "Finish date time can't be same or older than Start date time ";
             echo json_encode($result);
             $this->session->set_flashdata('error', $result);
@@ -253,7 +264,11 @@ class overtime_controller extends BaseController
         $overtime_parameter = array($overtime_id,  $description, $employee_id, $company_id, $company_brand_id, $overtime_status_id, $overtime_category_id, $time_overtime_start,  $time_overtime_finish, $amount_time_overtime, $change_user_id, $record_status, 'p_flag' => 1);
 
         // cek jika date time finish melebihi date time start
-        if (strtotime($time_overtime_finish) <= strtotime($time_overtime_start)) {
+        if (date('Y-m-d', strtotime($time_overtime_start)) < date("Y-m-d")) {
+            $result  = "Start date time can't older than Now ";
+            echo json_encode($result);
+            $this->session->set_flashdata('error', $result);
+        } else if (strtotime($time_overtime_finish) <= strtotime($time_overtime_start)) {
             $result = "Finish date time can't be same or older than Start date time ";
             echo json_encode($result);
             $this->session->set_flashdata('error', $result);
@@ -277,6 +292,9 @@ class overtime_controller extends BaseController
             $data['OvertimeDetails'] = $this->overtime_approval_model->GetOvertimeDetails($overtime_approval_parameter);
 
             //tinggal manggil overtime details ke body email and testing
+
+            $overtime_approval_parameter = array('p_overtime_approval_id' => 0, 'p_employee_id' => $employee_id, 'p_overtime_id' => $overtime_id, 'p_approver_id' => 0, 'p_flag' => 13);
+            $data['TokenRecords'] = $this->overtime_approval_model->GetToken($overtime_approval_parameter);
 
             $config = [
                 'mailtype'  => 'html',
@@ -308,10 +326,76 @@ class overtime_controller extends BaseController
                     "<br />Total Lembur &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     :&nbsp;" . $data['OvertimeDetails']->amountovertime .
                     "<br />Keterangan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;      :&nbsp;" . $data['OvertimeDetails']->description .
                     "<br /> " .
+                    "<br /> Untuk memberikan approval Bapak/Ibu dapat meng-klik link di bawah ini : " .
+                    "<br /> <a href= 'http://apps.persada-group.com:8086/hris/Approval'> HRIS Online </a>" .
+                    "<br /> " .
                     "<br />Terimakasih " .
                     "<br /><b>Team HRD Persada Group</b>"
             );
             $this->email->send();
+
+            if ($data['TokenRecords'] != null) {
+                // FCM endpoint URL
+                $url = 'https://fcm.googleapis.com/fcm/send';
+
+                // FCM server key
+                $server_key = 'AAAAaZZ5py8:APA91bFaDzkUOtraat7TKhTBna1GAjiwVijikigi3NUTnntr0GWmW5id_A-JaGoIm1IuUGSqZd2PSUA7zPChH-rY1nYe8hHPigR2PTugc2iXAcd1txFZrbsUhwFGtqgPd_rGwYqS-5KO';
+
+                // Notification payload
+                $payload = array(
+                    'to' => $data['TokenRecords'],
+                    'notification' => array(
+                        'title' =>
+                        'Approval Information',
+                        'body' => 'Mohon untuk memberikan approval pada Overtime Request dengan No '
+                            . $overtime_id .
+                            '. Terimakasih.'
+                    ),
+                    'data' => array(
+                        'chatId' => '123456',
+                        'senderId' => 'user123'
+                    )
+                );
+
+                // Set headers
+                $headers = array(
+                    'Content-Type:application/json',
+                    'Authorization:key=' . $server_key
+                );
+
+                // Initialize cURL
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+                // Execute the request
+                $response = curl_exec($ch);
+
+                // Check for errors
+                if ($response === false) {
+                    $error = curl_error($ch);
+                    curl_close($ch);
+                    log_message('error', 'FCM request failed: ' . $error);
+                    // return false;
+                }
+
+                // Close cURL
+                curl_close($ch);
+
+                // Check the response status
+                $response_data = json_decode($response);
+                if ($response_data->success == 1) {
+                    log_message('info', 'FCM notification sent successfully.');
+                    // return true;
+                } else {
+                    log_message('error', 'FCM notification failed: ' . $response);
+                    // return false;
+                }
+            }
+
             $this->session->set_flashdata('success', 'Overtime Request Submitted');
         }
     }

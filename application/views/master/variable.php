@@ -139,10 +139,10 @@
                 <input class="form-control" id="variable_id_update" placeholder="Variable Id" name="variable_id_update" readonly="true" required>
                 <br>
                 <label for="variablename">Variable Name</label>
-                <input class="form-control" id="variable_name_update" placeholder="Variable Name" name="variable_name_update" maxlength="50" required>
+                <input class="form-control" id="variable_name_update" placeholder="Variable Name" name="variable_name_update" required>
                 <br>
                 <label for="variabletype">Variable Type</label>
-                <input class="form-control" id="variable_type_update" placeholder="Variable Type" name="variable_type_update" maxlength="50" required>
+                <input class="form-control" id="variable_type_update" placeholder="Variable Type" name="variable_type_update" required>
               </div>
             </div>
           </div>

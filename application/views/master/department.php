@@ -12,11 +12,13 @@
                                     <h4>Department</h4>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="col-xs-12 text-right">
-                                        <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-department">
-                                            <i class="fa fa-plus"></i> Add Department
-                                        </button>
-                                    </div>
+                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                        <div class="col-xs-12 text-right">
+                                            <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-department">
+                                                <i class="fa fa-plus"></i> Add Department
+                                            </button>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -59,8 +61,10 @@
                                                 <td><?php echo $record->creation_user_name ?></td>
                                                 <td><?php echo $record->change_datetime ?></td>
                                                 <td class="text-center">
-                                                    <a id="btnSelect" class="btn btn-xs btn-primary" data-departmentname="<?= $record->department_name ?>" data-companyid="<?= $record->company_id ?>" data-divisionid="<?= $record->division_id ?>" data-departmentid="<?= $record->department_id ?>" data-toggle="modal" data-target="#modal-department-update"><i class="fa fa-pen"></i></a>
-                                                    <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteDepartment/' . $record->department_id; ?>"><i class="fa fa-trash"></i></a>
+                                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                                        <a id="btnSelect" class="btn btn-xs btn-primary" data-departmentname="<?= $record->department_name ?>" data-companyid="<?= $record->company_id ?>" data-companyname="<?= $record->company_name ?>" data-divisionid="<?= $record->division_id ?>" data-departmentid="<?= $record->department_id ?>" data-toggle="modal" data-target="#modal-department-update"><i class="fa fa-pen"></i></a>
+                                                        <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteDepartment/' . $record->department_id; ?>"><i class="fa fa-trash"></i></a>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                     <?php
@@ -145,12 +149,7 @@
                             <div class="col-lg-12">
                                 <input type="hidden" value="" name="department_id_update" id="department_id_update" />
                                 <label>Company</label>
-                                <!-- <select class="form-control select2bs4" id="company_id_update" name="company_id_update">
-                                    <?php foreach ($CompanyRecords as $row) : ?>
-                                        <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
-                                    <?php endforeach; ?>
-                                </select> -->
-                                <input class="form-control" value="<?= $record->company_name; ?>" id="company_name" name="company_name" readonly>
+                                <input class="form-control" value="" id="company_name_update" name="company_name_update" readonly>
                                 <br>
                                 <div id="divDivisionUpdate">
                                     <label>Division</label>
@@ -219,11 +218,13 @@
         //Counter
         var department_id = $(this).data("departmentid");
         var company_id = $(this).data("companyid");
+        var company_name = $(this).data("companyname");
         var division_id = $(this).data("divisionid");
         var department_name = $(this).data("departmentname");
 
         $("#department_id_update").val(department_id);
         // $("#company_id_update").val(company_id).trigger("change");
+        $("#company_name_update").val(company_name);
         $("#division_id_update").val(division_id).trigger("change");
         $("#department_name_update").val(department_name);
 

@@ -12,6 +12,17 @@ class noticeletter_model extends CI_Model
         }
     }
 
+    function GetNoticeLetterPerCabang($employee_notice_letter_parameter)
+    {
+        $procedure = "call usp_gm_employee_notice_letter_cabang_select(?, ?, ?,?,?)";
+        $sql_query = $this->db->query($procedure, $employee_notice_letter_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            return $sql_query->result();
+        }
+    }
+
+
     function InsertNoticeLetter($employee_notice_letter_parameter)
     {
         $procedure = "call usp_gm_employee_notice_letter_insert(?,?,?,?,?,?,?,?,?,?,?)";

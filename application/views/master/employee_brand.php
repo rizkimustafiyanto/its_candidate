@@ -12,15 +12,89 @@
                   <h4>Employee Brand</h4>
                 </div>
                 <div class="col-sm-6">
-                  <div class="col-xs-12 text-right">
-                    <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-employee-brand">
-                      <i class="fa fa-plus"></i> Add Employee Brand
-                    </button>
-                  </div>
+                  <!-- <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                    <div class="col-xs-12 text-right">
+                      <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-employee-brand">
+                        <i class="fa fa-plus"></i> Add Employee Brand
+                      </button>
+                    </div>
+                  <?php } ?> -->
                 </div>
               </div>
             </div>
           </div>
+
+          <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+            <div class="card card-sm card-default">
+              <div class="card-header">
+                <div class="row ">
+                  <form role="form" action="<?php echo base_url() ?>EmployeeBrandFilter" method="post">
+                    <div class="col-sm-12">
+                      <div class="row ">
+                        <div class="row-sm-6">
+                          <label>Company</label>
+                          <select class="form-control select2bs4" id="companypusat" name="companypusat" required>
+                            <option disabled selected value="">--Select--</option>
+                            <!-- <option value="all">All</option> -->
+                            <?php foreach ($CompanyInBrandPusatRecords as $row) : ?>
+                              <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;
+                        <div class="row-sm-6">
+                          <label>Company Brand</label>
+                          <select class="form-control select2bs4" name="company_brand_id_pusat" id="company_brand_id_pusat" required>
+                            <option disabled selected value="">--Select--</option>
+                          </select>
+                        </div>
+                      </div>
+                      &nbsp;&nbsp;&nbsp;
+                      <div style="width:11vw;">
+                        <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
+
+          <?php if ($this->session->userdata('role_id') == '2') { ?>
+            <div class="card card-sm card-default">
+              <div class="card-header">
+                <div class="row ">
+                  <form role="form" action="<?php echo base_url() ?>EmployeeBrandFilter" method="post">
+                    <div class="col-sm-12">
+                      <div class="row ">
+                        <div class="row-sm-6">
+                          <label>Company</label>
+                          <select class="form-control select2bs4" id="company" name="company" required>
+                            <option disabled selected value="">--Select--</option>
+                            <!-- <option value="all">All</option> -->
+                            <?php foreach ($CompanyInBrandRecords as $row) : ?>
+                              <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;
+                        <div class="row-sm-6">
+                          <label>Company Brand</label>
+                          <select class="form-control select2bs4" name="company_brand_id_cabang" id="company_brand_id_cabang" required>
+                            <option disabled selected value="">--Select--</option>
+                          </select>
+                        </div>
+                      </div>
+                      &nbsp;&nbsp;&nbsp;
+                      <div style="width:11vw;">
+                        <input type="submit" id="btnSubmit" class="btn btn-primary" value="Submit" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <?php } ?>
 
           <?php if ($this->session->flashdata('success')) : ?>
             <div class="flash-data" data-flashdata="<?= $this->session->flashdata('success'); ?>"></div>
@@ -42,7 +116,7 @@
                     <th>Employee Name</th>
                     <th>Company</th>
                     <th>Company Brand</th>
-                    <th>Action</th>
+                    <!-- <th>Action</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -56,10 +130,12 @@
                         <td><?php echo $record->employee_name ?></td>
                         <td><?php echo $record->company_name ?></td>
                         <td><?php echo $record->company_brand_name ?></td>
-                        <td class="text-center">
-                          <a id="btnSelect" class="btn btn-xs btn-primary" data-employeebrandid="<?= $record->employee_brand_id ?>" data-employeeid="<?= $record->employee_id ?>" data-employeename="<?= $record->employee_name ?>" data-companybrandid="<?= $record->company_brand_id ?>" data-companybrandname="<?= $record->company_brand_name ?>"><i class="fa fa-pen"></i></a>
-                          <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteEmployeeBrand/' . $record->employee_brand_id; ?>"><i class="fa fa-trash"></i></a>
-                        </td>
+                        <!-- <td class="text-center">
+                          <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                            <a id="btnSelect" class="btn btn-xs btn-primary" data-employeebrandid="<?= $record->employee_brand_id ?>" data-employeeid="<?= $record->employee_id ?>" data-employeename="<?= $record->employee_name ?>" data-companybrandid="<?= $record->company_brand_id ?>" data-companybrandname="<?= $record->company_brand_name ?>"><i class="fa fa-pen"></i></a>
+                            <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteEmployeeBrand/' . $record->employee_brand_id; ?>"><i class="fa fa-trash"></i></a>
+                          <?php } ?>
+                        </td> -->
                       </tr>
                   <?php
                     }
@@ -99,7 +175,7 @@
                 <label for="employeeid">Employee</label>
                 <select class="form-control select2bs4" id="employee_id" name="employee_id">
                   <?php foreach ($EmployeeRecords as $row) : ?>
-                    <option value="<?php echo $row->employee_id; ?>"><?php echo $row->employee_name; ?></option>
+                    <option value="<?php echo $row->employee_id; ?>"><?php echo $row->employee_id; ?> - <?php echo $row->employee_name; ?></option>
                   <?php endforeach; ?>
                 </select>
               </div>
@@ -143,7 +219,7 @@
                   <label for="employeeid">Employee</label>
                   <select class="form-control select2bs4" id="employee_id_update" name="employee_id_update">
                     <?php foreach ($EmployeeRecords as $row) : ?>
-                      <option value="<?php echo $row->employee_id; ?>"><?php echo $row->employee_name; ?></option>
+                      <option value="<?php echo $row->employee_id; ?>"><?php echo $row->employee_id; ?> - <?php echo $row->employee_name; ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -152,7 +228,7 @@
                   <label for="companybrandid">Company Brand</label>
                   <select class="form-control select2bs4" id="company_brand_id_update" name="company_brand_id_update">
                     <?php foreach ($CompanyBrandRecords as $row) : ?>
-                      <option value="<?php echo $row->company_brand_id; ?>"><?php echo $row->company_brand_name; ?></option>
+                      <option value="<?php echo $row->company_brand_id; ?>"><?php echo $row->company_name; ?> - <?php echo $row->company_brand_name; ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -197,4 +273,68 @@
     // $("#employee_id").val("");
     // $("#company_brand_id").val("");
   });
+
+  // get company brand
+  $("#company").change(function() {
+    var company = $("#company").val();
+
+    // For set value Vehicle type on first load
+    $.ajax({
+      url: 'GetCompanyBrandByCompanyId3',
+      data: {
+        company: company
+      },
+      type: 'post',
+      async: true,
+      dataType: 'json',
+      cache: false,
+      success: function(response) {
+        var html = '';
+        var is = '';
+        if (response != null) {
+          for (is = 0; is < response.length; is++) {
+            html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+            // console.log(company);
+          }
+        } else {
+          html += '<option value=""></option>';
+        }
+        //alert(data[0].sub_menu_id);
+        $('#company_brand_id_cabang').html(html);
+      }
+    })
+  })
+
+
+
+  // get company brand untuk hrd pusat
+  $("#companypusat").change(function() {
+    var companypusat = $("#companypusat").val();
+
+    // For set value Vehicle type on first load
+    $.ajax({
+      url: 'GetCompanyBrandByCompanyId4',
+      data: {
+        companypusat: companypusat
+      },
+      type: 'post',
+      async: true,
+      dataType: 'json',
+      cache: false,
+      success: function(response) {
+        var html = '';
+        var is = '';
+        if (response != null) {
+          for (is = 0; is < response.length; is++) {
+            html += '<option value=' + response[is].company_brand_id + '>' + response[is].company_brand_name + '</option>';
+            // console.log(company);
+          }
+        } else {
+          html += '<option value=""></option>';
+        }
+        //alert(data[0].sub_menu_id);
+        $('#company_brand_id_pusat').html(html);
+      }
+    })
+  })
 </script>

@@ -12,11 +12,13 @@
                   <h4>Paid Leave Level</h4>
                 </div>
                 <div class="col-sm-6">
+				<?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
                   <div class="col-xs-12 text-right">
                     <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-paid-leave-level">
                       <i class="fa fa-plus"></i> Add Paid Leave Level
                     </button>
                   </div>
+				<?php } ?>
                 </div>
               </div>
             </div>
@@ -62,10 +64,12 @@
                         <td><?php echo $record->level_name ?></td>
                         <td><?php echo $record->amount_paid_leave ?></td>
                         <td class="text-center">
+						<?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
                           <a id="btnSelect" class="btn btn-xs btn-primary" data-paidleavelevelid="<?= $record->paid_leave_level_id ?>" data-paidleaveid="<?= $record->paid_leave_id ?>" data-paidleavename="<?= $record->paid_leave_name ?>" data-levelid="<?= $record->level_id ?>" data-levelname="<?= $record->level_name ?>" data-amountpaidleave="<?= $record->amount_paid_leave ?>" data-employeestatusid="<?= $record->employee_status_id ?>" data-employeestatusname="<?= $record->employee_status_name ?>" data-paidleavename2="<?= $record->paid_leave_name2 ?>" data-toggle="modal" data-target="#modal-paid-leave-level-update">
                             <i class="fa fa-pen"></i></a>
                           <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeletePaidLeaveLevel/' . $record->paid_leave_level_id; ?>"><i class="fa fa-trash"></i></a>
-                        </td>
+                        <?php } ?>
+						</td>
                       </tr>
                   <?php
                     }

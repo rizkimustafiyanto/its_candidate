@@ -12,11 +12,13 @@
                                     <h4>Company</h4>
                                 </div>
                                 <div class="col-sm-6">
+								<?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
                                     <div class="col-xs-12 text-right">
                                         <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-company">
                                             <i class="fa fa-plus"></i> Add Company
                                         </button>
                                     </div>
+								<?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -57,9 +59,11 @@
                                                 <td><?php echo $record->creation_user_name ?></td>
                                                 <td><?php echo $record->change_datetime ?></td>
                                                 <td class="text-center">
+												<?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
                                                     <a id="btnSelect" class="btn btn-xs btn-primary" data-companyid="<?= $record->company_id ?>" data-companyinitial="<?= $record->company_initial ?>" data-companyname="<?= $record->company_name ?>" data-email="<?= $record->email ?>" data-address="<?= $record->address ?>" data-description="<?= $record->description ?>" data-phoneno="<?= $record->phone_no ?>"><i class="fa fa-pen"></i></a>
                                                     <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteCompany/' . $record->company_id; ?>"><i class="fa fa-trash"></i></a>
-                                                </td>
+                                                <?php } ?>
+												</td>
                                             </tr>
                                     <?php
                                         }

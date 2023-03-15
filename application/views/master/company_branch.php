@@ -12,11 +12,13 @@
                                     <h4>Company Branch</h4>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="col-xs-12 text-right">
-                                        <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-company_branch">
-                                            <i class="fa fa-plus"></i> Add Company Branch
-                                        </button>
-                                    </div>
+                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                        <div class="col-xs-12 text-right">
+                                            <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-company_branch">
+                                                <i class="fa fa-plus"></i> Add Company Branch
+                                            </button>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -40,8 +42,8 @@
                                         <th>Company Branch ID</th>
                                         <th>Company Name</th>
                                         <th>Company Branch Name</th>
-                                        <th>Creation</th>
-                                        <th>Updated Date</th>
+                                        <th>Longitude</th>
+                                        <th>Latitude</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -54,11 +56,13 @@
                                                 <td><?php echo $record->company_branch_id ?></td>
                                                 <td><?php echo $record->company_name ?></td>
                                                 <td><?php echo $record->company_branch_name ?></td>
-                                                <td><?php echo $record->creation_user_name ?></td>
-                                                <td><?php echo $record->change_datetime ?></td>
+                                                <td><?php echo $record->longitude ?></td>
+                                                <td><?php echo $record->latitude ?></td>
                                                 <td class="text-center">
-                                                    <a id="btnSelect" class="btn btn-xs btn-primary" data-companybranchname="<?= $record->company_branch_name ?>" data-companyid="<?= $record->company_id ?>" data-companybranchid="<?= $record->company_branch_id ?>" data-toggle="modal" data-target="#modal-company_branch-update"><i class="fa fa-pen"></i></a>
-                                                    <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteCompanyBranch/' . $record->company_branch_id; ?>"><i class="fa fa-trash"></i></a>
+                                                    <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                                                        <a id="btnSelect" class="btn btn-xs btn-primary" data-companybranchname="<?= $record->company_branch_name ?>" data-companyid="<?= $record->company_id ?>" data-companybranchid="<?= $record->company_branch_id ?>" data-longitude="<?= $record->longitude ?>" data-latitude="<?= $record->latitude ?>" data-toggle="modal" data-target="#modal-company_branch-update"><i class="fa fa-pen"></i></a>
+                                                        <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteCompanyBranch/' . $record->company_branch_id; ?>"><i class="fa fa-trash"></i></a>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                     <?php
@@ -106,6 +110,12 @@
                                 <label for="companybranchname">Company Branch Name</label>
                                 <input class="form-control" id="company_branch_name" placeholder="Company Branch Name" name="company_branch_name" maxlength="50" required>
                                 <br>
+                                <label for="longitude">Longitude</label>
+                                <input class="form-control" id="longitude" placeholder="Longitude" name="longitude" required>
+                                <br>
+                                <label for="latitude">Latitude</label>
+                                <input class="form-control" id="latitude" placeholder="Latitude" name="latitude" required>
+                                <br>
                             </div>
 
                         </div>
@@ -146,6 +156,12 @@
                                     <?php endforeach; ?>
                                 </select>
                                 <br>
+                                <label for="longitude">Longitude</label>
+                                <input class="form-control" id="longitude_update" placeholder="Longitude" name="longitude_update">
+                                <br>
+                                <label for="latitude">Latitude</label>
+                                <input class="form-control" id="latitude_update" placeholder="Latitude" name="latitude_update">
+                                <br>
                             </div>
 
                         </div>
@@ -169,10 +185,15 @@
         var company_branch_name = $(this).data("companybranchname");
         var company_branch_id = $(this).data("companybranchid");
         var company_id = $(this).data("companyid");
+        var longitude = $(this).data("longitude");
+        var latitude = $(this).data("latitude");
+
 
         $("#company_branch_name_update").val(company_branch_name);
         $("#company_branch_id_update").val(company_branch_id);
-        $("#company_id_update").val(company_id).trigger("change");;
+        $("#company_id_update").val(company_id).trigger("change");
+        $("#longitude_update").val(longitude);
+        $("#latitude_update").val(latitude);
 
     });
 

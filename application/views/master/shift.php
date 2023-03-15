@@ -12,11 +12,13 @@
                   <h4>Shift</h4>
                 </div>
                 <div class="col-sm-6">
-                  <div class="col-xs-12 text-right">
-                    <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-shift">
-                      <i class="fa fa-plus"></i> Add Shift
-                    </button>
-                  </div>
+                  <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                    <div class="col-xs-12 text-right">
+                      <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-shift">
+                        <i class="fa fa-plus"></i> Add Shift
+                      </button>
+                    </div>
+                  <?php } ?>
                 </div>
               </div>
             </div>
@@ -42,6 +44,7 @@
                     <!-- <th>Approval ID</th> -->
                     <th>Shift ID</th>
                     <th>Shift Name</th>
+                    <th>Company Name</th>
                     <th>Description</th>
                     <th>Action</th>
                   </tr>
@@ -56,12 +59,15 @@
                         <td><?= $i++; ?></td>
                         <td><?php echo $record->shift_id ?></td>
                         <td><?php echo $record->shift_name ?></td>
+                        <td><?php echo $record->company_name ?></td>
                         <td><?php echo $record->description ?></td>
                         <td class="text-center">
                           <!-- <a id="btnSelect" class="btn btn-xs btn-primary" data-shiftid="<?= $record->shift_id ?>" data-shiftname="<?= $record->shift_name ?>" data-description="<?= $record->description ?>" data-toggle="modal" data-target="#modal-shift-update">
                             <i class="fa fa-pen"></i></a> -->
                           <a id="btnSelect" class="btn btn-xs btn-primary" href="<?php echo base_url() . 'ShiftDetail/' . $record->shift_id; ?>"><i class="fa fa-pen"></i></a>
-                          <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteShift/' . $record->shift_id; ?>"><i class="fa fa-trash"></i></a>
+                          <?php if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') { ?>
+                            <a id="btnDelete" class="btn btn-xs btn-danger tombol-hapus" href="<?php echo base_url() . 'DeleteShift/' . $record->shift_id; ?>"><i class="fa fa-trash"></i></a>
+                          <?php } ?>
                         </td>
                       </tr>
                   <?php
@@ -103,6 +109,16 @@
               <br>
               <label for="shiftname">Shift Name</label>
               <input class="form-control" id="shift_name" placeholder="Shift Name" name="shift_name" maxlength="50" required>
+              <br>
+              <div class="form-group">
+                <label>Company</label>
+                <select class="form-control select2bs4" id="company_id" name="company_id" required>
+                  <option disabled selected value="">--Select--</option>
+                  <?php foreach ($CompanyRecords as $row) : ?>
+                    <option value="<?php echo $row->company_id; ?>"><?php echo $row->company_name; ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
               <br>
               <label for="description">Description</label>
               <textarea class="form-control" id="description" placeholder="Description" name="description"></textarea>

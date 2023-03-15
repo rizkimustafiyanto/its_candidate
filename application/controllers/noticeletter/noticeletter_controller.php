@@ -12,6 +12,7 @@ class noticeletter_controller extends BaseController
         $this->load->model('noticeletter/noticeletter_model');
         $this->load->model('master/company_model');
         $this->load->model('master/variable_model');
+        $this->load->model('master/employee_model');
         $this->load->helper(array('url', 'download'));
 
         $this->IsLoggedIn();
@@ -26,8 +27,65 @@ class noticeletter_controller extends BaseController
     function GetNoticeLetter()
     {
 
-        $employee_notice_letter_parameter = array('p_employee_notice_letter_id' => 0, 'p_employee_id' => '0', 'p_flag' => 1);
-        $data['EmployeeNoticeLetterRecords'] = $this->noticeletter_model->GetNoticeLetter($employee_notice_letter_parameter);
+        if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
+
+            $employee_notice_letter_parameter = array('p_employee_notice_letter_id' => 0, 'p_employee_id' => '0', 'p_flag' => 1);
+            $data['EmployeeNoticeLetterRecords'] = $this->noticeletter_model->GetNoticeLetter($employee_notice_letter_parameter);
+        }
+
+        if ($this->session->userdata('role_id') == '2') {
+            $employee_id = $this->session->userdata('employee_id');
+            $company_id = $this->session->userdata('company_id');
+
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            //get company_brand_id
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => $company_id, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 15);
+            $data['companybrandid'] = $this->employee_model->GetCompanyBrandId($employee_parameter);
+
+            $employee_notice_letter_parameter = array('p_employee_notice_letter_id' => 0, 'p_employee_id' => '0', 'p_company_id' => $company_id, 'p_company_brand_id' => $data['companybrandid'], 'p_flag' => 1);
+            $data['EmployeeNoticeLetterRecords'] = $this->noticeletter_model->GetNoticeLetterPerCabang($employee_notice_letter_parameter);
+        }
+
+        $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+        $data['CompanyRecords'] = $this->company_model->GetCompany($company_parameter);
+
+        //variable
+        $variable_notice_letter_type_parameter = array('p_variable_id' => 'NL', 'p_flag' => 1);
+        $data['NoticeLetterTypeRecords'] = $this->variable_model->GetVariable($variable_notice_letter_type_parameter);
+
+        $this->global['pageTitle'] = 'CodeInsect : Menu Listing';
+        $this->loadViews("noticeletter/noticeletter", $this->global, $data, NULL);
+    }
+
+    function GetNoticeLetterFilter()
+    {
+
+        if ($this->session->userdata('role_id') == '1' || $this->session->userdata('role_id') == '5') {
+            $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
+            $data['CompanyInBrandPusatRecords'] = $this->company_model->GetCompany($company_parameter);
+
+            $companypusat = $this->input->post('companypusat');
+            $company_brand_id_pusat = $this->input->post('company_brand_id_pusat');
+            $employee_notice_letter_parameter = array('p_employee_notice_letter_id' => 0, 'p_employee_id' => '0', 'p_company_id' => $companypusat, 'p_company_brand_id' => $company_brand_id_pusat, 'p_flag' => 1);
+            $data['EmployeeNoticeLetterRecords'] = $this->noticeletter_model->GetNoticeLetterPerCabang($employee_notice_letter_parameter);
+        }
+
+        if ($this->session->userdata('role_id') == '2') {
+            $employee_id = $this->session->userdata('employee_id');
+            $employee_parameter = array('p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_division_id' => 0, 'p_department_id' => 0, 'p_flag' => 14);
+            $data['CompanyInBrandRecords'] = $this->employee_model->GetEmployee($employee_parameter);
+
+            $company = $this->input->post('company');
+            $company_brand_id_cabang = $this->input->post('company_brand_id_cabang');
+            $employee_notice_letter_parameter = array('p_employee_notice_letter_id' => 0, 'p_employee_id' => '0', 'p_company_id' => $company, 'p_company_brand_id' => $company_brand_id_cabang, 'p_flag' => 1);
+            $data['EmployeeNoticeLetterRecords'] = $this->noticeletter_model->GetNoticeLetterPerCabang($employee_notice_letter_parameter);
+        }
+
 
         $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
         $data['CompanyRecords'] = $this->company_model->GetCompany($company_parameter);
@@ -57,7 +115,7 @@ class noticeletter_controller extends BaseController
 
         $fileExt = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
         if ($fileExt != "") {
-            $notice_letter_url = $notice_letter_no . '-' . time() . '.' . $fileExt;
+            $notice_letter_url = $employee_id . '-' . time() . '.' . $fileExt;
         } else {
             $notice_letter_url = "";
         }
@@ -68,7 +126,7 @@ class noticeletter_controller extends BaseController
         if ($fileExt != "") {
             $config['upload_path']    = './upload/';
             $config['allowed_types']  = 'jpeg|jpg|png|pdf';
-            $config['file_name']      = $notice_letter_no . '-' . time();
+            $config['file_name']      = $employee_id . '-' . time();
             $config['overwrite']      = true;
             $config['max_size']       = 100000;
             $config['max_width']      = 10000;
