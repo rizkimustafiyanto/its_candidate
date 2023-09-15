@@ -89,4 +89,14 @@ class dashboard_employee_model extends CI_Model
             return $ret->remainingpaidleave;
         }
     }
+
+    function GetSummaryList($summary_list_parameter)
+    {
+        $procedure = "call usp_xt_summary_list_select(?)";
+        $sql_query = $this->db->query($procedure, $summary_list_parameter);
+        mysqli_next_result($this->db->conn_id);
+        if ($sql_query->num_rows() > 0) {
+            return $sql_query->result();
+        }
+    }
 }

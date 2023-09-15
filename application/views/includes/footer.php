@@ -21,104 +21,127 @@
 <!-- Page specific script -->
 <script>
   $(function() {
-    $("#paid_leave_level_table")
+    $("#candidate_family_table")
       .DataTable({
         responsive: true,
         lengthChange: true,
         searching: true,
-        autoWidth: false,
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        autoWidth: false
       })
       .buttons()
       .container()
-      .appendTo("#paid_leave_level_table_wrapper .col-md-6:eq(0)");
+      .appendTo("#candidate_family_table_wrapper .col-md-6:eq(0)");
 
-    $("#noticelettertable")
+    $("#candidate_education_history_table")
       .DataTable({
         responsive: true,
         lengthChange: true,
         searching: true,
-        autoWidth: false,
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        autoWidth: false
       })
       .buttons()
       .container()
-      .appendTo("#noticelettertable_wrapper .col-md-6:eq(0)");
+      .appendTo("#candidate_education_history_table_wrapper .col-md-6:eq(0)");
 
-    $("#noticeletterhistorytable")
+    $("#candidate_courses_table")
       .DataTable({
         responsive: true,
         lengthChange: true,
         searching: true,
-        autoWidth: false,
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        autoWidth: false
       })
       .buttons()
       .container()
-      .appendTo("#noticeletterhistorytable_wrapper .col-md-6:eq(0)");
+      .appendTo("#candidate_courses_table_wrapper .col-md-6:eq(0)");
 
-    $("#example1")
+    $("#candidate_job_history_table")
       .DataTable({
         responsive: true,
         lengthChange: false,
-        autoWidth: false,
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        searching: true,
+        autoWidth: false
       })
       .buttons()
       .container()
-      .appendTo("#example1_wrapper .col-md-6:eq(0)");
+      .appendTo("#candidate_job_history_table_wrapper .col-md-6:eq(0)");
 
-    $('#table-general').DataTable({
-      "scrollY": 100,
-      "scrollX": true,
-      "scrollCollapse": true,
-      "fixedHeader": true,
-      "bInfo": false,
-      scrollResize: true,
-      lengthChange: false,
-      searching: false,
-      paging: false,
-      fixedColumns: {
-        leftColumns: 1,
-        rightColumns: 1
-      },
-      columnDefs: [{
-        orderable: false,
-        className: 'select-checkbox',
-        targets: 0
-      }],
-      select: {
-        style: 'multi',
-        selector: 'td:first-child'
-      },
-      order: [
-        [1, 'asc']
-      ]
-    });
+    $("#candidate_reference_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#candidate_reference_table_wrapper .col-md-6:eq(0)");
 
-    $("#employeelist")
+    $("#candidate_emergency_contact_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#candidate_emergency_contact_table_wrapper .col-md-6:eq(0)");
+
+    $("#candidate_social_activity_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#candidate_social_activity_table_wrapper .col-md-6:eq(0)");
+
+    $("#candidate_hobby_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#candidate_hobby_table_wrapper .col-md-6:eq(0)");
+
+    $("#candidate_echievement_table")
       .DataTable({
         responsive: true,
         lengthChange: true,
         searching: true,
-        autoWidth: false,
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        autoWidth: false
       })
       .buttons()
       .container()
-      .appendTo("#employeelist_wrapper .col-md-6:eq(0)");
+      .appendTo("#candidate_echievement_table_wrapper .col-md-6:eq(0)");
 
-    $("#menurole")
+
+    $("#candidate_language_skill_table")
       .DataTable({
         responsive: true,
         lengthChange: true,
         searching: true,
-        autoWidth: false,
-        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        autoWidth: false
       })
       .buttons()
       .container()
-      .appendTo("#menurole_wrapper .col-md-6:eq(0)");
+      .appendTo("candidate_language_skill_table_wrapper .col-md-6:eq(0)");
+
+    $("#candidate_computer_skill_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#candidate_computer_skill_table_wrapper .col-md-6:eq(0)");
 
     $("#example2")
       .DataTable({
@@ -147,6 +170,17 @@
       .appendTo("#leave_datetime_table_wrapper .col-md-6:eq(0)");
 
     $("#sppd_detail_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#sppd_detail_table_wrapper .col-md-6:eq(0)");
+
+    $("#sppd_detail_temp_table")
       .DataTable({
         responsive: true,
         lengthChange: true,
@@ -201,6 +235,61 @@
       .container()
       .appendTo("#lpd_table_wrapper .col-md-6:eq(0)");
 
+    $("#lppd_ext_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#lpd_table_wrapper .col-md-6:eq(0)");
+
+    $("#leave_table_general")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        order: [
+          [0, "desc"]
+        ]
+      })
+      .buttons()
+      .container()
+      .appendTo("#example1_wrapper .col-md-6:eq(0)");
+
+    $("#lppd_ext_table_2")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        bFilter: false,
+        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        order: [
+          [0, "asc"]
+        ]
+      })
+      .buttons()
+      .container()
+      .appendTo("#example1_wrapper .col-md-6:eq(0)");
+
+    $("#approval_date_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        bFilter: false,
+        buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        order: [
+          [0, "asc"]
+        ]
+      })
+      .buttons()
+      .container()
+      .appendTo("#example1_wrapper .col-md-6:eq(0)");
+
     $("#extpaidleave_table")
       .DataTable({
         responsive: true,
@@ -233,6 +322,17 @@
       .buttons()
       .container()
       .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
+
+    $("#list_candidate_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#list_candidate_table_wrapper .col-md-6:eq(0)");
 
     $("#approval1_table")
       .DataTable({
@@ -278,6 +378,17 @@
       .container()
       .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
 
+    $("#employeeattendancelocation_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
+
     $("#employeenoticeletter_table")
       .DataTable({
         responsive: true,
@@ -299,6 +410,31 @@
       .buttons()
       .container()
       .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
+
+    $("#employee_letter_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false
+      })
+      .buttons()
+      .container()
+      .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
+
+    $("#dashboard_table")
+      .DataTable({
+        responsive: true,
+        lengthChange: true,
+        searching: true,
+        autoWidth: false,
+        ordering: false,
+        pageLength: 5
+      })
+      .buttons()
+      .container()
+      .appendTo("#approval_table_wrapper .col-md-6:eq(0)");
+
 
     $("#sickleave_datetime_table")
       .DataTable({
@@ -421,6 +557,19 @@
       .container()
       .appendTo("#attendance_2_table_wrapper .col-md-6:eq(0)");
 
+    $("#reschedule_table")
+      .DataTable({
+        lengthChange: false,
+        autoWidth: false,
+        // buttons: ["copy", "csv", "excel", "colvis"],
+        order: [
+          [0, "asc"]
+        ]
+      })
+      .buttons()
+      .container()
+      .appendTo("#attendance_2_table_wrapper .col-md-6:eq(0)");
+
     $("#overtime_report")
       .DataTable({
         lengthChange: false,
@@ -499,201 +648,33 @@
       .container()
       .appendTo("#massive_leave_wrapper .col-md-6:eq(0)");
 
-    //format jam 
+    //format tahun 
     $('#datetime').datetimepicker({
-      // format: 'LT'
-      format: 'HH:mm'
+      format: 'YYYY'
     });
     $('#datetime1').datetimepicker({
-      // format: 'LT'
-      format: 'HH:mm',
+      format: 'YYYY'
     });
-
-    //format tanggal
     $('#datetime2').datetimepicker({
-      format: 'DD-MM-YYYY'
+      format: 'MM-YYYY'
     });
     $('#datetime3').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-check',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-      }
+      format: 'MM-YYYY'
     });
     $('#datetime4').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-check',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-      }
+      format: 'YYYY-MM-DD'
     });
     $('#datetime5').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-
-    $('#datetime6').datetimepicker({
       format: 'YYYY-MM-DD'
+    });
+    $('#datetime6').datetimepicker({
+      format: 'DD-MM-YYYY'
     });
     $('#datetime7').datetimepicker({
       format: 'DD-MM-YYYY'
     });
     $('#datetime8').datetimepicker({
-      format: 'YYYY-MM-DD'
-    });
-
-    $('#datetime9').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-check',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-      }
-    });
-    $('#datetime10').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-check',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-      }
-    });
-    $('#datetime11').datetimepicker({
       format: 'DD-MM-YYYY'
-    });
-    $('#datetime12').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime13').datetimepicker({
-      format: 'YYYY-MM-DD'
-    });
-    $('#datetime14').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime15').datetimepicker({
-      format: 'YYYY-MM-DD'
-    });
-    $('#datetime16').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime17').datetimepicker({
-      format: 'YYYY-MM-DD'
-    });
-    $('#datetime18').datetimepicker({
-      // format: 'LT'
-      format: 'HH:mm',
-    });
-    $('#datetime19').datetimepicker({
-      // format: 'LT'
-      format: 'HH:mm',
-    });
-    $('#datetime20').datetimepicker({
-      // format: 'LT'
-      format: 'HH:mm',
-    });
-    $('#datetime21').datetimepicker({
-      // format: 'LT'
-      format: 'HH:mm',
-    });
-    $('#datetime22').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-check',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-      }
-    });
-    $('#datetime23').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-check',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-      }
-    });
-    $('#datetime24').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-arrow-up',
-        down: 'fas fa-arrow-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-check',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-      }
-    });
-    $('#datetime25').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime26').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-
-    $('#datetime27').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime28').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime29').datetimepicker({
-      format: 'YYYY-MM-DD'
-    });
-    $('#datetime30').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime31').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime32').datetimepicker({
-      format: 'DD-MM-YYYY'
-    });
-    $('#datetime33').datetimepicker({
-      format: 'YYYY-MM-DD'
-    });
-    var dateNow = new Date();
-    $('#datetime34').datetimepicker({
-      defaultDate: dateNow,
-      format: 'YYYY-MM-DD'
     });
 
     $('.select2').select2()
@@ -707,6 +688,13 @@
 
 <!-- alert for leave error -->
 <script>
+  $('#btnAddLeaveError').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      text: 'Anda masih mempunyai draft pengajuan yang belum diselesaikan, mohon hapus pengajuan yang tidak diperlukan terlebih dahulu!'
+    })
+  });
+
   $('#btnSubmitLeaveError').on('click', function(e) {
     Swal.fire({
       icon: 'error',
@@ -714,17 +702,59 @@
     })
   });
 
-  $('#btnSubmitSPPDError').on('click', function(e) {
+  $('#btnSubmitLeaveError2').on('click', function(e) {
     Swal.fire({
       icon: 'error',
-      title: 'Mohon Input Rencana Perjalanan Dinas!'
+      title: 'Maaf tanggal yang anda ajukan sudah melewati batas yang telah ditentukan!'
     })
   });
 
-  $('#btnSubmitLPPDError').on('click', function(e) {
+  $('#btnSubmitAttendanceError').on('click', function(e) {
     Swal.fire({
       icon: 'error',
-      title: 'Mohon Input Laporan Perjalanan Dinas!'
+      title: 'Maaf terdapat data yang tidak valid mohon delete data dan upload ulang!'
+    })
+  });
+
+  $('#btnSubmitGenerateCostError').on('click', function(e) {
+    Swal.fire({
+      icon: 'warning',
+      text: 'Mohon tambahkan realisasi jam berangkat dan realisasi jam pulang terlebih dahulu!'
+    })
+  });
+
+  $('#btnSubmitMassiveLeaveError').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Please Input Date Massive Leave!'
+    })
+  });
+
+  $('#btnCandidateFamilyError').on('click', function(e) {
+    Swal.fire({
+      icon: 'warning',
+      text: 'Mohon lengkapi data susunan keluarga terlebih dahulu !'
+    })
+  });
+
+  $('#btnCandidateEducationHistoryError').on('click', function(e) {
+    Swal.fire({
+      icon: 'warning',
+      text: 'Mohon lengkapi data riwayat pendidikan terlebih dahulu !'
+    })
+  });
+
+  $('#btnCandidateHobbyError').on('click', function(e) {
+    Swal.fire({
+      icon: 'warning',
+      text: 'Mohon lengkapi data hobby terlebih dahulu !'
+    })
+  });
+
+  $('#btnCandidateLanguageSkillError').on('click', function(e) {
+    Swal.fire({
+      icon: 'warning',
+      text: 'Mohon lengkapi data kemampuan bahasa terlebih dahulu !'
     })
   });
 </script>
@@ -736,6 +766,15 @@
     Swal.fire({
       icon: 'error',
       title: 'Please Input Date Sick Leave and Attachment File!'
+    })
+  });
+</script>
+
+<script>
+  $('#btnAddSPPDError').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Mohon selesaikan LBPD terlebih dahulu sebelum mengajukan SPPUM baru !!'
     })
   });
 </script>
@@ -769,6 +808,24 @@
 
 
 <script>
+  $('#btnSubmitDetaseringError').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Mohon masukkan tunjangan detasering anda!'
+    })
+  });
+</script>
+<script>
+  $('#btnSubmitLPPDCostError').on('click', function(e) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Mohon masukkan uang makan dan uang saku anda!'
+    })
+  });
+</script>
+
+
+<script>
   $('.tombol-hapus').on('click', function(e) {
 
     e.preventDefault();
@@ -792,7 +849,6 @@
         // )
       }
     })
-
   });
 </script>
 
@@ -825,12 +881,40 @@
 </script>
 
 <script>
+  $('.tombol-1').on('click', function(e) {
+
+    e.preventDefault();
+    const href = $(this).attr('href');
+
+    Swal.fire({
+      title: 'Warning',
+      text: "pastikan anda telah mengupdate data dengan benar sebelum submit !!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Submit'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        document.location.href = '<?php echo base_url() ?>ReGenerateSPPUM';
+        // Swal.fire(
+        //   'Dihapus!',
+        //   'Data berhasil dihapus',
+        //   'success'
+        // )
+      }
+    })
+
+  });
+</script>
+
+<script>
   $('.show-loading').click(function() {
     let timerInterval
     Swal.fire({
       title: 'Wait For Process!',
       html: 'Loading...',
-      timer: 1000000,
+      timer: 10000000000,
       timerProgressBar: true,
       allowOutsideClick: false,
       didOpen: () => {
@@ -855,7 +939,7 @@
   const flashData = $('.flash-data').data('flashdata');
   if (flashData) {
     Swal.fire({
-      title: 'Congratulation',
+      // title: 'Congratulation',
       text: flashData,
       icon: 'success'
     });

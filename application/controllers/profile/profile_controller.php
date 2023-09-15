@@ -22,6 +22,8 @@ class profile_controller extends BaseController
         $this->load->model('login_model');
         $this->load->model('master/employee_address_model');
         $this->load->model('master/shift_model');
+        $this->load->model('master/employee_letter_model');
+
 
         $this->IsLoggedIn();
     }
@@ -40,7 +42,7 @@ class profile_controller extends BaseController
 
         $department_parameter = array('p_department_id' => 0, 'p_division_id' => 0, 'p_flag' => 0);
         $data['DepartmentRecords'] = $this->department_model->GetDepartment($department_parameter);
-        $division_parameter = array('p_division_id' => 0, 'p_company_id' => 0, 'p_flag' => 0);
+        $division_parameter = array('p_division_id' => 0, 'p_company_id' => 0, '', 'p_flag' => 0);
         $data['DivisionRecords'] = $this->division_model->GetDivision($division_parameter);
 
         $company_parameter = array('p_company_id' => 0, 'p_flag' => 0);
@@ -103,6 +105,10 @@ class profile_controller extends BaseController
         //shift
         $shift_parameter = array('p_shift_id' => 0, 'p_flag' => 0);
         $data['ShiftRecords'] = $this->shift_model->GetShift($shift_parameter);
+
+        //Employee Letter
+        $employee_letter_parameter = array('p_employee_letter_id' => 0, 'p_employee_id' => $employee_id, 'p_company_id' => 0, 'p_company_brand_id' => 0, 'p_flag' => 0);
+        $data['EmployeeLetterRecords'] = $this->employee_letter_model->GetEmployeeLetter($employee_letter_parameter);
 
         $this->global['pageTitle'] = 'CodeInsect : Employee Listing';
         $this->loadViews("profile/profile", $this->global, $data, NULL);

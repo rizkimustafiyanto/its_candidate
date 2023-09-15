@@ -4,7 +4,7 @@ class role_model extends CI_Model
 {
     function GetRole($role_parameter)
     {
-        $procedure = "call usp_gm_role_select(?, ?)";
+        $procedure = "call usp_gm_role_candidate_select(?, ?)";
         $sql_query = $this->db->query($procedure, $role_parameter);
         mysqli_next_result($this->db->conn_id);
         if ($sql_query->num_rows() > 0) {

@@ -4,7 +4,7 @@ class sub_menu_model extends CI_Model
 {
     function GetSubMenu($sub_menu_parameter)
     {
-        $procedure = "call usp_gm_sub_menu_select(?, ?)";
+        $procedure = "call usp_gm_sub_menu_candidate_select(?, ?)";
         $sql_query = $this->db->query($procedure, $sub_menu_parameter);
         mysqli_next_result($this->db->conn_id);
         if ($sql_query->num_rows() > 0) {

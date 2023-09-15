@@ -73,7 +73,6 @@ if (!empty($EmployeeRecords)) {
 
 <div class="content-wrapper">
     <div style="height: 20px;"></div>
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -85,7 +84,6 @@ if (!empty($EmployeeRecords)) {
                             </strong>
                             <!-- <?php print_r($photo_url); ?> -->
                         </div>
-                        <!-- /.col -->
                         <div class="col-lg-12">
                             <ol class="breadcrumb float-sm-left" style="font-size: small; padding-top: 10px;">
                                 <li class=" breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
@@ -124,11 +122,9 @@ if (!empty($EmployeeRecords)) {
                         </div>
                     </div> -->
                     <br>
-                    <!-- /.card-header -->
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <!-- /.card-header -->
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Employee Profile</b></h4>
@@ -221,7 +217,6 @@ if (!empty($EmployeeRecords)) {
                                 </div>
                             </div>
                             <div class="card">
-                                <!-- /.card-header -->
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Employee Details</b></h4>
@@ -240,7 +235,7 @@ if (!empty($EmployeeRecords)) {
                                                 <select data-width="100%" class="form-control select2bs4" id="company_id_update" name="company_id_update" data-companyid="<?= $company_id; ?>" disabled>
                                                     <?php
                                                     foreach ($CompanyRecords as $row) {
-                                                        $selected = ($row->company_id == $company_id) ? 'selected' : ''; // bikin kondisi kaya gini
+                                                        $selected = ($row->company_id == $company_id) ? 'selected' : '';
                                                     ?>
                                                         <option value="<?= $row->company_id; ?>" <?= $selected; ?> class=""><?= $row->company_name; ?></option>
                                                     <?php } ?>
@@ -388,8 +383,9 @@ if (!empty($EmployeeRecords)) {
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- EMPLOYEE STATUS AKTIF/RESIGN -->
                             <div class="card">
-                                <!-- /.card-header -->
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Employee Status Details</b></h4>
@@ -449,10 +445,11 @@ if (!empty($EmployeeRecords)) {
                                 </div>
                             </div>
                         </div>
+
+                        <!-- EXTENDED PAID LEAVE TABLE -->
                         <div class="col-md-12">
                             <?php if (!empty($ExtPaidLeaveRecords)) { ?>
                                 <div class="card">
-                                    <!-- card-header -->
                                     <div class="card-header">
                                         <strong>
                                             <h4 class="card-title"><b>Extended Paid Leave</b></h4>
@@ -492,8 +489,9 @@ if (!empty($EmployeeRecords)) {
                                     </div>
                                 </div>
                             <?php } ?>
+
+                            <!-- EMPLOYEE LEADER TABLE -->
                             <div class="card">
-                                <!-- card-header -->
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Employee Leader</b></h4>
@@ -530,16 +528,73 @@ if (!empty($EmployeeRecords)) {
                                     </table>
                                 </div>
                             </div>
+
+
+                            <!-- EMPLOYEE LETTER TABLE -->
                             <div class="card">
-                                <!-- card-header -->
+                                <div class="card-header">
+                                    <strong>
+                                        <h4 class="card-title"><b>Employee Letter</b></h4>
+                                    </strong>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table id="employee_letter_table" class="table table-bordered  table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Letter No</th>
+                                                <th>Letter Type</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Status</th>
+                                                <th>Description</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $i = 1;
+                                            if (!empty($EmployeeLetterRecords)) {
+                                                foreach ($EmployeeLetterRecords as $record) {
+                                            ?>
+                                                    <tr>
+                                                        <td><?= $i++; ?></td>
+                                                        <td><?php echo $record->letter_no; ?></td>
+                                                        <td><?php echo $record->letter_type_name; ?></td>
+                                                        <td><?php echo $record->start_date; ?></td>
+                                                        <td><?php echo $record->end_date; ?></td>
+                                                        <?php if ($record->status == 'A') { ?>
+                                                            <td><a class="badge badge-pill badge-success float"> <?= 'Aktif'; ?></a></td>
+                                                        <?php } else { ?>
+                                                            <td><a class="badge badge-pill badge-danger float"> <?= 'Non Aktif'; ?></a></td>
+                                                        <?php } ?>
+                                                        <td><?php echo $record->description; ?></td>
+                                                        <td>
+                                                            <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadEmployeeLetter/' . $record->letter_url . '/' . $record->employee_id; ?>"><i class="fa fa-download"></i></a>
+                                                            <a href="<?= base_url('upload/' . $record->letter_url); ?>" target="_blank" class="btn btn-xs btn-secondary"><i class="fas fa-eye"></i></a>
+                                                        </td>
+                                                    <?php } ?>
+                                                    </tr>
+                                                <?php
+                                            }
+                                                ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- EMPLOYEE DOCUMENT TABLE -->
+                            <div class="card">
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Employee Document</b></h4>
                                     </strong>
                                     <div class="card-tools">
-                                        <!-- <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-employeedocument">
-                                            <i class="fa fa-plus"></i> Add Document
-                                        </button> -->
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                             <i class="fas fa-minus"></i>
                                         </button>
@@ -568,7 +623,6 @@ if (!empty($EmployeeRecords)) {
                                                         <td>
                                                             <a id="btnDownload" class="btn btn-xs btn-success" href="<?php echo base_url() . 'DownloadProfileDocument/' . $record->document_url . '/' . $record->employee_id; ?>"><i class="fa fa-download"></i></a>
                                                             <a href="<?= base_url('upload/' . $record->document_url); ?>" target="_blank" class="btn btn-xs btn-primary"><i class="fas fa-eye"></i></a>
-                                                            <!-- <a id="btnDelete" class="btn btn-xs btn-danger" href="<?php echo base_url() . 'DeleteProfileDocument/' . $record->employee_document_id . '/' . $record->employee_id . '/' . $record->document_url; ?>"><i class="fa fa-trash"></i></a> -->
                                                         </td>
                                                     <?php } ?>
                                                     </tr>
@@ -579,8 +633,9 @@ if (!empty($EmployeeRecords)) {
                                     </table>
                                 </div>
                             </div>
+
+                            <!-- EMPLOYEE WARNING LETTER TABLE -->
                             <div class="card">
-                                <!-- card-header -->
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Employee Warning Letter</b></h4>
@@ -652,16 +707,14 @@ if (!empty($EmployeeRecords)) {
                                     </table>
                                 </div>
                             </div>
+
+                            <!-- EMPLOYEE ADDRESS TABLE -->
                             <div class="card">
-                                <!-- card-header -->
                                 <div class="card-header">
                                     <strong>
                                         <h4 class="card-title"><b>Employee Address</b></h4>
                                     </strong>
                                     <div class="card-tools">
-                                        <!-- <button type="button" class="btn btn-sm btn-primary" id="btnAdd" data-toggle="modal" data-target="#modal-employeeaddress">
-                                            <i class="fa fa-plus"></i> Add Employee Address
-                                        </button> -->
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                             <i class="fas fa-minus"></i>
                                         </button>
@@ -772,7 +825,6 @@ if (!empty($EmployeeRecords)) {
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <!--Region password old -->
                             <label for="">Old Password *</label>
                             <div class="input-group">
                                 <input class="form-control pwd" id="voldPassword" name="oldPassword" type="password" required>
@@ -781,8 +833,6 @@ if (!empty($EmployeeRecords)) {
                                 </span>
                             </div>
                             <br>
-                            <!--EndRegion password old -->
-                            <!--Region password new 1 -->
                             <label for="">New Password *</label>
                             <div class="input-group">
                                 <input class="form-control pwd1" id="vnewPassword" name="newPassword" type="password" required>
@@ -801,9 +851,7 @@ if (!empty($EmployeeRecords)) {
                 </div>
             </form>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
 <!--#EndRegion Modal Change Password-->
 
@@ -831,11 +879,9 @@ if (!empty($EmployeeRecords)) {
 <script>
     $(document).ready(function() {
 
-        // Selected Change Dropdown Vehicle
         $("#company_id_update").change(function() {
             var companyid = $("#company_id_update").val();
 
-            // For set value Vehicle type on first load
             $.ajax({
                 url: '../GetDivisionByCompanyId2',
                 data: {
@@ -865,7 +911,6 @@ if (!empty($EmployeeRecords)) {
         $("#division_id_update").change(function() {
             var divisionid = $("#division_id_update").val();
 
-            // For set value Vehicle type on first load
             $.ajax({
                 url: '../GetDepartmentByDivisionId2',
                 data: {

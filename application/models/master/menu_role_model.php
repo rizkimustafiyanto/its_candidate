@@ -4,7 +4,7 @@ class menu_role_model extends CI_Model
 {
     function GetMenuRole($menu_role_parameter)
     {
-        $procedure = "call usp_gm_menu_role_select(?, ?, ?)";
+        $procedure = "call usp_gm_menu_candidate_role_select(?, ?, ?)";
         $sql_query = $this->db->query($procedure, $menu_role_parameter);
         mysqli_next_result($this->db->conn_id);
         if ($sql_query->num_rows() > 0) {

@@ -93,6 +93,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <script type="text/javascript" src="<?php echo base_url(); ?>assets/chartjs/chart.js"></script>
 
+  <style type="text/css">
+    .person {
+      border: 1px solid;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+    }
+  </style>
 
 </head>
 
@@ -107,9 +115,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <li class="nav-item">
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
-        <li class="nav-item">
-          <a href="<?php echo base_url() . 'Home' ?>" class="nav-link">Back to Home</a>
-        </li>
+
       </ul>
 
       <!-- Right navbar links -->
@@ -145,11 +151,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <?php if ($this->session->userdata('photo_url') == null) { ?>
               <img src="<?php echo base_url(); ?>assets/dist/img/logo_psd.jpg" class="img-circle elevation-2" alt="User Image">
             <?php } else { ?>
-              <img src="<?php echo base_url(); ?>upload/<?php echo $this->session->userdata('photo_url'); ?>" class="img-circle elevation-2" alt="User Image">
+              <img src="<?php echo base_url(); ?>../api-hris/upload/<?php echo $this->session->userdata('photo_url') ?>" class="person" alt="User Image">
             <?php } ?>
           </div>
           <div class="info">
-            <a href="#" class="d-block"><?php echo $this->session->userdata('employee_name'); ?></a>
+            <a href="#" class="d-block"><?php echo $this->session->userdata('candidate_name'); ?></a>
           </div>
         </div>
 
@@ -171,25 +177,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
             // data main menu
             $this->db->distinct();
             $this->db->select('c.menu_id, c.menu_name, c.menu_url, c.menu_icon, c.url_name');
-            $this->db->from('gm_menu_role a');
-            $this->db->join('gm_role b', 'a.role_id = b.role_id', 'left');
-            $this->db->join('gm_menu c', 'a.menu_id = c.menu_id', 'left');
+            $this->db->from('gm_menu_role_candidate a');
+            $this->db->join('gm_role_candidate b', 'a.role_id = b.role_id', 'left');
+            $this->db->join('gm_menu_candidate c', 'a.menu_id = c.menu_id', 'left');
             $this->db->where('a.role_id', $this->session->userdata('role_id'));
             $main_menu = $this->db->get();
-            //$main_menu = $this->db->get_where('m_menu', array('record_status' => 'A'));
 
             foreach ($main_menu->result() as $main) {
               // Query untuk mencari data sub menu
               $this->db->select('c.sub_menu_id, c.sub_menu_name, c.sub_menu_url, c.sub_menu_icon, c.url_name');
-              $this->db->from('gm_menu_role a');
-              $this->db->join('gm_sub_menu c', 'a.sub_menu_id = c.sub_menu_id');
+              $this->db->from('gm_menu_role_candidate a');
+              $this->db->join('gm_sub_menu_candidate c', 'a.sub_menu_id = c.sub_menu_id');
               $this->db->where('a.role_id', $this->session->userdata('role_id'));
               $this->db->where('a.menu_id', $main->menu_id);
 
               $this->db->order_by('c.sub_menu_name', 'asc');
               $sub_menu = $this->db->get();
 
-              //$sub_menu = $this->db->get_where('m_sub_menu', array('menu_id' => $main->menu_id));
 
 
               // periksa apakah ada sub menu

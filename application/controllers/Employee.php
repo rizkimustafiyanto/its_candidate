@@ -300,7 +300,7 @@ class Employee extends BaseController
     {
         session_start();
         session_destroy();
-        redirect('../home/login');
+        redirect('../candidate/login');
         $this->session->set_flashdata('success', 'Success Logout');
     }
 }
